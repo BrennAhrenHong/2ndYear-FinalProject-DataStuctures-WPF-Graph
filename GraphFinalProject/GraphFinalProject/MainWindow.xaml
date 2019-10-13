@@ -23,7 +23,7 @@
             <RowDefinition Height="7*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <Canvas HorizontalAlignment="Left" Height="542" VerticalAlignment="Top" Width="730" Grid.ColumnSpan="4" Grid.RowSpan="2"/>
+        <Canvas HorizontalAlignment="Left" Height="542" Background="AntiqueWhite" VerticalAlignment="Top" Width="730" Grid.ColumnSpan="4" Grid.RowSpan="2"/>
         <Button Content="Add Vertex" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="100" Height="40" Margin="10,0,0,0"/>
         <Label Content="Vertices List" FontSize="20" FontFamily="Verdana" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <ListBox Grid.Column="4" HorizontalAlignment="Left" Height="474" Grid.Row="1" VerticalAlignment="Top" Width="182"/>

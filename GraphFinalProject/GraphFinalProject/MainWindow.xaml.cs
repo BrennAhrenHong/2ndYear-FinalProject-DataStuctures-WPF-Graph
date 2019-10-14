@@ -24,5 +24,10 @@ namespace GraphFinalProject
         {
             InitializeComponent();
         }
+
+        public void AddVertex()
+        {
+
+        }
     }
 }

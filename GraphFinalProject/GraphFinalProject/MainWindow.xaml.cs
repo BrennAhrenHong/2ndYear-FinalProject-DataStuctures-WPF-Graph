@@ -34,13 +34,14 @@ namespace GraphFinalProject
 
         private bool MousePress = false;
         private Nullable<Point> dragStart = null;
-        
+
         private char PrevLetter = 'Z';
         private List<Label> VertexList = new List<Label>();
         private int LabelNumber = 0;
+        private int IDNumber = 0;
         public double XaxisAuto { get; set; }
         public double YaxisAuto { get; set; }
-    
+
 
         private List<Border> VertexBorder = new List<Border>();
 
@@ -96,8 +97,8 @@ namespace GraphFinalProject
             if (VertexList.Count != 0)
                 label = CreateLabel(PrevLetter, VertexList.Count + 1);
             else
-                label = CreateLabel(PrevLetter,0);
-            
+                label = CreateLabel(PrevLetter, 0);
+
             VertexList.Add(label);
 
             Border vertexBorder = new Border();
@@ -112,7 +113,10 @@ namespace GraphFinalProject
             vertexBorder.BorderThickness = new Thickness(1);
             vertexBorder.Background = Brushes.LightSkyBlue;
             vertexBorder.Child = label;
-            ListBoxVertices.Ite
+            IDNumber++;
+
+            this.ListViewVerticesList.Items.Add(new ListViewItem {ID = IDNumber, Name = TxtbName.Text});
+
 
             vertexBorder.CornerRadius = new CornerRadius(50);
 
@@ -181,7 +185,7 @@ namespace GraphFinalProject
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            AddEdge(1,1);
+            AddEdge(1, 1);
         }
 
         private void CanvasPlane_MouseMove(object sender, MouseEventArgs e)
@@ -198,9 +202,8 @@ namespace GraphFinalProject
 
         private void CMitemAddVertex_OnClick(object sender, RoutedEventArgs e)
         {
-            AddVertex(XaxisAuto, YaxisAuto );
+            AddVertex(XaxisAuto, YaxisAuto);
         }
-
 
         private void CanvasPlane_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -210,7 +213,9 @@ namespace GraphFinalProject
 
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            CanvasPlane.Children.Remove();
+            if(ListViewVerticesList.SelectedIndex > -1)
+                ListViewVerticesList.Items.RemoveAt(ListViewVerticesList.SelectedIndex);
+            CanvasPlane.Children.RemoveAt(0);
         }
     }
 }

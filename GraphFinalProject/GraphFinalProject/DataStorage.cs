@@ -12,12 +12,13 @@ namespace GraphFinalProject
     {
         public static char PrevLetter = 'Z';
         public static int LabelNumber = 0;
-        public static int IDNumber = 0;
+        public static string RecentIDMade;
 
         public static List<Label> VertexList = new List<Label>();
         public static List<UnWeightedEdge<UIElement>> EdgeList = new List<UnWeightedEdge<UIElement>>();
         public static List<UIElement> CanvasChildrenList = new List<UIElement>();
         public static List<Border> VertexBorder = new List<Border>();
+        public static List<string> ID = new List<string>();
 
     }
 }

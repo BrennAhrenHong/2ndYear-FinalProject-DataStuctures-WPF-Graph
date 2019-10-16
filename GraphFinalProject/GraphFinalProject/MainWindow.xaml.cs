@@ -37,112 +37,21 @@ namespace GraphFinalProject
 
         private List<Label> VertexList = new List<Label>();
         private List<UnWeightedEdge<UIElement>> EdgeList = new List<UnWeightedEdge<UIElement>>();
-        private List<UIElement> _canvasChildrenList = new List<UIElement>();
 
         public double Xaxis { get; set; }
         public double Yaxis { get; set; }
-        //private List<Border> VertexBorder = new List<Border>();
-
-
-        #region CreateLabel/Vertex
-
-        //public Label CreateLabel(char prevLetter, int labelNumber)
-        //{
-        //    string labelContent = "";
-        //    char currentLetter;
-        //    int currentLabelNumber = DataStorage.LabelNumber;
-
-        //    //Assigning of Current Letter to PrevLetter & Creating the Label content letter
-        //    if (prevLetter != 'Z')
-        //    {
-        //        currentLetter = ++prevLetter;
-        //        PrevLetter = currentLetter;
-        //    }
-        //    else
-        //    {
-        //        currentLetter = 'A';
-        //        PrevLetter = 'A';
-        //    }
-
-        //    if (labelNumber % 26 == 0 && labelNumber > 25)
-        //    {
-        //        LabelNumber++;
-        //    }
-
-        //    if (labelNumber > 26)
-        //    {
-        //        labelContent += currentLetter + "" + currentLabelNumber;
-        //    }
-        //    else
-        //    {
-        //        labelContent += currentLetter;
-        //    }
-
-        //    //Create label for vertex
-        //    Label vertexLabel = new Label();
-
-        //    vertexLabel.VerticalAlignment = VerticalAlignment.Center;
-        //    vertexLabel.HorizontalContentAlignment = HorizontalAlignment.Center;
-        //    vertexLabel.FontSize = 12;
-        //    vertexLabel.Content = labelContent;
-
-        //    return vertexLabel;
-        //}
-
-
-        //public void AddVertex(double x, double y)
-        //{
-        //    Label label;
-
-        //    if (VertexList.Count != 0)
-        //        label = CreateLabel(PrevLetter, VertexList.Count + 1);
-        //    else
-        //        label = CreateLabel(PrevLetter, 0);
-
-        //    VertexList.Add(label);
-
-        //    Border vertexBorder = new Border();
-
-        //    int characters = label.Content.ToString().Length;
-        //    characters = characters * 10 + 25;
-
-        //    vertexBorder.Height = characters;
-        //    vertexBorder.Width = characters;
-
-        //    vertexBorder.BorderBrush = Brushes.Black;
-        //    vertexBorder.BorderThickness = new Thickness(1);
-        //    vertexBorder.Background = Brushes.LightSkyBlue;
-        //    vertexBorder.Child = label;
-        //    IDNumber++;
-
-        //    this.ListViewVerticesList.Items.Add(new ListViewItem {ID = IDNumber, Name = TxtbName.Text});
-
-
-        //    vertexBorder.CornerRadius = new CornerRadius(50);
-
-
-        //    Canvas.SetLeft(vertexBorder, x - 15);
-        //    Canvas.SetTop(vertexBorder, y - 15);
-
-        //    VertexBorder.Add(vertexBorder);
-
-        //    _canvasChildrenList.Add(vertexBorder);
-
-        //    AddElementsToCanvas();
-        //    //CanvasPlane Children Adding
-        //    //CanvasPlane.Children.Add(vertexBorder);
-        //}
-
-
-
-        #endregion
 
         public void AddVertex()
         {
             Vertex addVertex = new Vertex(Xaxis, Yaxis);
-
             addVertex.CreateVertex();
             AddElementsToCanvas();
+            if (TxtbName.Text == "")
+            {
+                TxtbName.Text = DataStorage.RecentIDMade;
+            }
+
+            ListViewVerticesList.Items.Add(new ListViewItem { ID = DataStorage.RecentIDMade, Name = TxtbName.Text});
         }
 
         public void AddElementsToCanvas()
@@ -163,7 +72,7 @@ namespace GraphFinalProject
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
             int selectedIndex = ListViewVerticesList.SelectedIndex;
-            _canvasChildrenList.RemoveAt(selectedIndex);
+            DataStorage.CanvasChildrenList.RemoveAt(selectedIndex);
             AddElementsToCanvas();
 
             if (ListViewVerticesList.SelectedIndex > -1)
@@ -233,14 +142,11 @@ namespace GraphFinalProject
 
         private void CanvasPlane_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!ContextMenuCanvas.IsOpen)
-            {
-                var x = e.GetPosition(CanvasPlane).X;
-                var y = e.GetPosition(CanvasPlane).Y;
+            var x = e.GetPosition(CanvasPlane).X; 
+            var y = e.GetPosition(CanvasPlane).Y;
 
-                TxtbXaxisAuto.Text = Math.Round(Convert.ToDouble(x),2).ToString();
-                TxtbYaxisAuto.Text = Math.Round(Convert.ToDouble(y), 2).ToString();
-            }
+            TxtbXaxisAuto.Text = Math.Round(Convert.ToDouble(x),2).ToString();
+            TxtbYaxisAuto.Text = Math.Round(Convert.ToDouble(y), 2).ToString();
         }
 
         private void CMitemAddVertex_OnClick(object sender, RoutedEventArgs e)

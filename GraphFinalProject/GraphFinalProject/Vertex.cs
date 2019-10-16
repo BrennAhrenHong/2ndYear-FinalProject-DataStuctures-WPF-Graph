@@ -20,11 +20,11 @@ namespace GraphFinalProject
             YCoordinateLine = y;
         }
 
-        public Label CreateLabel(char prevLetter, int labelNumber)
+        public Label CreateLabel(char prevLetter, int listlabelCount)
         {
             string labelContent = "";
             char currentLetter;
-            int currentLabelNumber = labelNumber;
+            int currentLabelNumber = DataStorage.LabelNumber;
 
             //Assigning of Current Letter to PrevLetter & Creating the Label content letter
             if (prevLetter != 'Z')
@@ -39,12 +39,12 @@ namespace GraphFinalProject
             }
 
             //If labelLetter reaches Z
-            if (labelNumber % 26 == 0 && labelNumber > 25)
+            if (listlabelCount % 26 == 0 && listlabelCount > 25)
             {
                 DataStorage.LabelNumber++;
             }
 
-            if (labelNumber > 26)
+            if (listlabelCount > 26)
             {
                 labelContent += currentLetter + "" + currentLabelNumber;
             }
@@ -75,7 +75,9 @@ namespace GraphFinalProject
             else
                 label = CreateLabel(DataStorage.PrevLetter, 0);
 
+            DataStorage.ID.Add(label.ContentStringFormat);
             DataStorage.VertexList.Add(label);
+            DataStorage.RecentIDMade = label.Content.ToString();
 
             Border vertexBorder = new Border();
 
@@ -89,7 +91,6 @@ namespace GraphFinalProject
             vertexBorder.BorderThickness = new Thickness(1);
             vertexBorder.Background = Brushes.LightSkyBlue;
             vertexBorder.Child = label;
-            DataStorage.IDNumber++;
 
             //this.ListViewVerticesList.Items.Add(new ListViewItem { ID = DataStorage.IDNumber, Name = TxtbName.Text });
 
@@ -101,9 +102,7 @@ namespace GraphFinalProject
             Canvas.SetTop(vertexBorder, y - 15);
 
             DataStorage.VertexBorder.Add(vertexBorder);
-
             DataStorage.CanvasChildrenList.Add(vertexBorder);
-
 
             //CanvasPlane Children Adding
             //CanvasPlane.Children.Add(vertexBorder);

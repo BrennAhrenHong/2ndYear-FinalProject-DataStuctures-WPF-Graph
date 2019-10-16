@@ -8,7 +8,7 @@
         SnapsToDevicePixels="True"
         ResizeMode="CanResizeWithGrip"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="920">
+        Title="MainWindow" Height="640" Width="980">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -25,9 +25,9 @@
         </Grid.ColumnDefinitions>
         <Button Content="Find Shortest Path" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="163" Height="40" Margin="10,14.333,0,13.667" />
 
-        <ListBox Grid.Column="5" HorizontalAlignment="Center" Height="455" Grid.Row="1" VerticalAlignment="Center" Width="128" />
-        <Canvas Name="CanvasPlane" ClipToBounds="True" Background="AliceBlue" Grid.ColumnSpan="4" HorizontalAlignment="Left" Height="475" Grid.Row="1" VerticalAlignment="Top" Width="444" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown">
-            <Border BorderBrush="Black" BorderThickness="1" Height="475" Width="444" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeftButtonUp="Border_MouseLeftButtonUp" MouseMove="Border_MouseMove">
+        <ListBox Grid.Column="5" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="157" Margin="0,0,0.333,67.667" Grid.RowSpan="2" />
+        <Canvas Name="CanvasPlane" Background="AliceBlue" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="474" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown" Grid.RowSpan="1">
+            <Border BorderBrush="Black" BorderThickness="1" Height="475" Width="474" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeftButtonUp="Border_MouseLeftButtonUp" MouseMove="Border_MouseMove">
             </Border>
             <Canvas.ContextMenu>
                 <ContextMenu Name="ContextMenuCanvas">
@@ -37,23 +37,27 @@
         </Canvas>
         <Label Grid.Row="0" Content="Vertices List" FontSize="20" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Grid.Row="0" Content="Adjacency Matrix" FontSize="18" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="148.333,9,0.333,10" Width="148" Grid.ColumnSpan="2" Height="49"/>
-        <TextBox Grid.Column="0" Name="TxtbAddEdge" HorizontalAlignment="Left" Margin="12,181,0,264" Grid.Row="1" TextWrapping="Wrap" Width="151"/>
-        <Button Grid.Column="0" Content="Add Edge" HorizontalAlignment="Left" Margin="10,241,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="Button_Click_1"/>
-        <Button Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Top" Width="153" Height="42" Click="Button_Click"/>
-        <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" Margin="24,38,0,5" TextWrapping="Wrap" Height="25" Width="45" Grid.Column="1"/>
+        <TextBox Name="TxtbAddEdge" Grid.Column="0"  HorizontalAlignment="Left" Margin="12,181,0,264" Grid.Row="1" TextWrapping="Wrap" Width="151"/>
+        <Button Grid.Column="0" Content="Add Edge" HorizontalAlignment="Left" Margin="10,241,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonAddEdgeClick"/>
+        <Button Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Bottom" Width="153" Height="42" Click="ButtonAddVertex_OnClick"/>
+
+        <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Height="25" Width="60" Grid.Column="1" Margin="10,0,0,10"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" TextWrapping="NoWrap" Width="60" Margin="0,0,0,10"/>
+
         <TextBox Grid.Column="0"  Grid.Row="1" Name="TxtbName" HorizontalAlignment="Left" Margin="59,13,0,438" TextWrapping="Wrap" Width="91"/>
         <Label Grid.Column="0" Content="V1, V2, Weight" HorizontalAlignment="Left" Margin="12,215,0,0" Grid.Row="1" VerticalAlignment="Top" Width="90"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" HorizontalAlignment="Left" Margin="93,38,0,5" Height="25" TextWrapping="Wrap" Width="45"/>
         <Label Grid.Column="0" Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Label Grid.Column="0" Content="X:" HorizontalAlignment="Left" Margin="10,45,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Label Grid.Column="0" Content="Y:" HorizontalAlignment="Left" Margin="10,83,0,0" Grid.Row="1" VerticalAlignment="Top"/>
-        <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Left" Margin="59,46,0,403" TextWrapping="Wrap" Height="25" Width="45" Grid.Row="1"/>
-        <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Left" Margin="59,83,0,366" Height="25" TextWrapping="Wrap" Width="45" Grid.Row="1"/>
+        
+        <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="NoWrap" Height="25" Width="46" Grid.Row="1" Margin="61,46,77,0"/>
+        <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Grid.Row="1" Margin="61,83,77,0"/>
+        
         <Button Grid.Column="0" Name="ButtonDelete" Content="Delete" HorizontalAlignment="Left" Margin="10,307,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonDelete_OnClick"/>
-        <ListView x:Name="ListViewVerticesList" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Top" Width="148" Grid.RowSpan="1">
+        <ListView x:Name="ListViewVerticesList" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" Height="475" VerticalAlignment="Center" Width="158" Grid.RowSpan="1" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Width="Auto" Header="ID" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Width="30" Header="ID" DisplayMemberBinding="{Binding ID}"/>
                     <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding Name}"/>
                 </GridView>
             </ListView.View>

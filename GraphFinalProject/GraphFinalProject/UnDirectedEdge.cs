@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace GraphFinalProject
 {
-    public class UnWeightedEdge<T>
+    public class UnDirectedEdge<T>
     {
         public double XCoordinateLine1 { get; protected set; }
         public double XCoordinateLine2 { get; protected set; }
@@ -19,7 +20,7 @@ namespace GraphFinalProject
         public Vertex<Border> Parent1 { get; protected set; }
         public Vertex<Border> Parent2 { get; protected set; }
 
-        public UnWeightedEdge(Vertex<Border> vertex1, Vertex<Border> vertex2)
+        public UnDirectedEdge(Vertex<Border> vertex1, Vertex<Border> vertex2)
         {
             XCoordinateLine1 = vertex1.XCoordinate;
             YCoordinateLine1 = vertex1.YCoordinate;

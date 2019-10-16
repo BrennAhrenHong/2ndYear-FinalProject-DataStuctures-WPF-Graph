@@ -23,10 +23,8 @@
             <ColumnDefinition Width="6*" />
             <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
-        <Button Content="Find Shortest Path" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="163" Height="40" Margin="10,14.333,0,13.667" />
-        <Canvas Name="CanvasPlane" Background="AliceBlue" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="474" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown" Grid.RowSpan="2" Margin="0,0,0,67.667">
-            <Border BorderBrush="Black" ClipToBounds="True" BorderThickness="1" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeftButtonUp="Border_MouseLeftButtonUp" MouseMove="Border_MouseMove" Height="475" Width="474">
-            </Border>
+        <Button Content="Find Shortest Path" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="163" Height="40" Margin="10,14.333,0,13.667" Click="Button_Click" />
+        <Canvas  Name="CanvasPlane" Background="AliceBlue" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="474" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown" Grid.RowSpan="2" Margin="0,0,0,67.667">
             <Canvas.ContextMenu>
                 <ContextMenu Name="ContextMenuCanvas">
                     <MenuItem Name="CMitemAddVertex" Header="Add Vertex" Click="CMitemAddVertex_OnClick"></MenuItem>

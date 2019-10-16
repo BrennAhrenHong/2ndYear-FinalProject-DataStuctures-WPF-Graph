@@ -22,9 +22,11 @@ namespace GraphFinalProject
     /// TODO
     /// Matrix Adjacency List 10%
     /// Vertices List 90%
+    /// Vertices 100%
+    /// Edges 80%
     /// Shortest Path 10%
-    /// UI Revamp (Buttons) 0%
-    /// Control Panel 10%
+    /// UI Revamp (Buttons) 70%
+    /// Control Panel 70%
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -107,23 +109,10 @@ namespace GraphFinalProject
                     }
                 }
             }
-            UnWeightedEdge<UIElement> newUnWeightedEdge = new UnWeightedEdge<UIElement>(getVertex[0], getVertex[1]);
-            newUnWeightedEdge.CreateEdge();
-            DataStorage.EdgeList.Add(newUnWeightedEdge);
+            UnDirectedEdge<UIElement> newUnDirectedEdge = new UnDirectedEdge<UIElement>(getVertex[0], getVertex[1]);
+            newUnDirectedEdge.CreateEdge();
+            DataStorage.EdgeList.Add(newUnDirectedEdge);
             AddElementsToCanvas();
-
-            //Line edgeLine = new Line();
-            //edgeLine.X1 = 50;
-            //edgeLine.X2 = 10;
-            //edgeLine.Y1 = 25;
-            //edgeLine.Y2 = 50;
-            //edgeLine.Stroke = Brushes.Black;
-            //edgeLine.StrokeThickness = 5;
-            //edgeLine.Fill = Brushes.Black;
-
-            //Canvas.SetLeft(edgeLine, 100);
-            //Canvas.SetTop(edgeLine, 100);
-            //CanvasPlane.Children.Add(edgeLine);
         }
 
         private void ButtonAddVertex_OnClick(object sender, RoutedEventArgs e)
@@ -191,6 +180,11 @@ namespace GraphFinalProject
         private void ButtonAddEdgeClick(object sender, RoutedEventArgs e)
         {
             AddEdge();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Canvas.GetLeft(DataStorage.CanvasChildrenList[0]);
         }
     }
 }

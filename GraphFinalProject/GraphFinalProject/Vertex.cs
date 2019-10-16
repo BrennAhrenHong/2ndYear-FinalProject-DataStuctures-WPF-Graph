@@ -9,15 +9,17 @@ using System.Windows.Media;
 
 namespace GraphFinalProject
 {
-    public class Vertex
+    public class Vertex<T>
     {
-        public double XCoordinateLine { get; protected set; }
-        public double YCoordinateLine { get; protected set; }
+        public double XCoordinate { get; protected set; }
+        public double YCoordinate { get; protected set; }
+        public string Name { get; protected set; }
 
-        public Vertex(double x, double y)
+        public Vertex(double x, double y, string name)
         {
-            XCoordinateLine = x;
-            YCoordinateLine = y;
+            XCoordinate = x;
+            YCoordinate = y;
+            Name = name;
         }
 
         public Label CreateLabel(char prevLetter, int listlabelCount)
@@ -66,18 +68,20 @@ namespace GraphFinalProject
 
         public void CreateVertex()
         {
-            double x = XCoordinateLine;
-            double y = YCoordinateLine;
+            double x = XCoordinate;
+            double y = YCoordinate;
             Label label;
 
-            if (DataStorage.VertexList.Count != 0)
-                label = CreateLabel(DataStorage.PrevLetter, DataStorage.VertexList.Count + 1);
+            if (DataStorage.VertexLabelList.Count != 0)
+                label = CreateLabel(DataStorage.PrevLetter, DataStorage.VertexLabelList.Count + 1);
             else
                 label = CreateLabel(DataStorage.PrevLetter, 0);
 
             DataStorage.ID.Add(label.ContentStringFormat);
-            DataStorage.VertexList.Add(label);
+            DataStorage.VertexLabelList.Add(label);
             DataStorage.RecentIDMade = label.Content.ToString();
+            if (Name == "")
+                Name = DataStorage.RecentIDMade;
 
             Border vertexBorder = new Border();
 
@@ -101,7 +105,7 @@ namespace GraphFinalProject
             Canvas.SetLeft(vertexBorder, x - 15);
             Canvas.SetTop(vertexBorder, y - 15);
 
-            DataStorage.VertexBorder.Add(vertexBorder);
+            //DataStorage.VertexBorder.Add(vertexBorder);
             DataStorage.CanvasChildrenList.Add(vertexBorder);
 
             //CanvasPlane Children Adding

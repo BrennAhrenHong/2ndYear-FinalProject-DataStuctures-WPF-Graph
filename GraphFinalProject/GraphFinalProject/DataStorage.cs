@@ -14,10 +14,11 @@ namespace GraphFinalProject
         public static int LabelNumber = 0;
         public static string RecentIDMade;
 
-        public static List<Label> VertexList = new List<Label>();
+        public static List<Label> VertexLabelList = new List<Label>();
         public static List<UnWeightedEdge<UIElement>> EdgeList = new List<UnWeightedEdge<UIElement>>();
+        public static List<UIElement> CanvasEdgeList = new List<UIElement>();
         public static List<UIElement> CanvasChildrenList = new List<UIElement>();
-        public static List<Border> VertexBorder = new List<Border>();
+        public static List<Vertex<Border>> VertexBorder = new List<Vertex<Border>>();
         public static List<string> ID = new List<string>();
 
     }

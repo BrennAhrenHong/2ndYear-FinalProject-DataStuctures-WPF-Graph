@@ -16,13 +16,19 @@ namespace GraphFinalProject
         public double YCoordinateLine1 { get; protected set; }
         public double YCoordinateLine2 { get; protected set; }
 
-        public UnWeightedEdge(double x1, double y1, double x2, double y2)
-        {
-            XCoordinateLine1 = x1;
-            YCoordinateLine1 = y1;
+        public Vertex<Border> Parent1 { get; protected set; }
+        public Vertex<Border> Parent2 { get; protected set; }
 
-            XCoordinateLine2 = x2;
-            YCoordinateLine2 = y2;
+        public UnWeightedEdge(Vertex<Border> vertex1, Vertex<Border> vertex2)
+        {
+            XCoordinateLine1 = vertex1.XCoordinate;
+            YCoordinateLine1 = vertex1.YCoordinate;
+
+            XCoordinateLine2 = vertex2.XCoordinate;
+            YCoordinateLine2 = vertex2.YCoordinate;
+
+            Parent1 = vertex1;
+            Parent2 = vertex2;
         }
 
         public Line CreateEdge()
@@ -39,8 +45,7 @@ namespace GraphFinalProject
             edgeLine.StrokeThickness = 3;
             edgeLine.Fill = Brushes.Black;
 
-            Canvas.SetLeft(edgeLine, 100);
-            Canvas.SetTop(edgeLine, 100);
+            //DataStorage.CanvasEdgeList.Add(edgeLine);
 
             return edgeLine;
         }

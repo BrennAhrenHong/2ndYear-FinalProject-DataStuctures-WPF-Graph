@@ -35,53 +35,81 @@ namespace GraphFinalProject
         //private bool MousePress = false;
         //private Nullable<Point> dragStart = null;
 
-        private List<Label> VertexList = new List<Label>();
-        private List<UnWeightedEdge<UIElement>> EdgeList = new List<UnWeightedEdge<UIElement>>();
-
-        public double Xaxis { get; set; }
-        public double Yaxis { get; set; }
+        public double Xcoordinate { get; set; }
+        public double Ycoordinate { get; set; }
 
         public void AddVertex()
         {
-            Vertex addVertex = new Vertex(Xaxis, Yaxis);
+            Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text);
             addVertex.CreateVertex();
+            DataStorage.VertexBorder.Add(addVertex);
             AddElementsToCanvas();
+
             if (TxtbName.Text == "")
-            {
                 TxtbName.Text = DataStorage.RecentIDMade;
-            }
+            
 
             ListViewVerticesList.Items.Add(new ListViewItem { ID = DataStorage.RecentIDMade, Name = TxtbName.Text});
+            TxtbName.Clear();
         }
 
         public void AddElementsToCanvas()
         {
             CanvasPlane.Children.Clear();
 
+            foreach (var edge in DataStorage.EdgeList)
+            {
+                bool parentExist1 = false;
+                bool parentExist2 = false;
+                foreach (var vertex in DataStorage.VertexBorder)
+                {
+                    if (vertex.Name == edge.Parent1.Name)
+                        parentExist1 = true;
+                    
+
+                    if (vertex.Name == edge.Parent2.Name)
+                        parentExist2 = true;
+                }
+                if(parentExist1 && parentExist2)
+                    CanvasPlane.Children.Add(edge.CreateEdge());
+            }
+
             foreach (var uiElement in DataStorage.CanvasChildrenList)
             {
                 CanvasPlane.Children.Add(uiElement);
-            }
-
-            foreach (var uiElement in EdgeList)
-            {
-                CanvasPlane.Children.Add(uiElement.CreateEdge());
             }
         }
 
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            int selectedIndex = ListViewVerticesList.SelectedIndex;
-            DataStorage.CanvasChildrenList.RemoveAt(selectedIndex);
+            DataStorage.CanvasChildrenList.RemoveAt(ListViewVerticesList.SelectedIndex);
+            DataStorage.VertexBorder.RemoveAt(ListViewVerticesList.SelectedIndex);
+            DataStorage.VertexLabelList.RemoveAt(ListViewVerticesList.SelectedIndex);
             AddElementsToCanvas();
 
             if (ListViewVerticesList.SelectedIndex > -1)
                 ListViewVerticesList.Items.RemoveAt(ListViewVerticesList.SelectedIndex);
         }
-        public void AddEdge(double x1, double y1, double x2, double y2)
+        public void AddEdge()
         {
-            UnWeightedEdge<UIElement> newUnWeightedEdge = new UnWeightedEdge<UIElement>(x1, y1, x2,y2);
-            EdgeList.Add(newUnWeightedEdge);
+            string[] tmpArray = TxtbAddEdge.Text.Split(',');
+            int counter = 0;
+            Vertex<Border>[] getVertex = new Vertex<Border>[2];
+
+            for (int i = 0; i < 2; i++)
+            {
+                foreach (var vertex in DataStorage.VertexBorder)
+                {
+                    if (vertex.Name == tmpArray[i])
+                    {
+                        getVertex[i] = vertex;
+                        break;
+                    }
+                }
+            }
+            UnWeightedEdge<UIElement> newUnWeightedEdge = new UnWeightedEdge<UIElement>(getVertex[0], getVertex[1]);
+            newUnWeightedEdge.CreateEdge();
+            DataStorage.EdgeList.Add(newUnWeightedEdge);
             AddElementsToCanvas();
 
             //Line edgeLine = new Line();
@@ -100,8 +128,8 @@ namespace GraphFinalProject
 
         private void ButtonAddVertex_OnClick(object sender, RoutedEventArgs e)
         {
-            Xaxis = Convert.ToDouble(TxtbXaxisManual.Text);
-            Yaxis = Convert.ToDouble(TxtbYaxisManual.Text);
+            Xcoordinate = Convert.ToDouble(TxtbXaxisManual.Text);
+            Ycoordinate = Convert.ToDouble(TxtbYaxisManual.Text);
             AddVertex();
         }
 
@@ -156,14 +184,13 @@ namespace GraphFinalProject
 
         private void CanvasPlane_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Xaxis = Math.Round(Convert.ToDouble(TxtbXaxisAuto.Text), 4);
-            Yaxis = Math.Round(Convert.ToDouble(TxtbYaxisAuto.Text), 4);
+            Xcoordinate = Math.Round(Convert.ToDouble(TxtbXaxisAuto.Text), 4);
+            Ycoordinate = Math.Round(Convert.ToDouble(TxtbYaxisAuto.Text), 4);
         }
 
         private void ButtonAddEdgeClick(object sender, RoutedEventArgs e)
         {
-            var x = TxtbAddEdge.Text.Split();
-            //AddEdge();
+            AddEdge();
         }
     }
 }

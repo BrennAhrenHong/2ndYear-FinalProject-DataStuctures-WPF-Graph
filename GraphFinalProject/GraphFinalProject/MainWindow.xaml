@@ -24,8 +24,6 @@
             <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
         <Button Content="Find Shortest Path" Grid.Column="0" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Center" Width="163" Height="40" Margin="10,14.333,0,13.667" />
-
-        <ListBox Grid.Column="5" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="157" Margin="0,0,0.333,67.667" Grid.RowSpan="2" />
         <Canvas Name="CanvasPlane" Background="AliceBlue" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="474" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown" Grid.RowSpan="2" Margin="0,0,0,67.667">
             <Border BorderBrush="Black" ClipToBounds="True" BorderThickness="1" MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseLeftButtonUp="Border_MouseLeftButtonUp" MouseMove="Border_MouseMove" Height="475" Width="474">
             </Border>
@@ -39,28 +37,31 @@
         <Label Grid.Row="0" Content="Adjacency Matrix" FontSize="18" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="148.333,9,0.333,10" Width="148" Grid.ColumnSpan="2" Height="49"/>
         <TextBox Name="TxtbAddEdge" Grid.Column="0"  HorizontalAlignment="Left" Margin="12,181,0,264" Grid.Row="1" TextWrapping="Wrap" Width="151"/>
         <Button Grid.Column="0" Content="Add Edge" HorizontalAlignment="Left" Margin="10,241,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonAddEdgeClick"/>
-        <Button Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Left" Margin="10,126,0,0" Grid.Row="1" VerticalAlignment="Bottom" Width="153" Height="42" Click="ButtonAddVertex_OnClick"/>
+        <Button Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Bottom" Width="163" Height="42" Click="ButtonAddVertex_OnClick"/>
 
         <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Height="25" Width="60" Grid.Column="1" Margin="10,0,0,10"/>
         <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" TextWrapping="NoWrap" Width="60" Margin="0,0,0,10"/>
 
-        <TextBox Grid.Column="0"  Grid.Row="1" Name="TxtbName" HorizontalAlignment="Left" Margin="59,13,0,438" TextWrapping="Wrap" Width="91"/>
+        <TextBox Grid.Column="0"  Grid.Row="1" Name="TxtbName" VerticalAlignment="Top"  VerticalContentAlignment="Center" HorizontalAlignment="Center" TextWrapping="NoWrap" Width="90" Height="25" MaxHeight="25" Margin="54,11,40,0"/>
         <Label Grid.Column="0" Content="V1, V2, Weight" HorizontalAlignment="Left" Margin="12,215,0,0" Grid.Row="1" VerticalAlignment="Top" Width="90"/>
         <Label Grid.Column="0" Content="Name:" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Label Grid.Column="0" Content="X:" HorizontalAlignment="Left" Margin="10,45,0,0" Grid.Row="1" VerticalAlignment="Top"/>
         <Label Grid.Column="0" Content="Y:" HorizontalAlignment="Left" Margin="10,83,0,0" Grid.Row="1" VerticalAlignment="Top"/>
 
-        <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="NoWrap" Height="25" Width="46" Grid.Row="1" Margin="61,46,77,0"/>
-        <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Grid.Row="1" Margin="61,83,77,0"/>
+        <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="NoWrap" Height="25" Width="46" Grid.Row="1" Margin="56,46,82,0"/>
+        <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Grid.Row="1" Margin="56,83,82,0"/>
 
-        <Button Grid.Column="0" Name="ButtonDelete" Content="Delete" HorizontalAlignment="Left" Margin="10,307,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonDelete_OnClick"/>
-        <ListView x:Name="ListViewVerticesList" ClipToBounds="True" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,0"  Grid.RowSpan="1" Grid.Row="1">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Width="50" Header="ID" DisplayMemberBinding="{Binding ID}"/>
-                    <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding Name}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <Button Grid.Column="0" Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" Margin="10,307,16,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonDelete_OnClick"/>
+
+        <DockPanel Grid.Column="4" LastChildFill="False" Grid.ColumnSpan="2" Margin="5,63,5,0" Grid.RowSpan="2">
+            <ListView Grid.ColumnSpan="2" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding ID}"/>
+                        <GridViewColumn Width="100" Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
     </Grid>
 </Window>

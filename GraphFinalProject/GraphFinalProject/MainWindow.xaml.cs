@@ -44,7 +44,7 @@ namespace GraphFinalProject
         {
             if (DataStorage.VertexLabelList.Count != 26)
             {
-                Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text);
+                Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text, DataStorage.IDNumber);
                 addVertex.CreateVertex();
                 DataStorage.VertexBorder.Add(addVertex);
                 AddElementsToCanvas();
@@ -75,11 +75,11 @@ namespace GraphFinalProject
                 bool parentExist2 = false;
                 foreach (var vertex in DataStorage.VertexBorder)
                 {
-                    if (vertex.Name == edge.Parent1.Name)
+                    if (vertex.Name == edge.FromVertex.Name)
                         parentExist1 = true;
                     
 
-                    if (vertex.Name == edge.Parent2.Name)
+                    if (vertex.Name == edge.ToVertex.Name)
                         parentExist2 = true;
                 }
 
@@ -97,13 +97,16 @@ namespace GraphFinalProject
 
         private void ButtonDelete_OnClick(object sender, RoutedEventArgs e)
         {
-            DataStorage.CanvasChildrenList.RemoveAt(ListViewVerticesList.SelectedIndex);
-            DataStorage.VertexBorder.RemoveAt(ListViewVerticesList.SelectedIndex);
-            DataStorage.VertexLabelList.RemoveAt(ListViewVerticesList.SelectedIndex);
-            AddElementsToCanvas();
-
             if (ListViewVerticesList.SelectedIndex > -1)
+            {
+                DataStorage.CanvasChildrenList.RemoveAt(ListViewVerticesList.SelectedIndex);
+                DataStorage.VertexBorder.RemoveAt(ListViewVerticesList.SelectedIndex);
+                DataStorage.VertexLabelList.RemoveAt(ListViewVerticesList.SelectedIndex);
+                DataStorage.IDNumber--;
+                AddElementsToCanvas();
+
                 ListViewVerticesList.Items.RemoveAt(ListViewVerticesList.SelectedIndex);
+            }
         }
         public void AddEdge()
         {
@@ -122,7 +125,7 @@ namespace GraphFinalProject
                     }
                 }
             }
-            UnDirectedEdge<UIElement> newUnDirectedEdge = new UnDirectedEdge<UIElement>(getVertex[0], getVertex[1]);
+            UnDirectedEdge<UIElement> newUnDirectedEdge = new UnDirectedEdge<UIElement>(getVertex[0], getVertex[1], Convert.ToInt32(TxtbWeight.Text));
             newUnDirectedEdge.CreateEdge();
             DataStorage.EdgeList.Add(newUnDirectedEdge);
             AddElementsToCanvas();

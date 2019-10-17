@@ -16,20 +16,23 @@ namespace GraphFinalProject
         public double XCoordinateLine2 { get; protected set; }
         public double YCoordinateLine1 { get; protected set; }
         public double YCoordinateLine2 { get; protected set; }
+        public int Weight { get; protected set; }
 
-        public Vertex<Border> Parent1 { get; protected set; }
-        public Vertex<Border> Parent2 { get; protected set; }
+        public Vertex<Border> FromVertex { get; protected set; }
+        public Vertex<Border> ToVertex { get; protected set; }
 
-        public UnDirectedEdge(Vertex<Border> vertex1, Vertex<Border> vertex2)
+        public UnDirectedEdge(Vertex<Border> fromVertex, Vertex<Border> toVertex, int weight)
         {
-            XCoordinateLine1 = vertex1.XCoordinate;
-            YCoordinateLine1 = vertex1.YCoordinate;
+            XCoordinateLine1 = fromVertex.XCoordinate;
+            YCoordinateLine1 = fromVertex.YCoordinate;
 
-            XCoordinateLine2 = vertex2.XCoordinate;
-            YCoordinateLine2 = vertex2.YCoordinate;
+            XCoordinateLine2 = toVertex.XCoordinate;
+            YCoordinateLine2 = toVertex.YCoordinate;
 
-            Parent1 = vertex1;
-            Parent2 = vertex2;
+            FromVertex = fromVertex;
+            ToVertex = toVertex;
+
+            Weight = weight;
         }
 
         public Line CreateEdge()

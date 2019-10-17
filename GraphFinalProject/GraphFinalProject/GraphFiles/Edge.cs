@@ -14,8 +14,8 @@ namespace Graphs
             ToVertex = vertex;
         }
 
-        public int FromVertex { get; set; }
-        public int ToVertex { get; set; }
+        public int FromVertex { get; protected set; }
+        public int ToVertex { get; protected set; }
     }
 
     public class WeightedEdge : Edge, IComparable<WeightedEdge>

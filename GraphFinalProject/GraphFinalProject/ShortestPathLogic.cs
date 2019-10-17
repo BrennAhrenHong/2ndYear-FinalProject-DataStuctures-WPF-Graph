@@ -11,8 +11,14 @@ namespace GraphFinalProject
     {
         public void FindShortestDistance()
         {
+            var edges = new List<WeightedEdge>();
+            foreach (var edge in DataStorage.EdgeList)
+            {
+                edges.Add(new WeightedEdge(edge.FromVertex.IDNumber,edge.ToVertex.IDNumber,edge.Weight));
+            }
+
             var vertices = new List<string> { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k" };
-            var edges = new List<WeightedEdge>{
+            var Zedges = new List<WeightedEdge>{
                 new WeightedEdge(0,7,10),//10
                 new WeightedEdge(0,4,1),//
                 new WeightedEdge(1,2,2),
@@ -27,7 +33,7 @@ namespace GraphFinalProject
                 new WeightedEdge(8,9,2),
                 new WeightedEdge(9,6,1),
             };
-            var wg = new WeightedGraph<string>(edges, vertices);
+            var wg = new WeightedGraph<string>(Zedges, vertices);
             var shortestPaths = wg.GetShortestPath(3);
             //PrintPath(shortestPaths);
         }

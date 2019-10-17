@@ -48,6 +48,7 @@
             <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Margin="46,73,71,0"/>
 
             <Button Grid.Column="0" x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" Margin="0,297,5,0" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonDelete_OnClick"/>
+            <TextBox Grid.Column="0" x:Name="TxtbWeight" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="143" Margin="10,127,10,0"/>
 
         </Grid>
 
@@ -58,7 +59,7 @@
             <ListView Grid.ColumnSpan="1" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="479">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
+                        <GridViewColumn Header="ListViewId" DisplayMemberBinding="{Binding ID}"/>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                     </GridView>
                 </ListView.View>

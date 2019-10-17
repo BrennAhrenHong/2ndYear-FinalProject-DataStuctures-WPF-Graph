@@ -14,12 +14,15 @@ namespace GraphFinalProject
         public double XCoordinate { get; protected set; }
         public double YCoordinate { get; protected set; }
         public string Name { get; protected set; }
+        public int IDNumber { get; protected set; }
 
-        public Vertex(double x, double y, string name)
+        public Vertex(double x, double y, string name, int iDNumber)
         {
             XCoordinate = x;
             YCoordinate = y;
             Name = name;
+            IDNumber = iDNumber;
+            DataStorage.IDNumber++;
         }
 
         public Label CreateLabel()
@@ -70,7 +73,7 @@ namespace GraphFinalProject
 
             Label label = CreateLabel();
 
-            DataStorage.ID.Add(label.ContentStringFormat);
+            DataStorage.ListViewId.Add(label.ContentStringFormat);
             DataStorage.VertexLabelList.Add(label);
             DataStorage.RecentIDMade = label.Content.ToString();
             if (Name == "")
@@ -86,7 +89,7 @@ namespace GraphFinalProject
             vertexBorder.Background = Brushes.LightSkyBlue;
             vertexBorder.Child = label;
 
-            //this.ListViewVerticesList.Items.Add(new ListViewItem { ID = DataStorage.IDNumber, Name = TxtbName.Text });
+            //this.ListViewVerticesList.Items.Add(new ListViewItem { ListViewId = DataStorage.IDNumber, Name = TxtbName.Text });
 
 
             vertexBorder.CornerRadius = new CornerRadius(50);

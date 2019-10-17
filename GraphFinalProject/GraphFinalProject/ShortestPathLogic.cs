@@ -29,7 +29,7 @@ namespace GraphFinalProject
             };
             var wg = new WeightedGraph<string>(edges, vertices);
             var shortestPaths = wg.GetShortestPath(3);
-            PrintPath(shortestPaths);
+            //PrintPath(shortestPaths);
         }
     }
 }

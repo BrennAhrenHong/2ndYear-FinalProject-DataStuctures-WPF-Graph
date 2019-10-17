@@ -148,6 +148,15 @@ namespace GraphFinalProject
             AddVertex();
         }
 
+        private void UpdateComboBox()
+        {
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                CmbStartingVertex.Items.Add(vertex.Name);
+                CmbEndingVertex.Items.Add(vertex.Name);
+            }
+        }
+
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             //if (e.OriginalSource is Ellipse)
@@ -208,16 +217,81 @@ namespace GraphFinalProject
             AddEdge();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Button_ShortestPathClick(object sender, RoutedEventArgs e)
         {
             ShortestPathLogic logic = new ShortestPathLogic(TheMainWindow);
-            logic.FindShortestDistance();
+            logic.FindShortestDistance(GetIndexOfVertex(CmbStartingVertex.Text));
+            Path();
+        }
+
+        private int GetIndexOfVertex(string name)
+        {
+            int index = -1;
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                if (vertex.Name == name)
+                {
+                    index = vertex.IDNumber;
+                }
+            }
+
+            return index;
+        }
+
+        private void Path()
+        {
+            int prev = 0;
+            var pathStack = new Stack<Vertex<Border>>();
+            //Find the id of the prevIndex
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                if (CmbEndingVertex.SelectedItem == vertex.Name)
+                {
+                    pathStack.Push(vertex);
+                    break;
+                }
+            }
+
+            while (DataStorage.PredecessorList[pathStack.Peek().IDNumber] > -1)
+            {
+                var x = DataStorage.PredecessorList[pathStack.Peek().IDNumber];
+                pathStack.Push(DataStorage.VerticesList[x]);
+            }
+
+            TxtbPath.Clear();
+            while (pathStack.Count != 1)
+            {
+                TxtbPath.Text += pathStack.Pop().Name + " -> ";
+            }
+            TxtbPath.Text += pathStack.Pop().Name;
         }
 
         private void Button_ShowVerticesClick(object sender, RoutedEventArgs e)
         {
             LabelDockPanel.Content = "Vertices List";
             ListViewVerticesList.Visibility = Visibility.Visible;
+
+            TxtbCost.Visibility = Visibility.Collapsed;
+            TxtbPredecessor.Visibility = Visibility.Collapsed;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ListViewVerticesList.Visibility = Visibility.Collapsed;
+            TxtbCost.Visibility = Visibility.Visible;
+            TxtbPredecessor.Visibility = Visibility.Visible;
+        }
+
+        private void CmbStartingVertex_DropDownOpened(object sender, EventArgs e)
+        {
+            CmbStartingVertex.Items.Clear();
+            UpdateComboBox();
+        }
+
+        private void CmbEndingVertex_DropDownOpened(object sender, EventArgs e)
+        {
+            CmbEndingVertex.Items.Clear();
+            UpdateComboBox();
         }
     }
 }

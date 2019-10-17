@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,6 +22,7 @@ namespace GraphFinalProject
         public static List<Vertex<Border>> VerticesList = new List<Vertex<Border>>();
         public static List<string> ListViewId = new List<string>();
         public static List<int> Weight = new List<int>();
+        public static List<int> PredecessorList = new List<int>();
 
     }
 }

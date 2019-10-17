@@ -14,7 +14,7 @@ namespace GraphFinalProject
         {
             MainWindow = mainWindow;
         }
-        public void FindShortestDistance()
+        public void FindShortestDistance(int sourceVertex)
         {
             var edges = new List<WeightedEdge>();
             foreach (var edge in DataStorage.EdgeList)
@@ -29,7 +29,7 @@ namespace GraphFinalProject
             }
 
             var weightedGraph = new WeightedGraph<string>(edges, vertices);
-            var shortestPaths = weightedGraph.GetShortestPath(0);
+            var shortestPaths = weightedGraph.GetShortestPath(sourceVertex);
             PrintPath(shortestPaths);
 
             //var vertices = new List<string> { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k" };
@@ -65,6 +65,8 @@ namespace GraphFinalProject
                 if (path.Costs[i] >= double.MaxValue) MainWindow.TxtbCost.Text += $"{"\u221e",5}";
                 else MainWindow.TxtbCost.Text += ($"{path.Costs[i],5}");
             }
+            MainWindow.TxtbPredecessor.Clear();
+            MainWindow.TxtbCost.Clear();
 
             MainWindow.TxtbPredecessor.Text = "Predecessors:";
             MainWindow.TxtbPredecessor.Text += "\n";
@@ -76,6 +78,9 @@ namespace GraphFinalProject
             for (int i = 0; i < path.Costs.Count; i++)
                 MainWindow.TxtbPredecessor.Text +=$"{path.Predecessor[i],5}";
             MainWindow.TxtbPredecessor.Text += "\n";
+
+            for (int i = 0; i < path.Costs.Count; i++)
+                DataStorage.PredecessorList.Add(path.Predecessor[i]);
         }
     }
 }

@@ -98,7 +98,7 @@ namespace GraphFinalProject
             Canvas.SetLeft(vertexBorder, x - 15);
             Canvas.SetTop(vertexBorder, y - 15);
 
-            //DataStorage.VertexBorder.Add(vertexBorder);
+            //DataStorage.VerticesList.Add(vertexBorder);
             DataStorage.CanvasChildrenList.Add(vertexBorder);
 
             //CanvasPlane Children Adding

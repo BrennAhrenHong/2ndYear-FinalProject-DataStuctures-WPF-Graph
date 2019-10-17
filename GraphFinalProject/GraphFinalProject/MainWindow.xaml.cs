@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -32,6 +33,7 @@ namespace GraphFinalProject
         public MainWindow()
         {
             InitializeComponent();
+           TheMainWindow = this;
         }
 
         //private bool MousePress = false;
@@ -39,6 +41,7 @@ namespace GraphFinalProject
 
         public double Xcoordinate { get; set; }
         public double Ycoordinate { get; set; }
+        public MainWindow TheMainWindow { get; protected set; }
 
         public void AddVertex()
         {
@@ -46,7 +49,7 @@ namespace GraphFinalProject
             {
                 Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text, DataStorage.IDNumber);
                 addVertex.CreateVertex();
-                DataStorage.VertexBorder.Add(addVertex);
+                DataStorage.VerticesList.Add(addVertex);
                 AddElementsToCanvas();
 
                 if (TxtbName.Text == "")
@@ -68,12 +71,14 @@ namespace GraphFinalProject
         public void AddElementsToCanvas()
         {
             CanvasPlane.Children.Clear();
+            
+            var tmpList = new List<UnDirectedEdge<UIElement>>();
 
             foreach (var edge in DataStorage.EdgeList)
             {
                 bool parentExist1 = false;
                 bool parentExist2 = false;
-                foreach (var vertex in DataStorage.VertexBorder)
+                foreach (var vertex in DataStorage.VerticesList)
                 {
                     if (vertex.Name == edge.FromVertex.Name)
                         parentExist1 = true;
@@ -86,7 +91,12 @@ namespace GraphFinalProject
                 if (parentExist1 && parentExist2)
                     CanvasPlane.Children.Add(edge.CreateEdge());
                 else
-                    DataStorage.EdgeList.Remove(edge);
+                    tmpList.Add(edge);
+            }
+
+            foreach (var edge in tmpList)
+            {
+                DataStorage.EdgeList.Remove(edge);
             }
 
             foreach (var uiElement in DataStorage.CanvasChildrenList)
@@ -100,7 +110,7 @@ namespace GraphFinalProject
             if (ListViewVerticesList.SelectedIndex > -1)
             {
                 DataStorage.CanvasChildrenList.RemoveAt(ListViewVerticesList.SelectedIndex);
-                DataStorage.VertexBorder.RemoveAt(ListViewVerticesList.SelectedIndex);
+                DataStorage.VerticesList.RemoveAt(ListViewVerticesList.SelectedIndex);
                 DataStorage.VertexLabelList.RemoveAt(ListViewVerticesList.SelectedIndex);
                 DataStorage.IDNumber--;
                 AddElementsToCanvas();
@@ -116,7 +126,7 @@ namespace GraphFinalProject
 
             for (int i = 0; i < 2; i++)
             {
-                foreach (var vertex in DataStorage.VertexBorder)
+                foreach (var vertex in DataStorage.VerticesList)
                 {
                     if (vertex.Name == tmpArray[i])
                     {
@@ -200,15 +210,14 @@ namespace GraphFinalProject
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //Canvas.GetLeft(DataStorage.CanvasChildrenList[0]);
-            Label addLabel = new Label();
-            addLabel.Content = "A";
-            DataStorage.VertexLabelList.Add(addLabel);
-            addLabel.Content = "B";
-            DataStorage.VertexLabelList.Add(addLabel);
+            ShortestPathLogic logic = new ShortestPathLogic(TheMainWindow);
+            logic.FindShortestDistance();
+        }
 
-            Label z = new Label();
-            var y = DataStorage.VertexLabelList.Find(x=> z.Content.Equals("A"));
+        private void Button_ShowVerticesClick(object sender, RoutedEventArgs e)
+        {
+            LabelDockPanel.Content = "Vertices List";
+            ListViewVerticesList.Visibility = Visibility.Visible;
         }
     }
 }

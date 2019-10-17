@@ -63,7 +63,6 @@
     <Compile Include="GraphFiles\ShortesPathSample.cs" />
     <Compile Include="GraphFiles\Tree.cs" />
     <Compile Include="GraphFiles\UnweightedGraph.cs" />
-    <Compile Include="GraphFiles\WeightedSimpleGraphTests.cs" />
     <Compile Include="ShortestPathLogic.cs" />
     <Compile Include="Vertex.cs" />
     <Page Include="MainWindow.xaml">

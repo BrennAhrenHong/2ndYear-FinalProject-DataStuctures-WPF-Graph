@@ -31,15 +31,13 @@
                 </ContextMenu>
             </Canvas.ContextMenu>
         </Canvas>
-        <Label Grid.Row="0" Content="Vertices List" FontSize="20" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Label Grid.Row="0" Content="Adjacency Matrix" FontSize="18" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="148.333,9,0.333,10" Width="148" Grid.ColumnSpan="2" Height="49"/>
+        <Label Name="LabelDockPanel" Grid.Row="0" Content="Vertices List" FontSize="20" Grid.Column="4" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.ColumnSpan="2"/>
         <Grid Margin="11,11,10,67" Grid.Row="1" Grid.RowSpan="2">
             <TextBox x:Name="TxtbAddEdge" Grid.Column="0"  HorizontalAlignment="Left" Margin="2,171,0,264" TextWrapping="Wrap" Width="151"/>
             <Button Grid.Column="0" Content="Add Edge" HorizontalAlignment="Left" Margin="0,231,0,0" VerticalAlignment="Top" Width="158" Height="41" Click="ButtonAddEdgeClick"/>
             <Button Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="163" Height="42" Click="ButtonAddVertex_OnClick"/>
 
             <TextBox Grid.Column="0" x:Name="TxtbName" VerticalAlignment="Top"  VerticalContentAlignment="Center" HorizontalAlignment="Center" TextWrapping="NoWrap" Width="90" Height="25" MaxHeight="25" Margin="44,1,29,0"/>
-            <Label Grid.Column="0" Content="V1, V2, Weight" HorizontalAlignment="Left" Margin="2,205,0,0" VerticalAlignment="Top" Width="90"/>
             <Label Grid.Column="0" Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
             <Label Grid.Column="0" Content="X:" HorizontalAlignment="Left" Margin="0,35,0,0" VerticalAlignment="Top"/>
             <Label Grid.Column="0" Content="Y:" HorizontalAlignment="Left" Margin="0,73,0,0" VerticalAlignment="Top"/>
@@ -55,15 +53,21 @@
         <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Height="25" Width="60" Grid.Column="1" Margin="10,0,0,10"/>
         <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" TextWrapping="NoWrap" Width="60" Margin="0,0,0,10"/>
 
-        <DockPanel Grid.Column="4" LastChildFill="False" Grid.ColumnSpan="2" Margin="5,63,0,0" Grid.RowSpan="2">
-            <ListView Grid.ColumnSpan="1" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="479">
+        <DockPanel Name="DPInfoDisplay" Grid.Column="4" LastChildFill="False" Grid.ColumnSpan="2" Margin="10,64,-5,67" Grid.RowSpan="3">
+            <ListView Visibility="Collapsed" DockPanel.Dock="Top" Grid.ColumnSpan="1" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="479">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ListViewId" DisplayMemberBinding="{Binding ID}"/>
+                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
+            <TextBox Name="TxtbCost" DockPanel.Dock="Top" Height="150" TextWrapping="Wrap" Text="" VerticalAlignment="Top"/>
+            <TextBox Name="TxtbPredecessor" DockPanel.Dock="Bottom" Height="150" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom"/>
         </DockPanel>
+        <Label x:Name="TmpLabel" FontSize="20" Grid.Column="1" Content="Path:" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="60" Grid.Row="2"/>
+        <Button Content="Vertices" Grid.Column="4" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48" Click="Button_ShowVerticesClick"/>
+        <Button Content="Adjacency Matrix" Grid.Column="5" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48"/>
+        <TextBox FontSize="20" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="70,19,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="394"/>
     </Grid>
 </Window>

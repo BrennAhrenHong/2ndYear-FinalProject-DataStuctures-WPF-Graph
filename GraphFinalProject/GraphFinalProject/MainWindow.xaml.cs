@@ -42,17 +42,27 @@ namespace GraphFinalProject
 
         public void AddVertex()
         {
-            Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text);
-            addVertex.CreateVertex();
-            DataStorage.VertexBorder.Add(addVertex);
-            AddElementsToCanvas();
+            if (DataStorage.VertexLabelList.Count != 26)
+            {
+                Vertex<Border> addVertex = new Vertex<Border>(Xcoordinate, Ycoordinate, TxtbName.Text);
+                addVertex.CreateVertex();
+                DataStorage.VertexBorder.Add(addVertex);
+                AddElementsToCanvas();
 
-            if (TxtbName.Text == "")
-                TxtbName.Text = DataStorage.RecentIDMade;
-            
+                if (TxtbName.Text == "")
+                    TxtbName.Text = DataStorage.RecentIDMade;
 
-            ListViewVerticesList.Items.Add(new ListViewItem { ID = DataStorage.RecentIDMade, Name = TxtbName.Text});
-            TxtbName.Clear();
+
+                ListViewVerticesList.Items.Add(new ListViewItem {ID = DataStorage.RecentIDMade, Name = TxtbName.Text});
+                TxtbName.Clear();
+
+
+                foreach (var col in ((GridView) ListViewVerticesList.View).Columns)
+                {
+                    if (double.IsNaN(col.Width)) col.Width = col.ActualWidth;
+                    col.Width = double.NaN;
+                }
+            }
         }
 
         public void AddElementsToCanvas()
@@ -72,8 +82,11 @@ namespace GraphFinalProject
                     if (vertex.Name == edge.Parent2.Name)
                         parentExist2 = true;
                 }
-                if(parentExist1 && parentExist2)
+
+                if (parentExist1 && parentExist2)
                     CanvasPlane.Children.Add(edge.CreateEdge());
+                else
+                    DataStorage.EdgeList.Remove(edge);
             }
 
             foreach (var uiElement in DataStorage.CanvasChildrenList)
@@ -184,7 +197,15 @@ namespace GraphFinalProject
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Canvas.GetLeft(DataStorage.CanvasChildrenList[0]);
+            //Canvas.GetLeft(DataStorage.CanvasChildrenList[0]);
+            Label addLabel = new Label();
+            addLabel.Content = "A";
+            DataStorage.VertexLabelList.Add(addLabel);
+            addLabel.Content = "B";
+            DataStorage.VertexLabelList.Add(addLabel);
+
+            Label z = new Label();
+            var y = DataStorage.VertexLabelList.Find(x=> z.Content.Equals("A"));
         }
     }
 }

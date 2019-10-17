@@ -22,37 +22,33 @@ namespace GraphFinalProject
             Name = name;
         }
 
-        public Label CreateLabel(char prevLetter, int listlabelCount)
+        public Label CreateLabel()
         {
             string labelContent = "";
-            char currentLetter;
-            int currentLabelNumber = DataStorage.LabelNumber;
-
+            bool letterDoesNotExist = false;
+            //DataStorage.VertexLabelList.FindLast();
             //Assigning of Current Letter to PrevLetter & Creating the Label content letter
-            if (prevLetter != 'Z')
+            Label tmp = new Label();
+
+            if (DataStorage.VertexLabelList.Count != 0)
             {
-                currentLetter = ++prevLetter;
-                DataStorage.PrevLetter = currentLetter;
+                for (char i = 'A'; !letterDoesNotExist; i++)
+                {
+                    letterDoesNotExist = true;
+                    foreach (var label in DataStorage.VertexLabelList)
+                    {
+                        if (label.Content.ToString() == i.ToString())
+                        {
+                            letterDoesNotExist = false;
+                            break;
+                        }
+                    }
+                    labelContent = i.ToString();
+                }
             }
             else
             {
-                currentLetter = 'A';
-                DataStorage.PrevLetter = 'A';
-            }
-
-            //If labelLetter reaches Z
-            if (listlabelCount % 26 == 0 && listlabelCount > 25)
-            {
-                DataStorage.LabelNumber++;
-            }
-
-            if (listlabelCount > 26)
-            {
-                labelContent += currentLetter + "" + currentLabelNumber;
-            }
-            else
-            {
-                labelContent += currentLetter;
+                labelContent = "A";
             }
 
             //Create label for vertex
@@ -70,12 +66,9 @@ namespace GraphFinalProject
         {
             double x = XCoordinate;
             double y = YCoordinate;
-            Label label;
 
-            if (DataStorage.VertexLabelList.Count != 0)
-                label = CreateLabel(DataStorage.PrevLetter, DataStorage.VertexLabelList.Count + 1);
-            else
-                label = CreateLabel(DataStorage.PrevLetter, 0);
+
+            Label label = CreateLabel();
 
             DataStorage.ID.Add(label.ContentStringFormat);
             DataStorage.VertexLabelList.Add(label);
@@ -85,11 +78,8 @@ namespace GraphFinalProject
 
             Border vertexBorder = new Border();
 
-            int characters = label.Content.ToString().Length;
-            characters = characters * 10 + 25;
-
-            vertexBorder.Height = characters;
-            vertexBorder.Width = characters;
+            vertexBorder.Height = 25;
+            vertexBorder.Width = 25;
 
             vertexBorder.BorderBrush = Brushes.Black;
             vertexBorder.BorderThickness = new Thickness(1);

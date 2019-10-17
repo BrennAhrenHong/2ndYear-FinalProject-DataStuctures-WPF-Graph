@@ -11,7 +11,6 @@ namespace GraphFinalProject
     public static class DataStorage
     {
         public static char PrevLetter = 'Z';
-        public static int LabelNumber = 0;
         public static string RecentIDMade;
 
         public static List<Label> VertexLabelList = new List<Label>();

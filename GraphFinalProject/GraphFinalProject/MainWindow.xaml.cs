@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -72,7 +73,7 @@ namespace GraphFinalProject
         {
             CanvasPlane.Children.Clear();
             
-            var tmpList = new List<UnDirectedEdge<UIElement>>();
+            var tmpList = new List<DirectedEdge<UIElement>>();
 
             foreach (var edge in DataStorage.EdgeList)
             {
@@ -120,25 +121,37 @@ namespace GraphFinalProject
         }
         public void AddEdge()
         {
-            string[] tmpArray = TxtbAddEdge.Text.Split(',');
-            int counter = 0;
-            Vertex<Border>[] getVertex = new Vertex<Border>[2];
-
-            for (int i = 0; i < 2; i++)
+            int.TryParse(TxtbWeight.Text, out int result);
+            
+            if (result > 0 && CmbFromVertex.Text != null && CmbToVertex.Text != null)
             {
-                foreach (var vertex in DataStorage.VerticesList)
+                string[] tmpArray = new string[2];
+                tmpArray[0] = CmbFromVertex.Text;
+                tmpArray[1] = CmbToVertex.Text;
+
+
+                int counter = 0;
+                Vertex<Border>[] getVertex = new Vertex<Border>[2];
+
+                for (int i = 0; i < 2; i++)
                 {
-                    if (vertex.Name == tmpArray[i])
+                    foreach (var vertex in DataStorage.VerticesList)
                     {
-                        getVertex[i] = vertex;
-                        break;
+                        if (vertex.Name == tmpArray[i])
+                        {
+                            getVertex[i] = vertex;
+                            break;
+                        }
                     }
                 }
+                DirectedEdge<UIElement> newDirectedEdge = new DirectedEdge<UIElement>(getVertex[0], getVertex[1], Convert.ToInt32(TxtbWeight.Text));
+                newDirectedEdge.CreateEdge();
+
+                //ListViewVerticesList.Items.Add(new ListViewItem { Weight = DataStorage.EdgeList[] });
+                
+                DataStorage.EdgeList.Add(newDirectedEdge);
+                AddElementsToCanvas();
             }
-            UnDirectedEdge<UIElement> newUnDirectedEdge = new UnDirectedEdge<UIElement>(getVertex[0], getVertex[1], Convert.ToInt32(TxtbWeight.Text));
-            newUnDirectedEdge.CreateEdge();
-            DataStorage.EdgeList.Add(newUnDirectedEdge);
-            AddElementsToCanvas();
         }
 
         private void ButtonAddVertex_OnClick(object sender, RoutedEventArgs e)
@@ -154,6 +167,9 @@ namespace GraphFinalProject
             {
                 CmbStartingVertex.Items.Add(vertex.Name);
                 CmbEndingVertex.Items.Add(vertex.Name);
+
+                CmbFromVertex.Items.Add(vertex.Name);
+                CmbToVertex.Items.Add(vertex.Name);
             }
         }
 
@@ -219,9 +235,12 @@ namespace GraphFinalProject
 
         private void Button_ShortestPathClick(object sender, RoutedEventArgs e)
         {
-            ShortestPathLogic logic = new ShortestPathLogic(TheMainWindow);
-            logic.FindShortestDistance(GetIndexOfVertex(CmbStartingVertex.Text));
-            Path();
+            if (CmbStartingVertex.SelectedIndex > -1 && CmbEndingVertex.SelectedIndex > -1)
+            {
+                ShortestPathLogic logic = new ShortestPathLogic(TheMainWindow);
+                logic.FindShortestDistance(GetIndexOfVertex(CmbStartingVertex.Text));
+                Path();
+            }
         }
 
         private int GetIndexOfVertex(string name)
@@ -273,6 +292,7 @@ namespace GraphFinalProject
 
             TxtbCost.Visibility = Visibility.Collapsed;
             TxtbPredecessor.Visibility = Visibility.Collapsed;
+            LabelDockPanel.Content = "Vertices List";
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
@@ -280,18 +300,48 @@ namespace GraphFinalProject
             ListViewVerticesList.Visibility = Visibility.Collapsed;
             TxtbCost.Visibility = Visibility.Visible;
             TxtbPredecessor.Visibility = Visibility.Visible;
+            LabelDockPanel.Content = "Other Info";
         }
 
         private void CmbStartingVertex_DropDownOpened(object sender, EventArgs e)
         {
+            CmbFromVertex.Items.Clear();
             CmbStartingVertex.Items.Clear();
             UpdateComboBox();
         }
 
         private void CmbEndingVertex_DropDownOpened(object sender, EventArgs e)
         {
+            CmbToVertex.Items.Clear();
             CmbEndingVertex.Items.Clear();
             UpdateComboBox();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            App.Current.Shutdown();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        { 
+            DataStorage.IDNumber = 0; 
+            DataStorage.RecentIDMade = "";
+            
+            DataStorage.VertexLabelList = new List<Label>(); 
+            DataStorage.EdgeList = new List<DirectedEdge<UIElement>>(); 
+            DataStorage.CanvasChildrenList = new List<UIElement>(); 
+            DataStorage.VerticesList = new List<Vertex<Border>>(); 
+            DataStorage.ListViewId = new List<string>(); 
+            DataStorage.Weight = new List<int>(); 
+            DataStorage.PredecessorList = new List<int>();
+            CanvasPlane.Children.Clear();
+            ListViewVerticesList.Items.Clear();
+        }
+
+        private void MenuItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
         }
     }
 }

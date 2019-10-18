@@ -4,11 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GraphFinalProject"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         WindowStartupLocation="CenterScreen"
         SnapsToDevicePixels="True"
         ResizeMode="CanResizeWithGrip"
         mc:Ignorable="d"
-        Title="MainWindow" Height="640" Width="980">
+        Title="Graph" Height="640" Width="980">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -23,6 +24,7 @@
             <ColumnDefinition Width="6*" />
             <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
+
         <Canvas  Name="CanvasPlane" Background="AliceBlue" Grid.ColumnSpan="3" HorizontalAlignment="Center" Height="475" Grid.Row="1" VerticalAlignment="Center" Width="474" Grid.Column="1" MouseMove="CanvasPlane_MouseMove" MouseRightButtonDown="CanvasPlane_MouseRightButtonDown" Grid.RowSpan="2" Margin="0,0,0,67.667">
             <Canvas.ContextMenu>
                 <ContextMenu Name="ContextMenuCanvas">
@@ -37,10 +39,8 @@
                 <RowDefinition Height="3*"></RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-
-            <TextBox x:Name="TxtbAddEdge" Grid.Column="0" Height="25" HorizontalAlignment="Left" Margin="61,65,0,67" TextWrapping="Wrap" Width="90" Grid.Row="1"/>
-            <Button Grid.Column="0" Grid.Row="1" Content="Add Edge" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Height="41" Margin="10" Click="ButtonAddEdgeClick"/>
-            <Button Grid.Row="0" Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Height="42" Click="ButtonAddVertex_OnClick" Margin="17,0,27,10"/>
+            <Button Background="DodgerBlue" BorderBrush="Black"  Grid.Column="0" Grid.Row="1" Content="Add Edge" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Height="41" Margin="2" Click="ButtonAddEdgeClick"/>
+            <Button Background="DodgerBlue" BorderBrush="Black"  Grid.Row="0" Grid.Column="0" Content="Add Vertex" HorizontalAlignment="Center" VerticalAlignment="Bottom" Width="120" Height="42" Click="ButtonAddVertex_OnClick" Margin="17,0,27,10"/>
 
             <TextBox Grid.Column="0" Grid.Row="0" x:Name="TxtbName" VerticalAlignment="Top"  VerticalContentAlignment="Center" HorizontalAlignment="Center" TextWrapping="NoWrap" Width="90" Height="25" MaxHeight="25" Margin="61,13,13,0"/>
             <Label Grid.Column="0" Grid.Row="0" Content="Name:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,12,0,0"/>
@@ -50,20 +50,24 @@
             <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="NoWrap" Height="25" Width="46" Margin="61,43,57,0"/>
             <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Margin="61,73,57,0"/>
 
-            <Button Grid.Column="0" x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="41" Click="ButtonDelete_OnClick" Grid.Row="2" Margin="10"/>
-            <TextBox Grid.Column="0" x:Name="TxtbWeight" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="92" Margin="59,15,13,0" Grid.Row="1"/>
-            <ComboBox Name="CmbStartingVertex" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Width="120" Grid.Row="2" DropDownOpened="CmbStartingVertex_DropDownOpened"/>
-            <ComboBox Name="CmbEndingVertex"  HorizontalAlignment="Center" Margin="30" VerticalAlignment="Bottom" Width="120" Grid.Row="2" DropDownOpened="CmbEndingVertex_DropDownOpened"/>
-            <Label Content="Weight:" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-            <Label Content="Vertices:" HorizontalAlignment="Left" Margin="7,64,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-
+            <Button Background="DodgerBlue" BorderBrush="Black"  Grid.Column="0" x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="40" Click="ButtonDelete_OnClick" Grid.Row="2" Margin="32,39,32,0"/>
+            <TextBox Grid.Column="0" x:Name="TxtbWeight" HorizontalAlignment="Center" VerticalAlignment="Top" Height="31" TextWrapping="NoWrap" Width="92" Margin="69,15,23,0" Grid.Row="1"/>
+            <ComboBox Name="CmbStartingVertex" HorizontalAlignment="Center" Margin="50,97,14,33" VerticalAlignment="Center" Width="120" Grid.Row="2" DropDownOpened="CmbStartingVertex_DropDownOpened"/>
+            <ComboBox Name="CmbEndingVertex"  HorizontalAlignment="Center" Margin="50,0,14,0" VerticalAlignment="Bottom" Width="120" Grid.Row="2" DropDownOpened="CmbEndingVertex_DropDownOpened"/>
+            <Label Content="Weight:" HorizontalAlignment="Left" Margin="7,15,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+            <Label Content="From:" HorizontalAlignment="Left" Margin="7,46,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+            <ComboBox x:Name="CmbFromVertex" HorizontalAlignment="Center" Margin="69,46,23,84" VerticalAlignment="Center" Width="92" Grid.Row="1" DropDownOpened="CmbStartingVertex_DropDownOpened"/>
+            <ComboBox x:Name="CmbToVertex"  HorizontalAlignment="Center" Margin="69,0,23,51" VerticalAlignment="Bottom" Width="92" Grid.Row="1" DropDownOpened="CmbEndingVertex_DropDownOpened"/>
+            <Label Content="To:" HorizontalAlignment="Left" Margin="7,81,0,0" VerticalAlignment="Top" Grid.Row="1"/>
+            <Label Content="To:" HorizontalAlignment="Left" Margin="5,132,0,0" VerticalAlignment="Top" Grid.Row="2"/>
+            <Label Content="From:" HorizontalAlignment="Left" Margin="5,104,0,0" VerticalAlignment="Top" Grid.Row="2"/>
         </Grid>
 
-        <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" VerticalAlignment="Bottom" TextWrapping="NoWrap" Height="25" Width="60" Grid.Column="1" Margin="10,0,0,10"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" TextWrapping="NoWrap" Width="60" Margin="0,0,10,10"/>
+        <TextBox Grid.Row="0" Name="TxtbXaxisAuto" HorizontalAlignment="Left" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" VerticalAlignment="Bottom" TextWrapping="NoWrap" Height="40" Width="60" Grid.Column="1" Margin="10,0,0,10"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="TxtbYaxisAuto" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="40" TextWrapping="NoWrap" Width="60" Margin="0,0,10,10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
 
-        <DockPanel Name="DPInfoDisplay" Grid.Column="4" LastChildFill="False" Grid.ColumnSpan="2" Margin="10,64,-5,67" Grid.RowSpan="3">
-            <ListView Visibility="Collapsed" DockPanel.Dock="Top" Grid.ColumnSpan="1" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="479">
+        <DockPanel Name="DPInfoDisplay" Grid.Column="4" LastChildFill="False" Margin="10,64,11,67" Grid.RowSpan="3" Grid.ColumnSpan="2">
+            <ListView Visibility="Visible" DockPanel.Dock="Top" Grid.ColumnSpan="1" x:Name="ListViewVerticesList" VerticalContentAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Top">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}"/>
@@ -71,13 +75,21 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <TextBox Name="TxtbCost" DockPanel.Dock="Top" Height="150" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Margin="0,0,10,0"/>
-            <TextBox Name="TxtbPredecessor" DockPanel.Dock="Bottom" Height="150" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
+            <TextBox Visibility="Collapsed" Name="TxtbCost" DockPanel.Dock="Top" Height="75" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Margin="0,0,10,0"/>
+            <TextBox Visibility="Collapsed" Name="TxtbPredecessor" DockPanel.Dock="Top" Height="75" TextWrapping="Wrap" Text="" VerticalAlignment="Bottom" Margin="0,0,10,0"/>
         </DockPanel>
         <Label x:Name="TmpLabel" FontSize="20" Grid.Column="1" Content="Path:" HorizontalAlignment="Left" Margin="10,17,0,0" VerticalAlignment="Top" Width="60" Grid.Row="2"/>
-        <Button Content="Vertices" Grid.Column="4" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48" Click="Button_ShowVerticesClick"/>
-        <Button Content="Adjacency Matrix" Grid.Column="5" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48" Click="Button_Click_1"/>
-        <TextBox Name="TxtbPath" FontSize="20" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="70,19,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="394"/>
-        <Button Content="Find Shortest Path" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Bottom" Height="40" Click="Button_ShortestPathClick" Width="120" Margin="10" Grid.Row="2" />
+        <Button Background="DodgerBlue" BorderBrush="Black"  Content="Vertices" Grid.Column="4" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48" Click="Button_ShowVerticesClick"/>
+        <Button Background="DodgerBlue" BorderBrush="Black"  Content="More Info" Grid.Column="5" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="137" Height="48" Click="Button_Click_1"/>
+        <TextBox Name="TxtbPath" IsReadOnly="True" FontSize="20" Grid.ColumnSpan="3" Grid.Column="1" HorizontalAlignment="Left" Height="35" Margin="70,19,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="394"/>
+        <Button Background="DodgerBlue" BorderBrush="Black"  Content="Find Shortest Path" HorizontalAlignment="Center" Grid.Column="0" VerticalAlignment="Bottom" Height="40" Click="Button_ShortestPathClick" Width="120" Margin="10" Grid.Row="2" />
+        <Button Background="DarkRed" BorderBrush="Black"  Content="{materialDesign:PackIcon ExitToApp}" HorizontalAlignment="Left" Margin="10" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="70" Height="34" Click="Button_Click"/>
+        <Button Background="SeaGreen" BorderBrush="Black" Content="{materialDesign:PackIcon Restart}" HorizontalAlignment="Right" Margin="10"  VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="70" Height="34" Click="Button_Click_2">
+            <Button.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Name="CmRestartButton" Header="Full Restart" Click="MenuItem_OnClick"></MenuItem>
+                </ContextMenu>
+            </Button.ContextMenu>
+        </Button>
     </Grid>
 </Window>

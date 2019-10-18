@@ -55,6 +55,7 @@ namespace GraphFinalProject
 
         public void PrintPath(Path path)
         {
+            MainWindow.TxtbCost.Clear();
             MainWindow.TxtbCost.Text = "Costs: \n";
             for (int i = 0; i < path.Costs.Count; i++)
                 MainWindow.TxtbCost.Text += ($"{i,5}");
@@ -66,7 +67,7 @@ namespace GraphFinalProject
                 else MainWindow.TxtbCost.Text += ($"{path.Costs[i],5}");
             }
             MainWindow.TxtbPredecessor.Clear();
-            MainWindow.TxtbCost.Clear();
+
 
             MainWindow.TxtbPredecessor.Text = "Predecessors:";
             MainWindow.TxtbPredecessor.Text += "\n";

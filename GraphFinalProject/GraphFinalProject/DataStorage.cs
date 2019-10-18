@@ -11,13 +11,11 @@ namespace GraphFinalProject
 {
     public static class DataStorage
     {
-        public static char PrevLetter = 'Z';
         public static int IDNumber = 0;
         public static string RecentIDMade;
 
         public static List<Label> VertexLabelList = new List<Label>();
-        public static List<UnDirectedEdge<UIElement>> EdgeList = new List<UnDirectedEdge<UIElement>>();
-        public static List<UIElement> CanvasEdgeList = new List<UIElement>();
+        public static List<DirectedEdge<UIElement>> EdgeList = new List<DirectedEdge<UIElement>>();
         public static List<UIElement> CanvasChildrenList = new List<UIElement>();
         public static List<Vertex<Border>> VerticesList = new List<Vertex<Border>>();
         public static List<string> ListViewId = new List<string>();

@@ -24,7 +24,7 @@
         <!--Center Column SubGrid Canvas and Control Panel-->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="10*"></RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -32,16 +32,30 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
+
             <Border Grid.Row="1" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2">
-                <Canvas Background="AliceBlue"/>
+                <Canvas Background="AliceBlue">
+                    <Canvas.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Name="CmiAddVertex" Header="Add Vertex" Click="CmiAddVertex_OnClick"/>
+                        </ContextMenu>
+                    </Canvas.ContextMenu>
+                </Canvas>
             </Border>
-            <Button Content="AddVertex" HorizontalAlignment="Left" Height="25" Width="129" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="49,68,0,57"/>
-            <TextBox HorizontalAlignment="Left" Height="24" Margin="49,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="129"/>
-            <TextBlock HorizontalAlignment="Left" Margin="10,13,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
-            <TextBlock HorizontalAlignment="Left" Margin="34,42,0,0" Grid.Row="2" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top"/>
-            <TextBlock HorizontalAlignment="Left" Margin="109,42,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top"/>
-            <TextBox HorizontalAlignment="Left" Height="24" Margin="49,39,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
-            <TextBox HorizontalAlignment="Left" Height="24" Margin="123,39,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
+
+            <TextBlock HorizontalAlignment="Left" TextAlignment="Center" Height="24" Margin="10,13,0,0" Grid.Row="0" Grid.Column="0" Text="X:" VerticalAlignment="Center"></TextBlock>
+            <TextBlock HorizontalAlignment="Left" TextAlignment="Center" Height="24" Margin="90,13,0,0" Grid.Row="0" Grid.Column="0" Text="Y:" VerticalAlignment="Center"></TextBlock>
+            
+            <TextBox Name="TxtbXcoordinates" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Margin="25,5,0,0" TextAlignment="Center" Height="24" Grid.Row="0" Grid.Column="0"></TextBox>
+            <TextBox Name="TxtbYcoordinates" HorizontalAlignment="Left" VerticalAlignment="Center" Width="50" Margin="105,5,0,0" TextAlignment="Center" Height="24" Grid.Row="0" Grid.Column="0"></TextBox>
+
+            <Button Content="AddVertex" HorizontalAlignment="Left" Height="25" Width="128" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="49,0,0,-10"/>
+            <TextBox HorizontalAlignment="Left" Height="24" Margin="49,10,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="129"/>
+            <TextBlock HorizontalAlignment="Left" Margin="10,13,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="34,42,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="109,42,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top"/>
+            <TextBox HorizontalAlignment="Left" Height="24" Margin="49,39.333,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
+            <TextBox HorizontalAlignment="Left" Height="24" Margin="123,39,0,0" Grid.Column="0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="55"/>
         </Grid>
 
         <!--Right Column SubGrid (Info Panel)-->

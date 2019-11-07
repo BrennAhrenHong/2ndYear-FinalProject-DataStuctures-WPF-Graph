@@ -25,12 +25,14 @@ namespace TheGraphProject
             InitializeComponent();
         }
 
-        private double AspectRatio = 0.0;
-
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             
         }
 
+        private void CmiAddVertex_OnClick(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -16,6 +16,7 @@ namespace GraphFinalProject
         }
         public void FindShortestDistance(int sourceVertex)
         {
+            DataStorage.PredecessorList.Clear();
             var edges = new List<WeightedEdge>();
             foreach (var edge in DataStorage.EdgeList)
             {

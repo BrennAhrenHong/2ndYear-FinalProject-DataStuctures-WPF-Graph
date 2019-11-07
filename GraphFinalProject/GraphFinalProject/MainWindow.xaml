@@ -50,7 +50,7 @@
             <TextBox Grid.Column="0" x:Name="TxtbXaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="NoWrap" Height="25" Width="46" Margin="61,43,57,0"/>
             <TextBox Grid.Column="0" x:Name="TxtbYaxisManual" HorizontalAlignment="Center" VerticalAlignment="Top" Height="25" TextWrapping="NoWrap" Width="46" Margin="61,73,57,0"/>
 
-            <Button Background="DodgerBlue" BorderBrush="Black"  Grid.Column="0" x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="40" Click="ButtonDelete_OnClick" Grid.Row="2" Margin="32,39,32,0"/>
+            <Button Background="DodgerBlue" BorderBrush="Black"  Grid.Column="0" x:Name="ButtonDelete" Content="Delete" HorizontalAlignment="Center" VerticalAlignment="Top" Width="120" Height="40" Click="ButtonDelete_OnClick" Grid.Row="2" Margin="30"/>
             <TextBox Grid.Column="0" x:Name="TxtbWeight" HorizontalAlignment="Center" VerticalAlignment="Top" Height="31" TextWrapping="NoWrap" Width="92" Margin="69,15,23,0" Grid.Row="1"/>
             <ComboBox Name="CmbStartingVertex" HorizontalAlignment="Center" Margin="50,97,14,33" VerticalAlignment="Center" Width="120" Grid.Row="2" DropDownOpened="CmbStartingVertex_DropDownOpened"/>
             <ComboBox Name="CmbEndingVertex"  HorizontalAlignment="Center" Margin="50,0,14,0" VerticalAlignment="Bottom" Width="120" Grid.Row="2" DropDownOpened="CmbEndingVertex_DropDownOpened"/>

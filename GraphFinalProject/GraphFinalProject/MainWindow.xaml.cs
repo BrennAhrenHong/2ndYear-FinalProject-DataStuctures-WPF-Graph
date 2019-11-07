@@ -42,6 +42,7 @@ namespace GraphFinalProject
 
         public double Xcoordinate { get; set; }
         public double Ycoordinate { get; set; }
+        public bool IsDragging { get; set; }
         public MainWindow TheMainWindow { get; protected set; }
 
         public void AddVertex()
@@ -197,6 +198,7 @@ namespace GraphFinalProject
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
+            
             //if(dragStart != null && e.LeftButton == MouseButtonState.Pressed)
             //{
             //    var element = (UIElement)sender;
@@ -204,7 +206,6 @@ namespace GraphFinalProject
             //    Canvas.SetLeft(element, p2.X - dragStart.Value.X);
             //    Canvas.SetTop(element, p2.Y - dragStart.Value.Y);
             //}
-
         }
 
 
@@ -334,6 +335,9 @@ namespace GraphFinalProject
             DataStorage.ListViewId = new List<string>(); 
             DataStorage.Weight = new List<int>(); 
             DataStorage.PredecessorList = new List<int>();
+            TxtbPath.Clear();
+            TxtbCost.Clear();
+            TxtbPredecessor.Clear();
             CanvasPlane.Children.Clear();
             ListViewVerticesList.Items.Clear();
         }

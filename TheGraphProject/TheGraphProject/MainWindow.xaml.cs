@@ -25,14 +25,11 @@ namespace TheGraphProject
             InitializeComponent();
         }
 
+
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             
         }
 
-        private void CmiAddVertex_OnClick(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

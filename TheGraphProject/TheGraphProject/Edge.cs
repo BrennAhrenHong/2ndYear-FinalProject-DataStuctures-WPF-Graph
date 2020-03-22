@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheGraphProject
 {
-    public static class DataStorage
+    public class Edge
     {
 
     }

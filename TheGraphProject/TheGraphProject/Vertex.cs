@@ -1,47 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Label = System.Windows.Controls.Label;
 
 namespace TheGraphProject
 {
     public class Vertex
     {
-        Vertex(double x, double y)
+        public Vertex(double x, double y)
         {
-            Xcords = x;
-            Ycords = y;
+            Vertex_X_Coords = x;
+            Vertex_Y_Coords = y;
         }
-        public double Xcords { get; protected set; }
-        public double Ycords { get; protected set; }
+        public string Name { get; protected set; }
+        public int VertexIDNumber { get; protected set; }
+        public double Vertex_X_Coords { get; protected set; }
+        public double Vertex_Y_Coords { get; protected set; }
+        public bool HasEdge { get; protected set; }
 
-        public Border CircleBorder(String vertexText)
+        public Border CreateVertex()
         {
             Border createVertex = new Border();
-            createVertex.BorderBrush = Brushes.Black;
-            createVertex.Width = 25;
+
             createVertex.Height = 25;
-            createVertex.CornerRadius = new CornerRadius(50);
+            createVertex.Width = 25;
+            createVertex.BorderBrush = Brushes.Black;
             createVertex.BorderThickness = new Thickness(1);
 
-            
-
-
-            createVertex.Child = CreateVertexLabel(sometext);
-            return createVertex;
+            return null;
         }
-
-        public Label CreateVertexLabel(string vertexText)
-        {
-
-            Label createLabel = new Label();
-            createLabel.Content = vertexText;
-        }
-     }
+    }
 }

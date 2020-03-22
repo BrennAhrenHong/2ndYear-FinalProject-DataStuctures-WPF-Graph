@@ -7,7 +7,15 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Loaded="MainWindow_OnLoaded"
-        Title="MainWindow" Height="720" Width="1080">
+        Title="MainWindow" Height="720" Width="1080"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        TextElement.FontWeight="Regular"
+        TextElement.FontSize="13"
+        TextOptions.TextFormattingMode="Ideal"
+        TextOptions.TextRenderingMode="Auto"
+        Background="{DynamicResource MaterialDesignPaper}"
+        FontFamily="{DynamicResource MaterialDesignFont}">
     <Grid>
         <!--Main Grid-->
         <Grid.ColumnDefinitions>
@@ -39,6 +47,9 @@
                 </ListView.View>
             </ListView>
         </Grid>
+        <Grid>
+
+        </Grid>
 
         <!--Center Column SubGrid Canvas and Control Panel-->
         <Grid Grid.Column="1">
@@ -54,17 +65,17 @@
             <Border Grid.Row="1" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="2">
                 <Canvas Name="CanvasGraph" Background="AliceBlue"/>
             </Border>
-            <Button Name="BtnAddVertex" Content="AddVertex" HorizontalAlignment="Left" Height="25" Width="129" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Margin="49,0,0,61"/>
+            <Button Name="BtnAddVertex" Content="AddVertex" HorizontalAlignment="Left" Height="25" Width="144" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Margin="34,0,0,43"/>
             <TextBox Name="TxtbVertexName" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="49,10,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="129"/>
-            <TextBox Name="TxtbX" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="49,39,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
-            <TextBox Name="TxtbY" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="123,39,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
+            <TextBox x:Name="TxtbX" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55" Margin="49,51,0,0" Grid.Row="2"/>
+            <TextBox x:Name="TxtbY" HorizontalAlignment="Left" Height="24" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55" Margin="123,51,0,0" Grid.Row="2"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top" Margin="34,54,0,0" Grid.Row="2"/>
+            <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top" Margin="109,54,0,0" Grid.Row="2"/>
             <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="10,13,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="34,42,0,0" Grid.Row="2" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top"/>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="109,42,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top"/>
 
             <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="196,13,53,0" Grid.Row="2" TextWrapping="Wrap" Text="Starting Vertex:" VerticalAlignment="Top" Width="86"/>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="202,39,53,0" Grid.Row="2" TextWrapping="Wrap" Text="Ending Vertex:" VerticalAlignment="Top" Width="80"/>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="235,69,58,0" Grid.Row="2" TextWrapping="Wrap" Text="Weight: " VerticalAlignment="Top" Width="42"/>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="196,45,59,0" Grid.Row="2" TextWrapping="Wrap" Text="Ending Vertex:" VerticalAlignment="Top" Width="80"/>
+            <TextBlock Grid.Column="0" HorizontalAlignment="Center" Margin="196,78,92,0" Grid.Row="2" TextWrapping="Wrap" Text="Weight: " VerticalAlignment="Top" Width="47"/>
             <ComboBox Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="288,10,0,0" Grid.Row="2" VerticalAlignment="Top" Width="120"/>
             <ComboBox Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" Margin="288,36,0,0" Grid.Row="2" VerticalAlignment="Top" Width="120"/>
             <TextBox Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="288,66,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
@@ -78,7 +89,12 @@
 
         <!--Right Column SubGrid (Info Panel)-->
         <Grid Grid.Column="2">
+            <StackPanel>
+                <Image Height="140"/>
+                <ListView>
 
+                </ListView>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

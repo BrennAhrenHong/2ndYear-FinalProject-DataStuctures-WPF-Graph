@@ -11,20 +11,22 @@ namespace TheGraphProject
 {
     public class Vertex
     {
-        public Vertex(string name, char vertexListViewIdLetter, double x, double y)
+        public Vertex(MainWindow mainWindow, string name, char vertexListViewIdLetter, double x, double y)
         {
+            MainWindow = mainWindow;
             Name = name;
             VertexListViewIdLetter = vertexListViewIdLetter;
             Vertex_X_Coords = x;
             Vertex_Y_Coords = y;
         }
 
+        public MainWindow MainWindow { get; set; }
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
         public char VertexListViewIdLetter { get; protected set; }
         public double Vertex_X_Coords { get; protected set; }
         public double Vertex_Y_Coords { get; protected set; }
-        public List<Char> EdgesConnected { get; protected set; }
+        public List<Edge> EdgesConnected = new List<Edge>();
 
         public Label CreateLabel()
         {
@@ -40,6 +42,7 @@ namespace TheGraphProject
         {
             Border newVertex = new Border();
 
+
             newVertex.Height = 25;
             newVertex.Width = 25;
             newVertex.BorderBrush = Brushes.Black;
@@ -51,6 +54,10 @@ namespace TheGraphProject
             Canvas.SetLeft(newVertex, Vertex_X_Coords - 15); //SetLeft = X-Axis
             Canvas.SetTop(newVertex, Vertex_Y_Coords - 15); //SetTop = Y-Axis
             Panel.SetZIndex(newVertex,1);
+
+            newVertex.MouseLeftButtonDown += MainWindow.Vertex_MouseLeftButtonDown;
+            newVertex.MouseMove += MainWindow.Vertex_MouseMove;
+            newVertex.MouseLeftButtonUp += MainWindow.Vertex_MouseLeftButtonUp;
 
             VertexIdNumber = DataStorage.UniqueIDList.Count;
             if (DataStorage.UniqueIDList.Count == 0)

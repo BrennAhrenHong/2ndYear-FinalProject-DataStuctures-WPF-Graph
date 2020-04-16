@@ -25,7 +25,7 @@ namespace TheGraphProject
         public double XCoordinateLine2 { get; protected set; }
         public double YCoordinateLine1 { get; protected set; }
         public double YCoordinateLine2 { get; protected set; }
-        public List<Vertex> VerticesConnecetedList { get; set; }
+        public List<Vertex> VerticesConnectedList = new List<Vertex>();
         public int Weight { get; protected set; }
 
         public Edge(double xCoordinateLine1, double yCoordinateLine1, double xCoordinateLine2, double yCoordinateLine2)

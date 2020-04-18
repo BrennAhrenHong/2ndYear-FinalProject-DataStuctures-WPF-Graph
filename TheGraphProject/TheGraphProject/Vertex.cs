@@ -21,11 +21,12 @@ namespace TheGraphProject
         }
 
         public MainWindow MainWindow { get; set; }
+        public Border VertexStored { get; set; }
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
         public char VertexListViewIdLetter { get; protected set; }
-        public double Vertex_X_Coords { get; protected set; }
-        public double Vertex_Y_Coords { get; protected set; }
+        public double Vertex_X_Coords { get; set; }
+        public double Vertex_Y_Coords { get; set; }
         public List<Edge> EdgesConnected = new List<Edge>();
 
         public Label CreateLabel()
@@ -65,7 +66,7 @@ namespace TheGraphProject
             else
                 DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
 
-            
+            VertexStored = newVertex;
 
             return newVertex;
         }

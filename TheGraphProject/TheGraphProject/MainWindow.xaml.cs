@@ -235,6 +235,23 @@ namespace TheGraphProject
             isDragging = true;
             clickPosition = e.GetPosition(this);
             draggableControl.CaptureMouse();
+
+            var x = e.GetPosition(CanvasGraph).X;
+            var y = e.GetPosition(CanvasGraph).Y;
+
+            foreach (var item in DataStorage.VertexList)
+            {
+                if (draggableControl == item.VertexStored)
+                {
+                    CanvasGraph.Children.Remove(draggableControl);
+                    item.Vertex_X_Coords = x;
+                    item.Vertex_Y_Coords = y;
+                    CanvasGraph.Children.Add(item.VertexStored);
+                    break;
+                }
+            }
+
+
         }
 
         public void Vertex_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

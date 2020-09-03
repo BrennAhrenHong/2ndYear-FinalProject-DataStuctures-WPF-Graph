@@ -16,8 +16,8 @@ namespace TheGraphProject
             MainWindow = mainWindow;
             Name = name;
             VertexListViewIdLetter = vertexListViewIdLetter;
-            Vertex_X_Coords = x;
-            Vertex_Y_Coords = y;
+            VertexXCoords = x;
+            VertexYCoords = y;
         }
 
         public MainWindow MainWindow { get; set; }
@@ -25,9 +25,11 @@ namespace TheGraphProject
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
         public char VertexListViewIdLetter { get; protected set; }
-        public double Vertex_X_Coords { get; set; }
-        public double Vertex_Y_Coords { get; set; }
-        public List<Edge> EdgesConnected = new List<Edge>();
+        public double VertexXCoords { get; set; }
+        public double VertexYCoords { get; set; }
+        public bool IsStartingVertex { get; set; } = false;
+
+        public LinkedList<Edge> EdgesConnected = new LinkedList<Edge>();
 
         public Label CreateLabel()
         {
@@ -39,7 +41,7 @@ namespace TheGraphProject
             return vertexLabel;
         }
 
-        public Border CreateVertex()
+        public void CreateVertex()
         {
             Border newVertex = new Border();
 
@@ -52,9 +54,9 @@ namespace TheGraphProject
             newVertex.CornerRadius = new CornerRadius(50);
             newVertex.Child = CreateLabel();
 
-            Canvas.SetLeft(newVertex, Vertex_X_Coords - 15); //SetLeft = X-Axis
-            Canvas.SetTop(newVertex, Vertex_Y_Coords - 15); //SetTop = Y-Axis
-            Panel.SetZIndex(newVertex,1);
+            Canvas.SetLeft(newVertex, VertexXCoords - 12.5); //SetLeft = X-Axis
+            Canvas.SetTop(newVertex, VertexYCoords - 12.5); //SetTop = Y-Axis
+            Panel.SetZIndex(newVertex, 1);
 
             newVertex.MouseLeftButtonDown += MainWindow.Vertex_MouseLeftButtonDown;
             newVertex.MouseMove += MainWindow.Vertex_MouseMove;
@@ -67,8 +69,6 @@ namespace TheGraphProject
                 DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
 
             VertexStored = newVertex;
-
-            return newVertex;
         }
     }
 }

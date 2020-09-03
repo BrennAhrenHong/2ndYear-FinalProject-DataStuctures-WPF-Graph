@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -29,12 +30,12 @@ namespace TheGraphProject
         //Delete Edge Functionality 0%
         //Collision Checker Functionality 0%
 
-
         private double SelectedCanvas_XCoordinate { get; set; }
         private double SelectedCanvas_YCoordinate { get; set; }
-
         protected bool isDragging;
         private Point clickPosition;
+        private Point ClickStart;
+        private Border SelectedVertexOrigin;
         private TranslateTransform originTT;
 
         public MainWindow()
@@ -47,7 +48,6 @@ namespace TheGraphProject
             //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 4 , Name = "H", });
             //VerticesList.ItemsSource = DataStorage.ListViewItems;
             //LinkedList<Int32> x = new LinkedList<int>();
-            
             LoadStackWithIDStartUp();
         }
 
@@ -57,13 +57,28 @@ namespace TheGraphProject
         {
             Vertex newVertex = new Vertex(this, TxtbVertexName.Text, DataStorage.IDStack.Peek(),
                 Convert.ToInt32(SelectedCanvas_XCoordinate), Convert.ToInt32(SelectedCanvas_YCoordinate));
-
-            DataStorage.VertexList.Add(newVertex);
-            CanvasGraph.Children.Add(newVertex.CreateVertex());
+            newVertex.CreateVertex();
+            DataStorage.VertexList.AddLast(newVertex);
+            AddChildrenToCanvas();
             DataStorage.ListViewItems.Add(new DataTemplate()
             { ID = DataStorage.IDStack.Pop(), Name = TxtbVertexName.Text, });
             ListViewVerticesList.ItemsSource = "";
             ListViewVerticesList.ItemsSource = DataStorage.ListViewItems;
+        }
+
+        public void AddChildrenToCanvas()
+        {
+            CanvasGraph.Children.Clear();
+            if (DataStorage.VertexList.Count != 0)
+            {
+                foreach (var vertex in DataStorage.VertexList) {
+                    CanvasGraph.Children.Add(vertex.VertexStored);
+                }
+
+                foreach (var edge in DataStorage.EdgeList){
+                    CanvasGraph.Children.Add(edge.EdgeLine);
+                }
+            }
         }
 
         public void AddEdge()
@@ -79,25 +94,16 @@ namespace TheGraphProject
                 EdgeType = "UnDirected";
             }
 
+
             Vertex StartingVertex = null;
             Vertex EndingVertex = null;
 
-            int StartingVertexIndex = 0;
-            int EndingVertexIndex = 0;
-
-            foreach (var x in DataStorage.VertexList)
+            foreach (var vertex in DataStorage.VertexList)
             {
-                if (x.VertexListViewIdLetter == DataStorage.SelectedStartingVertex)
-                {
-                    StartingVertex = x;
-                    StartingVertexIndex = DataStorage.VertexList.IndexOf(x);
-                }
-
-                if (x.VertexListViewIdLetter == DataStorage.SelectedEndingVertex)
-                {
-                    EndingVertex = x;
-                    EndingVertexIndex = DataStorage.VertexList.IndexOf(x);
-                }
+                if (vertex.VertexListViewIdLetter == Convert.ToChar(CmbStartingVertex.SelectedItem))
+                    StartingVertex = vertex;
+                else if (vertex.VertexListViewIdLetter == Convert.ToChar(CmbEndingVertex.SelectedItem))
+                    EndingVertex = vertex;
             }
 
             if (StartingVertex != null && EndingVertex != null)
@@ -105,35 +111,30 @@ namespace TheGraphProject
                 switch (EdgeType)
                 {
                     case "Directed":
-                        {
+                    {
+
                             break;
-                        }
+                    }
 
                     case "UnDirected":
-                        {
-                            Edge createUndirectedEdge = new Edge(StartingVertex.Vertex_X_Coords,
-                                StartingVertex.Vertex_Y_Coords, EndingVertex.Vertex_X_Coords, EndingVertex.Vertex_Y_Coords);
+                    {
+                            StartingVertex.IsStartingVertex = true;
+                            Edge createUndirectedEdge = new Edge(StartingVertex, EndingVertex);
                             CanvasGraph.Children.Add(createUndirectedEdge.AddEdge());
-                            DataStorage.VertexList[StartingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
-                            DataStorage.VertexList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
+                            DataStorage.EdgeList.Add(createUndirectedEdge);
+                            //DataStorage.VertexList.Find(EdgesConnected.Addlast(createUndirectedEdge));
+                            //DataStorage.VertexList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
                             break;
-                        }
+                    }
 
                     default:
                         break;
                 }
             }
+
         }
 
         //Events
-        private void CanvasGraph_MouseMove(object sender, MouseEventArgs e)
-        {
-            var x = e.GetPosition(CanvasGraph).X;
-            var y = e.GetPosition(CanvasGraph).Y;
-                
-            TxtboxAutoCaptureXCoords.Text = Math.Round(Convert.ToDouble(x)).ToString();
-            TxtboxAutoCaptureYCoords.Text = Math.Round(Convert.ToDouble(y)).ToString();
-        }
 
         private void BtnAddVertex_Click(object sender, RoutedEventArgs e)
         {
@@ -215,17 +216,28 @@ namespace TheGraphProject
             TxtbWeight.IsReadOnly = true;
         }
 
+        //Moving Vertex
+
         public void Vertex_MouseMove(object sender, MouseEventArgs e)
         {
             var draggableControl = sender as Border;
             if (isDragging && draggableControl != null)
             {
-                Point currentPosition = e.GetPosition(this);
+                Point currentPosition = e.GetPosition(CanvasGraph);
                 var transform = draggableControl.RenderTransform as TranslateTransform ?? new TranslateTransform();
                 transform.X = originTT.X + (currentPosition.X - clickPosition.X);
                 transform.Y = originTT.Y + (currentPosition.Y - clickPosition.Y);
+
                 draggableControl.RenderTransform = new TranslateTransform(transform.X, transform.Y);
             }
+        }
+        private void CanvasGraph_MouseMove(object sender, MouseEventArgs e)
+        {
+            var x = e.GetPosition(CanvasGraph).X;
+            var y = e.GetPosition(CanvasGraph).Y;
+
+            TxtboxAutoCaptureXCoords.Text = Math.Round(Convert.ToDouble(x)).ToString();
+            TxtboxAutoCaptureYCoords.Text = Math.Round(Convert.ToDouble(y)).ToString();
         }
 
         public void Vertex_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -233,33 +245,55 @@ namespace TheGraphProject
             var draggableControl = sender as Border;
             originTT = draggableControl.RenderTransform as TranslateTransform ?? new TranslateTransform();
             isDragging = true;
-            clickPosition = e.GetPosition(this);
+            SelectedVertexOrigin = draggableControl; //THE SELECTED VERTEX
+            clickPosition = e.GetPosition(CanvasGraph);
+            ClickStart = e.GetPosition(CanvasGraph);
             draggableControl.CaptureMouse();
-
-            var x = e.GetPosition(CanvasGraph).X;
-            var y = e.GetPosition(CanvasGraph).Y;
-
-            foreach (var item in DataStorage.VertexList)
-            {
-                if (draggableControl == item.VertexStored)
-                {
-                    CanvasGraph.Children.Remove(draggableControl);
-                    item.Vertex_X_Coords = x;
-                    item.Vertex_Y_Coords = y;
-                    CanvasGraph.Children.Add(item.VertexStored);
-                    break;
-                }
-            }
-
-
         }
 
         public void Vertex_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+
             isDragging = false;
             var draggable = sender as Border;
             draggable.ReleaseMouseCapture();
+
+            var x = e.GetPosition(CanvasGraph).X; //(Canvas.GetLeft(SelectedVertexOrigin) + 12.5) - (ClickStart.X - e.GetPosition(CanvasGraph).X);
+            var y = e.GetPosition(CanvasGraph).Y; //(Canvas.GetTop(SelectedVertexOrigin) + 12.5) - (ClickStart.Y - e.GetPosition(CanvasGraph).Y);
+            Console.WriteLine($"{x} {y}");
+                foreach (var vertex in DataStorage.VertexList)
+                {
+                    if (draggable == vertex.VertexStored)
+                    {
+                        vertex.VertexXCoords = x;
+                        vertex.VertexYCoords = y;
+                        foreach (var edge in DataStorage.EdgeList)
+                        {
+                            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
+                            {
+                                edge.VertexA.VertexXCoords = vertex.VertexXCoords;
+                                edge.VertexA.VertexYCoords = vertex.VertexYCoords;
+                            }
+
+                            if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
+                            {
+                                edge.VertexB.VertexXCoords = vertex.VertexXCoords;
+                                edge.VertexB.VertexYCoords = vertex.VertexYCoords;
+                            }
+
+                            edge.ChangeLine();
+                            Console.WriteLine($"{edge.EdgeLine.X1} {edge.EdgeLine.Y1} {edge.EdgeLine.X2} {edge.EdgeLine.Y2}");
+                        }
+
+                        break;
+                    }
+                }
+            AddChildrenToCanvas();
         }
 
+        private void CMenuItemListViewDeleteSelected_OnClick(object sender, RoutedEventArgs e)
+        {
+            //ListViewVerticesList.Items.
+        }
     }
 }

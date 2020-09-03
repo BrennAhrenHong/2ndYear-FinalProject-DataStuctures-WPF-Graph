@@ -35,7 +35,7 @@ namespace TheGraphProject
         public static char SelectedEndingVertex { get; set; }
 
         public static List<DataTemplate> ListViewItems = new List<DataTemplate>();
-        public static List<Vertex> VertexList = new List<Vertex>();
+        public static LinkedList<Vertex> VertexList = new LinkedList<Vertex>();
         public static List<Edge> EdgeList = new List<Edge>();
         //public static List<char> ListViewIDArray = new List<char>();
         public static List<int> UniqueIDList = new List<int>();

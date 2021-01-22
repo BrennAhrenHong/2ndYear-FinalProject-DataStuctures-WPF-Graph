@@ -35,6 +35,7 @@ namespace TheGraphProject
         public LinkedList<Vertex> VerticesConnectedList = new LinkedList<Vertex>();
         public int Weight { get; protected set; }
         public Line EdgeLine { get; protected set; }
+        public TextBlock TxtBlockWeight {get; protected set; }
 
         public Edge(Vertex vertexA, Vertex vertexB)
         {
@@ -42,10 +43,16 @@ namespace TheGraphProject
             VertexB = vertexB;
         }
 
+        public Edge(Vertex vertexA, Vertex vertexB, int weight)
+        {
+            VertexA = vertexA;
+            VertexB = vertexB;
+            Weight = weight;
+        }
+
+
         public Line AddEdge()
         {
-            TextBlock textBlockLine = new TextBlock();
-            //textBlockLine.ADD
 
             Line edgeLine = new Line();
 
@@ -68,6 +75,43 @@ namespace TheGraphProject
             EdgeLine = edgeLine;
             return edgeLine;
         }
+        public Line AddEdge(int weight) 
+        {
+
+            
+
+            Line edgeLine = new Line();
+
+            edgeLine.X1 = VertexA.VertexXCoords;
+            edgeLine.Y1 = VertexA.VertexYCoords;
+
+            edgeLine.X2 = VertexB.VertexXCoords;
+            edgeLine.Y2 = VertexB.VertexYCoords;
+
+
+
+
+            //textBlock Weight
+            TextBlock textBlockLine = new TextBlock();
+            textBlockLine.Text = weight.ToString();
+
+            double XmidPointCoordinates = (edgeLine.X1 + edgeLine.X2) / 2;
+            double YmidPointCoordinates = (edgeLine.Y1 + edgeLine.Y2) / 2;
+
+            Canvas.SetLeft(textBlockLine, XmidPointCoordinates);
+            Canvas.SetTop(textBlockLine, YmidPointCoordinates);
+            Canvas.SetZIndex(textBlockLine,1);
+
+            TxtBlockWeight = textBlockLine;
+
+            edgeLine.Stroke = Brushes.Black;
+            edgeLine.StrokeThickness = 2;
+            edgeLine.Fill = Brushes.Black;
+
+            //textBlockLine.Inlines.Add(new Line{});
+            EdgeLine = edgeLine;
+            return edgeLine;
+        }
 
         public void ChangeLine()
         {
@@ -76,6 +120,15 @@ namespace TheGraphProject
 
             EdgeLine.X2 = VertexB.VertexXCoords;
             EdgeLine.Y2 = VertexB.VertexYCoords;
+
+
+
+            double XmidPointCoordinates = (EdgeLine.X1 + EdgeLine.X2) / 2;
+            double YmidPointCoordinates = (EdgeLine.Y1 + EdgeLine.Y2) / 2;
+
+            Canvas.SetLeft(TxtBlockWeight, XmidPointCoordinates);
+            Canvas.SetTop(TxtBlockWeight, YmidPointCoordinates);
+            Canvas.SetZIndex(TxtBlockWeight, 1);
         }
     }
 }

@@ -43,16 +43,17 @@
             <ListView Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" MaxWidth="200">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn/>
+                        <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding EdgeId}"/>
+                        <GridViewColumn Header="Weight" Width="100" DisplayMemberBinding="{Binding Weight}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
 
             <Grid Grid.Row="3">
                 <RadioButton Name="RadioButtonWeighted" GroupName="WeightMode" IsChecked="True" Content="Weighted" HorizontalAlignment="Left" Margin="10,98,0,35" Click="RadioButtonWeighted_Click"/>
-                <RadioButton Name="RadioBUnweighted" GroupName="WeightMode" IsChecked="False" Content="Unweighted" HorizontalAlignment="Left" Margin="93,98,0,0" VerticalAlignment="Top" Click="RadioBUnweighted_Click"/>
-                <RadioButton Name="RadioButtonDirected" GroupName="LineMode" IsChecked="false" Content="Directed" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top"/>
-                <RadioButton Name="RadioUndirected" GroupName="LineMode" IsChecked="True" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top"/>
+                <RadioButton Name="RadioButtonUnweighted" GroupName="WeightMode" IsChecked="False" Content="Unweighted" HorizontalAlignment="Left" Margin="93,98,0,0" VerticalAlignment="Top" Click="RadioButtonUnweighted_Click"/>
+                <RadioButton Name="RadioButtonDirected" GroupName="LineMode" IsChecked="false" Content="Directed" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Click="RadioButtonDirected_OnClick"/>
+                <RadioButton Name="RadioButtonUndirected" GroupName="LineMode" IsChecked="True" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top" Click="RadioButtonUndirected_OnClick"/>
             </Grid>
         </Grid>
 
@@ -69,7 +70,7 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Border Grid.Row="1" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="3">
-                <Canvas Name="CanvasGraph" Background="AliceBlue" MouseMove="CanvasGraph_MouseMove" MouseRightButtonDown="CanvasGraph_MouseRightButtonDown">
+                <Canvas Name="CanvasGraph" ClipToBounds="True" Background="AliceBlue" MouseMove="CanvasGraph_MouseMove" MouseRightButtonDown="CanvasGraph_MouseRightButtonDown">
                     <Canvas.ContextMenu>
                         <ContextMenu>
                             <MenuItem Name="CMenuItemAddVertex" Header="Add Vertex" Click="CMenuItemAddVertex_OnClick"/>
@@ -94,13 +95,15 @@
             <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="45,83,132,0" Grid.Row="2" TextWrapping="Wrap" Text="Weight: " VerticalAlignment="Top" Width="46"/>
             <ComboBox Name="CmbStartingVertex" Grid.Column="1" ItemsSource="{Binding VertexList}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" Width="120" Margin="96,9,7,0" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="CmbStartingVertex_DropDownClosed"/>
             <ComboBox Name="CmbEndingVertex" Grid.Column="1" ItemsSource="{Binding VertexList}" HorizontalAlignment="Center" Margin="96,42,7,0" Grid.Row="2" VerticalAlignment="Top" Width="120" DropDownOpened="CmbEndingVertex_DropDownOpened" DropDownClosed="CmbEndingVertex_DropDownClosed"/>
-            <TextBox Name="TxtbWeight" Grid.Column="1" IsReadOnly="False" HorizontalAlignment="Left" Height="24" Margin="96,75,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <TextBox Name="TxtbWeight" Text="5" Grid.Column="1" IsReadOnly="False" HorizontalAlignment="Left" Height="24" Margin="96,75,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
             <Button Name="BtnAddEdge" Content="Add Edge" HorizontalAlignment="Center" Margin="96,0,7,10"  Height="33" Width="120" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Grid.ColumnSpan="1" Click="BtnAddEdge_Click"/>
 
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,9,0,0" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top"/>
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="75,9,0,0" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top"/>
             <TextBox Name="TxtboxAutoCaptureXCoords" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="15,6,0,0" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
             <TextBox Name="TxtboxAutoCaptureYCoords" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="89,6,0,0" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
+            <TextBox Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="49,17,0,0" Grid.Row="2" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <Button Content="Button" Grid.Column="2" HorizontalAlignment="Left" Margin="49,78,0,0" Grid.Row="2" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         </Grid>
 
         <!--Right Column SubGrid (Info Panel)-->

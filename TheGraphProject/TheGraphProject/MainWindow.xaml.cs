@@ -29,6 +29,7 @@ namespace TheGraphProject
         //Delete Vertex Functionality 0%
         //Delete Edge Functionality 0%
         //Collision Checker Functionality 0%
+        //Add adjacency matrix
 
         private double SelectedCanvas_XCoordinate { get; set; }
         private double SelectedCanvas_YCoordinate { get; set; }
@@ -72,11 +73,19 @@ namespace TheGraphProject
             if (DataStorage.VertexList.Count != 0)
             {
                 foreach (var vertex in DataStorage.VertexList) {
-                    CanvasGraph.Children.Add(vertex.VertexStored);
+                    //Canvas.SetLeft(vertex.GetVertex,vertex.VertexXCoords);
+                    //Canvas.SetTop(vertex.GetVertex,vertex.VertexYCoords); 
+                    CanvasGraph.Children.Add(vertex.GetVertex);
                 }
 
                 foreach (var edge in DataStorage.EdgeList){
                     CanvasGraph.Children.Add(edge.EdgeLine);
+                    if (RadioButtonWeighted.IsChecked == true)
+                    {
+                        CanvasGraph.Children.Add(edge.TxtBlockWeight);
+                    }
+
+
                 }
             }
         }
@@ -89,7 +98,7 @@ namespace TheGraphProject
                 EdgeType = "Directed";
             }
 
-            if (RadioUndirected.IsChecked == true)
+            if (RadioButtonUndirected.IsChecked == true)
             {
                 EdgeType = "UnDirected";
             }
@@ -112,16 +121,32 @@ namespace TheGraphProject
                 {
                     case "Directed":
                     {
-
+                            Edge createDirectedEdge = new Edge(StartingVertex, EndingVertex, Convert.ToInt32(TxtbWeight.Text));
+                            CanvasGraph.Children.Add(createDirectedEdge.AddEdge());
+                            DataStorage.EdgeList.Add(createDirectedEdge);
                             break;
                     }
 
                     case "UnDirected":
                     {
                             StartingVertex.IsStartingVertex = true;
-                            Edge createUndirectedEdge = new Edge(StartingVertex, EndingVertex);
-                            CanvasGraph.Children.Add(createUndirectedEdge.AddEdge());
-                            DataStorage.EdgeList.Add(createUndirectedEdge);
+
+                            if (RadioButtonWeighted.IsChecked != true)
+                            {
+                                Edge createUndirectedEdge = new Edge(StartingVertex, EndingVertex);
+                                CanvasGraph.Children.Add(createUndirectedEdge.AddEdge());
+                                DataStorage.EdgeList.Add(createUndirectedEdge);
+                            }
+                            else
+                            {
+                                Edge createUndirectedEdge = new Edge(StartingVertex, EndingVertex, Convert.ToInt32(TxtbWeight.Text));
+                                CanvasGraph.Children.Add(createUndirectedEdge.AddEdge(createUndirectedEdge.Weight));
+                                DataStorage.EdgeList.Add(createUndirectedEdge);
+                            }
+
+
+
+
                             //DataStorage.VertexList.Find(EdgesConnected.Addlast(createUndirectedEdge));
                             //DataStorage.VertexList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
                             break;
@@ -130,12 +155,17 @@ namespace TheGraphProject
                     default:
                         break;
                 }
+
+                AddChildrenToCanvas();
             }
 
         }
 
         //Events
 
+        #region Events
+
+        
         private void BtnAddVertex_Click(object sender, RoutedEventArgs e)
         {
             if (DataStorage.IDStack.Count != 0)
@@ -202,20 +232,6 @@ namespace TheGraphProject
                 AddVertex();
         }
 
-
-
-        private void RadioButtonWeighted_Click(object sender, RoutedEventArgs e)
-        {
-            TxtbWeight.IsReadOnly = false;
-        }
-
-
-        private void RadioBUnweighted_Click(object sender, RoutedEventArgs e)
-        {
-            TxtbWeight.Clear();
-            TxtbWeight.IsReadOnly = true;
-        }
-
         //Moving Vertex
 
         public void Vertex_MouseMove(object sender, MouseEventArgs e)
@@ -258,18 +274,22 @@ namespace TheGraphProject
             var draggable = sender as Border;
             draggable.ReleaseMouseCapture();
 
+            Point currentPosition = e.GetPosition(CanvasGraph);
+
             var x = e.GetPosition(CanvasGraph).X; //(Canvas.GetLeft(SelectedVertexOrigin) + 12.5) - (ClickStart.X - e.GetPosition(CanvasGraph).X);
             var y = e.GetPosition(CanvasGraph).Y; //(Canvas.GetTop(SelectedVertexOrigin) + 12.5) - (ClickStart.Y - e.GetPosition(CanvasGraph).Y);
             Console.WriteLine($"{x} {y}");
                 foreach (var vertex in DataStorage.VertexList)
                 {
-                    if (draggable == vertex.VertexStored)
+                    if (draggable == vertex.GetVertex)
                     {
-                        vertex.VertexXCoords = x;
-                        vertex.VertexYCoords = y;
+
+                        vertex.VertexXCoords = currentPosition.X;
+                        vertex.VertexYCoords = currentPosition.Y;
+
                         foreach (var edge in DataStorage.EdgeList)
                         {
-                            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
+                            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber) 
                             {
                                 edge.VertexA.VertexXCoords = vertex.VertexXCoords;
                                 edge.VertexA.VertexYCoords = vertex.VertexYCoords;
@@ -282,7 +302,6 @@ namespace TheGraphProject
                             }
 
                             edge.ChangeLine();
-                            Console.WriteLine($"{edge.EdgeLine.X1} {edge.EdgeLine.Y1} {edge.EdgeLine.X2} {edge.EdgeLine.Y2}");
                         }
 
                         break;
@@ -295,5 +314,40 @@ namespace TheGraphProject
         {
             //ListViewVerticesList.Items.
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var x = DataStorage.VertexList.First;
+            x.Value.VertexXCoords = 100;
+            Canvas.SetLeft(x.Value.GetVertex, x.Value.VertexXCoords);
+
+            var y = DataStorage.EdgeList[0];
+            y.ChangeLine();
+            AddChildrenToCanvas();
+        }
+        private void RadioButtonWeighted_Click(object sender, RoutedEventArgs e)
+        {
+            TxtbWeight.IsReadOnly = false;
+        }
+
+        private void RadioButtonUnweighted_Click(object sender, RoutedEventArgs e)
+        {
+            TxtbWeight.Clear();
+            TxtbWeight.IsReadOnly = true;
+        }
+
+        private void RadioButtonDirected_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void RadioButtonUndirected_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        #endregion
+
+
     }
 }

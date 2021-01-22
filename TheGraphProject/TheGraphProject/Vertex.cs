@@ -21,7 +21,7 @@ namespace TheGraphProject
         }
 
         public MainWindow MainWindow { get; set; }
-        public Border VertexStored { get; set; }
+        public Border GetVertex { get; set; }
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
         public char VertexListViewIdLetter { get; protected set; }
@@ -54,8 +54,11 @@ namespace TheGraphProject
             newVertex.CornerRadius = new CornerRadius(50);
             newVertex.Child = CreateLabel();
 
-            Canvas.SetLeft(newVertex, VertexXCoords - 12.5); //SetLeft = X-Axis
-            Canvas.SetTop(newVertex, VertexYCoords - 12.5); //SetTop = Y-Axis
+            //SetLeft = X-Axis
+            Canvas.SetLeft(newVertex, VertexXCoords - 12.5);
+            //SetTop = Y-Axis
+            Canvas.SetTop(newVertex, VertexYCoords - 12.5);
+
             Panel.SetZIndex(newVertex, 1);
 
             newVertex.MouseLeftButtonDown += MainWindow.Vertex_MouseLeftButtonDown;
@@ -68,7 +71,8 @@ namespace TheGraphProject
             else
                 DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
 
-            VertexStored = newVertex;
+            GetVertex = newVertex;
+
         }
     }
 }

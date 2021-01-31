@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace TheGraphProject
 {
@@ -29,7 +30,7 @@ namespace TheGraphProject
         public double VertexYCoords { get; set; }
         public bool IsStartingVertex { get; set; } = false;
 
-        public LinkedList<Edge> EdgesConnected = new LinkedList<Edge>();
+        public LinkedList<Line> EdgesConnected = new LinkedList<Line>();
 
         public Label CreateLabel()
         {
@@ -37,7 +38,7 @@ namespace TheGraphProject
             vertexLabel.VerticalAlignment = VerticalAlignment.Center;
             vertexLabel.HorizontalContentAlignment = HorizontalAlignment.Center;
             vertexLabel.FontSize = 12;
-            vertexLabel.Content = DataStorage.IDStack.Peek();
+            vertexLabel.Content = DataStorage.IDStack.Peek();// CHANGED SOMETHING
             return vertexLabel;
         }
 
@@ -58,6 +59,11 @@ namespace TheGraphProject
             Canvas.SetLeft(newVertex, VertexXCoords - 12.5);
             //SetTop = Y-Axis
             Canvas.SetTop(newVertex, VertexYCoords - 12.5);
+
+            Canvas.SetBottom(newVertex, VertexYCoords);
+
+            Canvas.SetRight(newVertex, VertexXCoords);
+
 
             Panel.SetZIndex(newVertex, 1);
 

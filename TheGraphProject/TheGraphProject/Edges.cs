@@ -19,7 +19,7 @@ namespace TheGraphProject
 
     }
 
-    public class Edge
+    public class LineEdge
     {
         /// <summary>
         /// Create vertex neighbor property
@@ -37,13 +37,13 @@ namespace TheGraphProject
         public Line EdgeLine { get; protected set; }
         public TextBlock TxtBlockWeight {get; protected set; }
 
-        public Edge(Vertex vertexA, Vertex vertexB)
+        public LineEdge(Vertex vertexA, Vertex vertexB)
         {
             VertexA = vertexA;
             VertexB = vertexB;
         }
 
-        public Edge(Vertex vertexA, Vertex vertexB, int weight)
+        public LineEdge(Vertex vertexA, Vertex vertexB, int weight)
         {
             VertexA = vertexA;
             VertexB = vertexB;
@@ -73,13 +73,13 @@ namespace TheGraphProject
 
             //textBlockLine.Inlines.Add(new Line{});
             EdgeLine = edgeLine;
+            VertexA.EdgesConnected.AddLast(edgeLine);
+            VertexB.EdgesConnected.AddLast(edgeLine);
+
             return edgeLine;
         }
         public Line AddEdge(int weight) 
         {
-
-            
-
             Line edgeLine = new Line();
 
             edgeLine.X1 = VertexA.VertexXCoords;
@@ -110,6 +110,9 @@ namespace TheGraphProject
 
             //textBlockLine.Inlines.Add(new Line{});
             EdgeLine = edgeLine;
+            VertexA.EdgesConnected.AddLast(edgeLine);
+            VertexB.EdgesConnected.AddLast(edgeLine);
+
             return edgeLine;
         }
 

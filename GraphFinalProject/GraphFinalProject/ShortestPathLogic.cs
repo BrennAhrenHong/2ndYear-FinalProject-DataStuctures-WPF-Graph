@@ -69,7 +69,6 @@ namespace GraphFinalProject
             }
             MainWindow.TxtbPredecessor.Clear();
 
-
             MainWindow.TxtbPredecessor.Text = "Predecessors:";
             MainWindow.TxtbPredecessor.Text += "\n";
 

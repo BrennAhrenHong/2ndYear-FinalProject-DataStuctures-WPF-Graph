@@ -11,7 +11,7 @@ namespace TheGraphProject
     public class DataTemplate
     {
         public string Name { get; set; }
-        public char ID { get; set; }
+        public int ID { get; set; }
 
         //public void IDAdder)
         //{

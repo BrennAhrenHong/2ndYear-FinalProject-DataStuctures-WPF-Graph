@@ -12,11 +12,10 @@ namespace TheGraphProject
 {
     public class Vertex
     {
-        public Vertex(MainWindow mainWindow, string name, char vertexListViewIdLetter, double x, double y)
+        public Vertex(MainWindow mainWindow, string name, double x, double y)
         {
             MainWindow = mainWindow;
             Name = name;
-            VertexListViewIdLetter = vertexListViewIdLetter;
             VertexXCoords = x;
             VertexYCoords = y;
         }
@@ -25,7 +24,6 @@ namespace TheGraphProject
         public Border GetVertex { get; set; }
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
-        public char VertexListViewIdLetter { get; protected set; }
         public double VertexXCoords { get; set; }
         public double VertexYCoords { get; set; }
         public bool IsStartingVertex { get; set; } = false;
@@ -38,7 +36,7 @@ namespace TheGraphProject
             vertexLabel.VerticalAlignment = VerticalAlignment.Center;
             vertexLabel.HorizontalContentAlignment = HorizontalAlignment.Center;
             vertexLabel.FontSize = 12;
-            vertexLabel.Content = DataStorage.IDStack.Peek();// CHANGED SOMETHING
+            vertexLabel.Content = VertexIdNumber;// CHANGED SOMETHING
             return vertexLabel;
         }
 
@@ -53,6 +51,14 @@ namespace TheGraphProject
             newVertex.BorderThickness = new Thickness(1);
             newVertex.Background = Brushes.DodgerBlue;
             newVertex.CornerRadius = new CornerRadius(50);
+
+
+
+            VertexIdNumber = DataStorage.UniqueIDList.Count;
+            if (DataStorage.UniqueIDList.Count == 0)
+                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count);
+            else
+                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
             newVertex.Child = CreateLabel();
 
             //SetLeft = X-Axis
@@ -71,11 +77,7 @@ namespace TheGraphProject
             newVertex.MouseMove += MainWindow.Vertex_MouseMove;
             newVertex.MouseLeftButtonUp += MainWindow.Vertex_MouseLeftButtonUp;
 
-            VertexIdNumber = DataStorage.UniqueIDList.Count;
-            if (DataStorage.UniqueIDList.Count == 0)
-                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count);
-            else
-                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
+
 
             GetVertex = newVertex;
 

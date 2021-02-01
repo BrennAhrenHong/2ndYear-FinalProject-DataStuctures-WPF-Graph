@@ -18,25 +18,25 @@ namespace GraphLogic
         Path GetShortestPath(int sourceVertex);
     }
 
-    //public class Paths
-    //{
-    //    public IList<double> Costs { get; set; }
-    //    public IList<int> Predecessor { get; set; }
-    //    public IList<int> SearchOrder { get; set; }
+    public class Path
+    {
+        public IList<double> Costs { get; set; }
+        public IList<int> Predecessor { get; set; }
+        public IList<int> SearchOrder { get; set; }
 
-    //    public int Root
-    //    {
-    //        get
-    //        {
-    //            if (SearchOrder.Count == 0) return -1;
-    //            return SearchOrder[0];
-    //        }
-    //    }
+        public int Root
+        {
+            get
+            {
+                if (SearchOrder.Count == 0) return -1;
+                return SearchOrder[0];
+            }
+        }
 
-    //    public Path(IList<int> predecessor, IList<double> costs)
-    //    {
-    //        Costs = costs;
-    //        Predecessor = predecessor;
-    //    }
-    //}
+        public Path(IList<int> predecessor, IList<double> costs)
+        {
+            Costs = costs;
+            Predecessor = predecessor;
+        }
+    }
 }

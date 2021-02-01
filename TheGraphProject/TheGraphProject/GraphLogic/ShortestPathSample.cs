@@ -138,27 +138,27 @@ namespace GraphLogic
     //    #endregion
     //}
 
-    public class Path
-    {
-        public IList<double> Costs { get; }
-        public IList<int> Predecessor { get; }
-        public IList<int> SearchOrder { get; }
-        public int Root
-        {
-            get
-            {
-                if (SearchOrder.Count == 0) return -1;
-                return SearchOrder[0];
-            }
-        }
+    //public class Path
+    //{
+    //    public IList<double> Costs { get; }
+    //    public IList<int> Predecessor { get; }
+    //    public IList<int> SearchOrder { get; }
+    //    public int Root
+    //    {
+    //        get
+    //        {
+    //            if (SearchOrder.Count == 0) return -1;
+    //            return SearchOrder[0];
+    //        }
+    //    }
 
-        public Path(IList<int> predecessor, IList<double> costs)
-        {
-            Costs = costs;
-            Predecessor = predecessor;
-        }
+    //    public Path(IList<int> predecessor, IList<double> costs)
+    //    {
+    //        Costs = costs;
+    //        Predecessor = predecessor;
+    //    }
 
-    }
+    //}
 
     public class Sample
     {

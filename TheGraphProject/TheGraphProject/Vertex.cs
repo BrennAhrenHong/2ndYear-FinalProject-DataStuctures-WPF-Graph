@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Shell;
+using GraphLogic;
 
 namespace TheGraphProject
 {
@@ -22,6 +24,7 @@ namespace TheGraphProject
 
         public MainWindow MainWindow { get; set; }
         public Border GetVertex { get; set; }
+        public LinkedList<LineEdge> EdgeList = new LinkedList<LineEdge>();
         public string Name { get; protected set; }
         public int VertexIdNumber { get; protected set; }
         public double VertexXCoords { get; set; }

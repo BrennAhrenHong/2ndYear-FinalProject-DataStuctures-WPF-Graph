@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -105,7 +106,7 @@ namespace TheGraphProject
     //        return edgeLine;
     //    }
 
-    //    public void ChangeLine()
+    //    public void UpdateLine()
     //    {
     //        EdgeLine.X1 = VertexA.VertexXCoords;
     //        EdgeLine.Y1 = VertexA.VertexYCoords;
@@ -137,7 +138,7 @@ namespace TheGraphProject
             VertexA = vertexA;
             VertexB = vertexB;
             IsDirected = isDirected;
-            Weight = 0;
+            Weight = 1;
             IsWeighted = false;
         }
 
@@ -192,6 +193,7 @@ namespace TheGraphProject
 
             //textBlockLine.Inlines.Add(new Line{});
             EdgeLine = edgeLine;
+
             VertexA.EdgesConnected.AddLast(edgeLine);
             VertexB.EdgesConnected.AddLast(edgeLine);
 
@@ -235,24 +237,31 @@ namespace TheGraphProject
             return edgeLine;
         }
 
-        public void ChangeLine()
+        public void UpdateLine()
         {
-            EdgeLine.X1 = VertexA.VertexXCoords;
-            EdgeLine.Y1 = VertexA.VertexYCoords;
+            //EdgeLine.X1 = VertexA.VertexXCoords;
+            //EdgeLine.Y1 = VertexA.VertexYCoords;
 
-            EdgeLine.X2 = VertexB.VertexXCoords;
-            EdgeLine.Y2 = VertexB.VertexYCoords;
+            //EdgeLine.X2 = VertexB.VertexXCoords;
+            //EdgeLine.Y2 = VertexB.VertexYCoords;
 
+            double xmidPointCoordinates = (EdgeLine.X1 + EdgeLine.X2) / 2;
+            double ymidPointCoordinates = (EdgeLine.Y1 + EdgeLine.Y2) / 2;
 
-
-            double XmidPointCoordinates = (EdgeLine.X1 + EdgeLine.X2) / 2;
-            double YmidPointCoordinates = (EdgeLine.Y1 + EdgeLine.Y2) / 2;
-            if (MainWindow.RadioButtonWeighted.IsChecked.Value)
+            try
             {
-                Canvas.SetLeft(TxtBlockWeight, XmidPointCoordinates);
-                Canvas.SetTop(TxtBlockWeight, YmidPointCoordinates);
-                Canvas.SetZIndex(TxtBlockWeight, 1);
+                if (IsWeighted)
+                {
+                    Canvas.SetLeft(TxtBlockWeight, xmidPointCoordinates);
+                    Canvas.SetTop(TxtBlockWeight, ymidPointCoordinates);
+                    Canvas.SetZIndex(TxtBlockWeight, 2);
+                }
             }
+            catch (Exception e)
+            {
+                MessageBox.Show("error");
+            }
+
 
         }
     }

@@ -49,6 +49,7 @@ namespace GraphLogic
 
         public int[,] AdjacencyMatrix => CreateAdjacencyMatrix();
 
+
         private int[,] CreateAdjacencyMatrix()
         {
             var adjacencyMatrix = new int[VertexCount, VertexCount];

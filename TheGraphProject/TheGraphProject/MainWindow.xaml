@@ -31,6 +31,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
+            <Button Content="Button" Click="Button_Click"/>
+
             <ListView Name="ListViewVerticesList"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Height="250" Margin="10,0">
                 <ListView.View>
                     <GridView>
@@ -63,6 +65,7 @@
                 <ComboBox Name="ComboBoxStartingVertexSp" HorizontalAlignment="Left" Margin="747,8,-666,0" VerticalAlignment="Top" Width="120" DropDownOpened="ComboBox_DropDownOpened_1"/>
                 <ComboBox Name="ComboBoxEndingVertexSp" HorizontalAlignment="Left" Margin="747,41,-666,0" VerticalAlignment="Top" Width="120" DropDownOpened="ComboBoxEndingVertexSp_DropDownOpened"/>
             </Grid>
+            <Button Content="Delete" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75"/>
         </Grid>
 
         <!--Center Column SubGrid Canvas and Control Panel-->
@@ -125,7 +128,17 @@
                 <TabControl>
                     <TabItem Header="TabItem">
                         <Grid Background="#FFE5E5E5">
-                            <ListView/>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="150*"></RowDefinition>
+                                <RowDefinition Height="150*"></RowDefinition>
+                                <RowDefinition Height="150"></RowDefinition>
+                                <RowDefinition Height="150"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <TextBox Name="TxtbAdjacencyList" Height="150" TextWrapping="Wrap" Text="TextBox" HorizontalScrollBarVisibility="Auto" Grid.Row="0" VerticalScrollBarVisibility="Auto"/>
+                            <TextBox Name="TxtbNeighborList" Height="150" TextWrapping="Wrap" Text="TextBox" HorizontalScrollBarVisibility="Auto" Grid.Row="1" VerticalScrollBarVisibility="Auto"/>
+                            <TextBox Name="TxtbPredecessor" Height="150" TextWrapping="Wrap" Text="TextBox" HorizontalScrollBarVisibility="Auto" Grid.Row="2" VerticalScrollBarVisibility="Auto"/>
+                            <TextBox Name="TxtbCost" Height="150" TextWrapping="Wrap" Text="TextBox" HorizontalScrollBarVisibility="Auto" Grid.Row="3" VerticalScrollBarVisibility="Auto"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="TabItem">
@@ -133,9 +146,7 @@
                     </TabItem>
                 </TabControl>
                 <ListView/>
-                <TextBox Name="TxtbCost" Height="23" TextWrapping="Wrap" Text="TextBox"/>
-                <TextBox Name="TxtbPredecessor" Height="23" TextWrapping="Wrap" Text="TextBox"/>
-                <Button Content="Button" d:LayoutOverrides="Height" Click="Button_Click"/>
+
             </StackPanel>
         </Grid>
     </Grid>

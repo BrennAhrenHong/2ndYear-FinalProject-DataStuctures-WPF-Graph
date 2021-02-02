@@ -56,10 +56,10 @@
             </ListView>
 
             <Grid Grid.Row="3">
-                <RadioButton Name="RadioButtonWeighted" GroupName="WeightMode" IsChecked="True" Content="Weighted" HorizontalAlignment="Left" Margin="10,98,0,35" Click="RadioButtonWeighted_Click"/>
+                <RadioButton Name="RadioButtonWeighted" GroupName="WeightMode" IsChecked="False" Content="Weighted" HorizontalAlignment="Left" Margin="10,98,0,35" Click="RadioButtonWeighted_Click"/>
                 <RadioButton Name="RadioButtonUnweighted" GroupName="WeightMode" IsChecked="False" Content="Unweighted" HorizontalAlignment="Left" Margin="93,98,0,0" VerticalAlignment="Top" Click="RadioButtonUnweighted_Click"/>
                 <RadioButton Name="RadioButtonDirected" GroupName="LineMode" IsChecked="false" Content="Directed" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Click="RadioButtonDirected_OnClick"/>
-                <RadioButton Name="RadioButtonUndirected" GroupName="LineMode" IsChecked="True" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top" Click="RadioButtonUndirected_OnClick"/>
+                <RadioButton Name="RadioButtonUndirected" GroupName="LineMode" IsChecked="False" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top" Click="RadioButtonUndirected_OnClick"/>
                 <ComboBox Name="ComboBoxStartingVertexSp" HorizontalAlignment="Left" Margin="747,8,-666,0" VerticalAlignment="Top" Width="120" DropDownOpened="ComboBox_DropDownOpened_1"/>
                 <ComboBox Name="ComboBoxEndingVertexSp" HorizontalAlignment="Left" Margin="747,41,-666,0" VerticalAlignment="Top" Width="120" DropDownOpened="ComboBoxEndingVertexSp_DropDownOpened"/>
             </Grid>
@@ -135,6 +135,7 @@
                 <ListView/>
                 <TextBox Name="TxtbCost" Height="23" TextWrapping="Wrap" Text="TextBox"/>
                 <TextBox Name="TxtbPredecessor" Height="23" TextWrapping="Wrap" Text="TextBox"/>
+                <Button Content="Button" d:LayoutOverrides="Height" Click="Button_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

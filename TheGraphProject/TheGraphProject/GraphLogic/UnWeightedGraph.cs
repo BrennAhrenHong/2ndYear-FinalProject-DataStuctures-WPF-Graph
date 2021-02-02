@@ -115,7 +115,6 @@ namespace GraphLogic
                 int secondVertex = edge.ToVertex;
 
                 Neighbors[firstVertex].Add(secondVertex);
-                Neighbors[secondVertex].Add(firstVertex);
             }
         }
 
@@ -159,7 +158,6 @@ namespace GraphLogic
                 int secondVertex = edge.ToVertex;
 
                 Neighbors[firstVertex].Add(secondVertex);
-                Neighbors[secondVertex].Add(firstVertex);
             }
         }
 
@@ -181,8 +179,8 @@ namespace GraphLogic
         //Produces the Predecessor List
         public Path GetShortestPath(int sourceVertex)
         {
-            // stores the previous vertex of v in the path
-            var predecessors = new List<int>();
+            //stores the previous vertex of v in the path
+                    var predecessors = new List<int>();
 
             // stores the currDist of each vertex. 
             // The index of this variable refers to the index of the vertex.
@@ -192,7 +190,7 @@ namespace GraphLogic
             {
                 predecessors.Add(-1);
                 toBeChecked.Add(i);
-                currDist.Add(double.MaxValue); //Infinity
+                currDist.Add(double.MaxValue);
             }
             // the parent of the source is -1; root
             predecessors[sourceVertex] = -1;
@@ -241,7 +239,9 @@ namespace GraphLogic
                         }
                     }
                 }
+
             }
+
             return new Path(predecessors, currDist);
         }
 

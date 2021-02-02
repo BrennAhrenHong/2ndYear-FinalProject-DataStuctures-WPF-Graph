@@ -17,16 +17,17 @@ namespace GraphLogic
             Vertices = new List<T>();
 
             // Create vertices since only the vertex count is given
-            for (int i = 0; i < VertexCount; i++) Vertices.Add(default);
+            for (int i = 0; i < vertexCount; i++) 
+                Vertices.Add(default);
             CreateAdjacencyList(edges, vertexCount);
             CreateNeighborEdges(edges, vertexCount);
         }
 
         public WeightedGraph(IList<WeightedEdge> edges, IList<T> vertices)
         {
-            Vertices = vertices;
-            CreateAdjacencyList(edges, vertices.Count);
-            CreateNeighborEdges(edges, vertices.Count);
+            //Vertices = vertices;
+            //CreateAdjacencyList(edges, vertices.Count);
+            //CreateNeighborEdges(edges, vertices.Count);
         }
         #endregion
 
@@ -70,7 +71,7 @@ namespace GraphLogic
         //Produces the Predecessor List
         public Path GetShortestPath(int sourceVertex)
         {
-            // stores the previous vertex of v in the path
+            //stores the previous vertex of v in the path
             var predecessors = new List<int>();
 
             // stores the currDist of each vertex. 
@@ -130,7 +131,9 @@ namespace GraphLogic
                         }
                     }
                 }
+
             }
+
             return new Path(predecessors, currDist);
         }
 

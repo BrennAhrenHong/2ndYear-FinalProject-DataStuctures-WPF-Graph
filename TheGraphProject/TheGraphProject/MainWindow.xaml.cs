@@ -7,6 +7,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +41,7 @@ namespace TheGraphProject
 
         private double SelectedCanvas_XCoordinate { get; set; }
         private double SelectedCanvas_YCoordinate { get; set; }
+        
         protected bool isDragging;
 
         private WeightedGraph<string> _WeightedGraph;
@@ -53,7 +55,7 @@ namespace TheGraphProject
         private Point ClickStart;
         private Border SelectedVertexOrigin;
         private TranslateTransform originTT;
-
+        private Vertex x;
         public MainWindow()
         {
             InitializeComponent();
@@ -64,10 +66,26 @@ namespace TheGraphProject
             //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 4 , Name = "H", });
             //VerticesList.ItemsSource = DataStorage.ListViewItems;
             //LinkedList<Int32> x = new LinkedList<int>();
+            RadioButtonUndirected.IsChecked = true;
+            RadioButtonUnweighted.IsChecked = true;
+
             LoadStackWithIDStartUp();
+
+
+            MainWindow y = this;
+            x = new Vertex(y, "Brenn", 25, 25);
+            DataStorage.VerticesList.AddLast(x);
+            x.CreateVertex();
+            AddChildrenToCanvas();
+
         }
 
-
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Canvas.SetLeft(x.GetVertex,Convert.ToInt32(TxtbWeight.Text));
+            Canvas.SetTop(x.GetVertex, Convert.ToInt32(TxtbWeight.Text));
+            AddChildrenToCanvas();
+        }
         //Methods
         public void AddVertex()
         {
@@ -98,7 +116,7 @@ namespace TheGraphProject
                 foreach (var edge in DataStorage.EdgeList)
                 {
                     CanvasGraph.Children.Add(edge.EdgeLine);
-                    if (RadioButtonWeighted.IsChecked == true)
+                    if (edge.IsWeighted == true)
                     {
                         CanvasGraph.Children.Add(edge.TxtBlockWeight);
                     }
@@ -111,16 +129,9 @@ namespace TheGraphProject
         {
             MainWindow mainWindow = this;
 
-            string EdgeType = "";
-            if (RadioButtonDirected.IsChecked == true)
-            {
-                EdgeType = "Directed";
-            }
 
-            if (RadioButtonUndirected.IsChecked == true)
-            {
-                EdgeType = "UnDirected";
-            }
+
+            bool isDirectedOn = RadioButtonDirected.IsChecked.Value;
 
             Vertex StartingVertex = null;
             Vertex EndingVertex = null;
@@ -135,129 +146,131 @@ namespace TheGraphProject
 
             if (StartingVertex != null && EndingVertex != null)
             {
-                switch (EdgeType)
+
+                if (isDirectedOn)
                 {
-                    case "Directed":
+
+                    if (!RadioButtonWeighted.IsChecked.Value)
                     {
-                        LineEdge createDirectedLineEdge =
-                            new LineEdge(mainWindow,StartingVertex, EndingVertex, Convert.ToInt32(TxtbWeight.Text));
-                        CanvasGraph.Children.Add(createDirectedLineEdge.AddEdge());
-                        DataStorage.EdgeList.Add(createDirectedLineEdge);
-                        break;
+                        var createLineEdge =
+                            new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn);
+                        createLineEdge.AddDirectedEdge();
+                        DataStorage.EdgeList.Add(createLineEdge);
+                    }
+                    else if (RadioButtonWeighted.IsChecked.Value)
+                    {
+                        var createLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
+                            Convert.ToInt32(TxtbWeight.Text));
+                        createLineEdge.AddDirectedEdge();
+                        DataStorage.EdgeList.Add(createLineEdge);
                     }
 
-                    case "UnDirected":
-                    {
-                        StartingVertex.IsStartingVertex = true;
-
-                        if (RadioButtonWeighted.IsChecked != true)
-                        {
-                            LineEdge createUndirectedLineEdge = new LineEdge(mainWindow,StartingVertex, EndingVertex);
-                            createUndirectedLineEdge.AddEdge();
-                            DataStorage.EdgeList.Add(createUndirectedLineEdge);
-                        }
-                        else
-                        {
-                            LineEdge createUndirectedLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex,
-                                Convert.ToInt32(TxtbWeight.Text));
-                            createUndirectedLineEdge.AddEdge(Convert.ToInt32(TxtbWeight.Text));
-                            DataStorage.EdgeList.Add(createUndirectedLineEdge);
-                        }
-
-                        //DataStorage.VerticesList.Find(EdgesConnected.Addlast(createUndirectedEdge));
-                        //DataStorage.VerticesList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
-                        break;
-                    }
-                    default:
-                        break;
                 }
-
-                AddChildrenToCanvas();
-            }
-
-        }
-        public void AddWeightedEdge()
-        {
-            MainWindow mainWindow = this;
-
-            string EdgeType = "";
-            if (RadioButtonDirected.IsChecked == true)
-            {
-                EdgeType = "Directed";
-            }
-
-            if (RadioButtonUndirected.IsChecked == true)
-            {
-                EdgeType = "UnDirected";
-            }
-
-            Vertex StartingVertex = null;
-            Vertex EndingVertex = null;
-
-            foreach (var vertex in DataStorage.VerticesList)
-            {
-                if (vertex.Name == CmbStartingVertex.SelectedItem)
-                    StartingVertex = vertex;
-                else if (vertex.Name == CmbEndingVertex.SelectedItem)
-                    EndingVertex = vertex;
-            }
-
-            if (StartingVertex != null && EndingVertex != null)
-            {
-                switch (EdgeType)
+                else
                 {
-                    case "Directed":
+                    if (!RadioButtonWeighted.IsChecked.Value)
                     {
-                        if (RadioButtonWeighted.IsChecked != true)
-                        {
-                                LineEdge createDirectedLineEdge =
-                            new LineEdge(mainWindow, StartingVertex, EndingVertex, Convert.ToInt32(TxtbWeight.Text));
+                        var createLineEdge =
+                            new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn);
+                        createLineEdge.AddUndirectedEdge();
+                        DataStorage.EdgeList.Add(createLineEdge);
+                    }
+                    else if (RadioButtonWeighted.IsChecked.Value)
+                    {
+                        var createLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
+                            Convert.ToInt32(TxtbWeight.Text));
+                        createLineEdge.AddUndirectedEdge();
+                        DataStorage.EdgeList.Add(createLineEdge);
+                    }
+                }
+            }
 
-                        CanvasGraph.Children.Add(createDirectedLineEdge.AddEdge());
-                        DataStorage.EdgeList.Add(createDirectedLineEdge);
-                        }
-                        else
-                        {
-                            LineEdge createDirectedLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex,
-                                Convert.ToInt32(TxtbWeight.Text));
+            AddChildrenToCanvas();
+        }
+        
+    
+        //public void AddWeightedEdge()
+        //{
+        //    MainWindow mainWindow = this;
 
-                            createDirectedLineEdge.AddEdge(Convert.ToInt32(TxtbWeight.Text));
-                            DataStorage.EdgeList.Add(createDirectedLineEdge);
-                        }
+        //    string EdgeType = "";
+        //    if (RadioButtonDirected.IsChecked == true)
+        //    {
+        //        EdgeType = "Directed";
+        //    }
+
+        //    if (RadioButtonUndirected.IsChecked == true)
+        //    {
+        //        EdgeType = "UnDirected";
+        //    }
+
+        //    Vertex StartingVertex = null;
+        //    Vertex EndingVertex = null;
+
+        //    foreach (var vertex in DataStorage.VerticesList)
+        //    {
+        //        if (vertex.Name == CmbStartingVertex.SelectedItem)
+        //            StartingVertex = vertex;
+        //        else if (vertex.Name == CmbEndingVertex.SelectedItem)
+        //            EndingVertex = vertex;
+        //    }
+
+        //    if (StartingVertex != null && EndingVertex != null)
+        //    {
+        //        switch (EdgeType)
+        //        {
+        //            case "Directed":
+        //            {
+        //                if (RadioButtonWeighted.IsChecked != true)
+        //                {
+        //                        var createDirectedLineEdge =
+        //                    new LineEdge(mainWindow, StartingVertex, EndingVertex, Convert.ToInt32(TxtbWeight.Text));
+
+        //                CanvasGraph.Children.Add(createDirectedLineEdge.AddEdge());
+        //                DataStorage.EdgeList.Add(createDirectedLineEdge);
+        //                }
+        //                else
+        //                {
+        //                    var createDirectedLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex,
+        //                        Convert.ToInt32(TxtbWeight.Text));
+
+        //                    createDirectedLineEdge.AddUndirectedEdge(Convert.ToInt32(TxtbWeight.Text));
+        //                    DataStorage.EdgeList.Add(createDirectedLineEdge);
+        //                }
                         
-                        break;
-                    }
+        //                break;
+        //            }
 
-                    case "UnDirected":
-                        {
-                            StartingVertex.IsStartingVertex = true;
+        //            case "UnDirected":
+        //                {
+        //                    StartingVertex.IsStartingVertex = true;
 
-                            if (RadioButtonWeighted.IsChecked != true)
-                            {
-                                LineEdge createUndirectedLineEdge = new LineEdge(mainWindow,StartingVertex, EndingVertex);
-                                createUndirectedLineEdge.AddEdge();
-                                DataStorage.EdgeList.Add(createUndirectedLineEdge);
-                            }
-                            else
-                            {
-                                LineEdge createUndirectedLineEdge = new LineEdge(mainWindow,StartingVertex, EndingVertex,
-                                    Convert.ToInt32(TxtbWeight.Text));
-                                createUndirectedLineEdge.AddEdge(Convert.ToInt32(TxtbWeight.Text));
-                                DataStorage.EdgeList.Add(createUndirectedLineEdge);
-                            }
+        //                    if (RadioButtonWeighted.IsChecked != true)
+        //                    {
+        //                        LineEdge createLineEdge = new LineEdge(mainWindow,StartingVertex, EndingVertex);
+        //                        createLineEdge.AddEdge();
+        //                        DataStorage.EdgeList.Add(createLineEdge);
+        //                    }
+        //                    else
+        //                    {
+        //                        LineEdge createLineEdge = new LineEdge(mainWindow,StartingVertex, EndingVertex,
+        //                            Convert.ToInt32(TxtbWeight.Text));
+        //                        createLineEdge.AddUndirectedEdge(Convert.ToInt32(TxtbWeight.Text));
+        //                        DataStorage.EdgeList.Add(createLineEdge);
+        //                    }
 
-                            //DataStorage.VerticesList.Find(EdgesConnected.Addlast(createUndirectedEdge));
-                            //DataStorage.VerticesList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
-                            break;
-                        }
-                    default:
-                        break;
-                }
+        //                    //DataStorage.VerticesList.Find(EdgesConnected.Addlast(createUndirectedEdge));
+        //                    //DataStorage.VerticesList[EndingVertexIndex].EdgesConnected.Add(createUndirectedEdge);
+        //                    break;
+        //                }
+        //            default:
+        //                break;
+        //        }
 
-                AddChildrenToCanvas();
-            }
+        //        AddChildrenToCanvas();
+        //    }
 
-        }
+        //}
 
 
         public void UnWeightedGraphLogic()
@@ -267,6 +280,7 @@ namespace TheGraphProject
             {
                 edges.Add(new WeightedEdge(edge.VertexA.VertexIdNumber, edge.VertexB.VertexIdNumber, 0));
             }
+
 
             bool isDirected = RadioButtonDirected.IsChecked.Value;
 
@@ -316,14 +330,20 @@ namespace TheGraphProject
         public void WeightedGraphLogic()
         {
             var edges = new List<WeightedEdge>();
-            foreach (var edge in DataStorage.EdgeList)
+
             {
-                edges.Add(new WeightedEdge(edge.VertexA.VertexIdNumber, edge.VertexB.VertexIdNumber, edge.Weight));
+                foreach (var edge in DataStorage.EdgeList)
+                {
+                    edges.Add(new WeightedEdge(edge.VertexA.VertexIdNumber, edge.VertexB.VertexIdNumber, edge.Weight));
+                    if(edge.IsDirected == false)  
+                        edges.Add(new WeightedEdge(edge.VertexB.VertexIdNumber, edge.VertexA.VertexIdNumber, edge.Weight));
+                }
             }
 
 
             _WeightedGraph = new WeightedGraph<string>(edges, DataStorage.VerticesList.Count);
             _shortestPath = _WeightedGraph.GetShortestPath(Convert.ToInt32(ComboBoxStartingVertexSp.Text));
+
 
             try
             {
@@ -410,11 +430,12 @@ namespace TheGraphProject
 
         private void BtnSolveShortestPath_Click(object sender, RoutedEventArgs e)
         {
-            UnWeightedGraphLogic();
+            TxtboxPath.Clear();
+
 
             try
             {
-                //WeightedGraphLogic();
+                WeightedGraphLogic();
             }
             catch (Exception exception)
             {
@@ -506,26 +527,73 @@ namespace TheGraphProject
 
         //Moving Vertex
 
+        //public void Vertex_MouseMove(object sender, MouseEventArgs e)
+        //{
+        //    var draggableControl = sender as Border;
+        //    if (isDragging && draggableControl != null)
+        //    {
+        //        Point currentPosition = e.GetPosition(CanvasGraph);
+        //        var transform = draggableControl.RenderTransform as TranslateTransform ?? new TranslateTransform();
+        //        transform.X = originTT.X + (currentPosition.X - clickPosition.X);
+        //        transform.Y = originTT.Y + (currentPosition.Y - clickPosition.Y);
+
+        //        draggableControl.RenderTransform = new TranslateTransform(transform.X, transform.Y);
+        //    }
+        //}
+
         public void Vertex_MouseMove(object sender, MouseEventArgs e)
         {
             var draggableControl = sender as Border;
             if (isDragging && draggableControl != null)
             {
                 Point currentPosition = e.GetPosition(CanvasGraph);
-                var transform = draggableControl.RenderTransform as TranslateTransform ?? new TranslateTransform();
-                transform.X = originTT.X + (currentPosition.X - clickPosition.X);
-                transform.Y = originTT.Y + (currentPosition.Y - clickPosition.Y);
 
-                draggableControl.RenderTransform = new TranslateTransform(transform.X, transform.Y);
+                foreach (var vertex in DataStorage.VerticesList)
+                {
+                    if (draggableControl == vertex.GetVertex)
+                    {
+
+                        vertex.VertexXCoords = currentPosition.X;
+                        vertex.VertexYCoords = currentPosition.Y;
+
+                        foreach (var edge in DataStorage.EdgeList)
+                        {
+                            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
+                            {
+                                //edge.VertexA.VertexXCoords = vertex.VertexXCoords;
+                                //edge.VertexA.VertexYCoords = vertex.VertexYCoords;
+                                Canvas.SetLeft(edge.VertexA.GetVertex, edge.VertexA.VertexXCoords);
+                                Canvas.SetTop(edge.VertexA.GetVertex, edge.VertexA.VertexYCoords);
+                            }
+
+                            if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
+                            {
+                                /*edge.VertexB.VertexXCoords = vertex.VertexXCoords;
+                                edge.VertexB.VertexYCoords = vertex.VertexYCoords;*/
+                                Canvas.SetLeft(edge.VertexB.GetVertex, edge.VertexB.VertexXCoords);
+                                Canvas.SetTop(edge.VertexB.GetVertex, edge.VertexB.VertexYCoords);
+                            }
+
+                            edge.ChangeLine();
+                        }
+
+                        break;
+                    }
+                }
+                AddChildrenToCanvas();
             }
         }
+
+
         private void CanvasGraph_MouseMove(object sender, MouseEventArgs e)
         {
+            var draggable = sender as Border;
             var x = e.GetPosition(CanvasGraph).X;
             var y = e.GetPosition(CanvasGraph).Y;
 
             TxtboxAutoCaptureXCoords.Text = Math.Round(Convert.ToDouble(x)).ToString();
             TxtboxAutoCaptureYCoords.Text = Math.Round(Convert.ToDouble(y)).ToString();
+
         }
 
         public void Vertex_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -551,38 +619,39 @@ namespace TheGraphProject
             var x = e.GetPosition(CanvasGraph).X; //(Canvas.GetLeft(SelectedVertexOrigin) + 12.5) - (ClickStart.X - e.GetPosition(CanvasGraph).X);
             var y = e.GetPosition(CanvasGraph).Y; //(Canvas.GetTop(SelectedVertexOrigin) + 12.5) - (ClickStart.Y - e.GetPosition(CanvasGraph).Y);
             Console.WriteLine($"{x} {y}");
-                foreach (var vertex in DataStorage.VerticesList)
+
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                if (draggable == vertex.GetVertex)
                 {
-                    if (draggable == vertex.GetVertex)
+
+                    vertex.VertexXCoords = currentPosition.X;
+                    vertex.VertexYCoords = currentPosition.Y;
+
+                    foreach (var edge in DataStorage.EdgeList)
                     {
-
-                        vertex.VertexXCoords = currentPosition.X;
-                        vertex.VertexYCoords = currentPosition.Y;
-
-                        foreach (var edge in DataStorage.EdgeList)
+                        if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
                         {
-                            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber) 
-                            {
-                                edge.VertexA.VertexXCoords = vertex.VertexXCoords;
-                                edge.VertexA.VertexYCoords = vertex.VertexYCoords;
-                                //Canvas.SetLeft(edge.VertexA.GetVertex, edge.VertexA.VertexXCoords);
-                                //Canvas.SetTop(edge.VertexA.GetVertex, edge.VertexA.VertexYCoords);
-                            }
-
-                            if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
-                            {
-                                edge.VertexB.VertexXCoords = vertex.VertexXCoords;
-                                edge.VertexB.VertexYCoords = vertex.VertexYCoords;
-                                //Canvas.SetLeft(edge.VertexB.GetVertex, edge.VertexB.VertexXCoords);
-                                //Canvas.SetTop(edge.VertexB.GetVertex, edge.VertexB.VertexYCoords);
-                            }    
-
-                            edge.ChangeLine();
+                            edge.VertexA.VertexXCoords = vertex.VertexXCoords;
+                            edge.VertexA.VertexYCoords = vertex.VertexYCoords;
+                            //Canvas.SetLeft(edge.VertexA.GetVertex, edge.VertexA.VertexXCoords);
+                            //Canvas.SetTop(edge.VertexA.GetVertex, edge.VertexA.VertexYCoords);
                         }
 
-                        break;
+                        if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
+                        {
+                            edge.VertexB.VertexXCoords = vertex.VertexXCoords;
+                            edge.VertexB.VertexYCoords = vertex.VertexYCoords;
+                            //Canvas.SetLeft(edge.VertexB.GetVertex, edge.VertexB.VertexXCoords);
+                            //Canvas.SetTop(edge.VertexB.GetVertex, edge.VertexB.VertexYCoords);
+                        }
+
+                        edge.ChangeLine();
                     }
+
+                    break;
                 }
+            }
             AddChildrenToCanvas();
         }
 
@@ -634,5 +703,7 @@ namespace TheGraphProject
                 ComboBoxEndingVertexSp.Items.Add(vertex.VertexIdNumber);
             }
         }
+
+
     }
 }

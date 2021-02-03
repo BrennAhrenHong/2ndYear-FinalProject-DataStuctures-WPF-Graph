@@ -443,6 +443,9 @@ namespace TheGraphProject
                 //Get edgelist of vertex
                 foreach (var vertex in DataStorage.VerticesList)
                 {
+                    if(vertex.IsDeleted)
+                        continue;
+
                     if (vertex.ID.ToString() == getVertex.ID)    
                     {
                         getVertexEdgeList = vertex.EdgeList;
@@ -465,6 +468,9 @@ namespace TheGraphProject
 
                     foreach (var edge in getVertexEdgeList)
                     {
+                        if (edge.IsDeleted)
+                            continue;
+
                         if (getId == edge.VertexA.ID)
                         {
                             edgesToBeDeletedStack.Push(lineEdge);
@@ -497,9 +503,14 @@ namespace TheGraphProject
             {
                 var getItem = ListViewEdgeList.Items[ListViewEdgeList.SelectedIndex];
                 var getEdge = ((ListViewEdgeTemplate) getItem);
-
+                var edgeStack = new Stack<LineEdge>();
+                    
+                //Deleting Edges
                 foreach (var lineEdge in DataStorage.EdgeList)
                 {
+                    if(lineEdge.IsDeleted)
+                        continue;
+
                     if (lineEdge.VertexA == getEdge.VertexA)
                     {
                         lineEdge.IsDeleted = true;
@@ -508,12 +519,17 @@ namespace TheGraphProject
 
                         lineEdge.VertexB.EdgeList.Remove(lineEdge);
                         lineEdge.VertexB.EdgesConnected.Remove(lineEdge.EdgeLine);
-                        //DataStorage.EdgesListViewItems.Remove(lineEdge.EdgeLine);
+
+                        break;
                     }
                 }
 
+                //Delete ListViewEdgeItems
+                DataStorage.EdgesListViewItems.Remove(getEdge);
 
-                ListViewEdgeList.Items.Refresh();
+
+                    ListViewEdgeList.Items.Refresh();
+                RefreshCanvas();
             }
 
         }
@@ -522,9 +538,16 @@ namespace TheGraphProject
         {
             if (DataStorage.IDStack.Count != 0)
             {
-                SelectedCanvas_XCoordinate = Convert.ToInt32(TxtBoxManualXCoords.Text);
-                SelectedCanvas_YCoordinate = Convert.ToInt32(TxtBoxManualYCoords.Text);
-                AddVertex();
+                try
+                {
+                    SelectedCanvas_XCoordinate = Convert.ToInt32(TxtBoxManualXCoords.Text);
+                    SelectedCanvas_YCoordinate = Convert.ToInt32(TxtBoxManualYCoords.Text);
+                    AddVertex();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine(exception);
+                }
             }
         }
 
@@ -539,6 +562,23 @@ namespace TheGraphProject
                 TextBlockLineEdgeErrorMsg.Visibility = Visibility.Visible;
                 return;
             }
+
+
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                if (vertex.ID.ToString() == CmbStartingVertex.Text)
+                {
+                    foreach (var edge in vertex.EdgeList)
+                    {
+                        if (edge.VertexB.ID.ToString() == CmbEndingVertex.Text)
+                        { 
+                            MessageBox.Show("Edge Already Exists","Oops!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                            return;
+                        }
+                    }
+                }
+            }
+
 
             //DataStorage.VerticesList.Find(CmbStartingVertex.Text);
 
@@ -637,7 +677,8 @@ namespace TheGraphProject
         {
             //draggablecontrol is a UIelement(Datatype)
             var draggableControl = sender as Border;
-            bool noMatch = true;
+            var draggableControl2 = sender as Line;
+
             // "sender as type Border" allows to move the vertex since the original datatype of the
             // vertex is a Border thus, this further allows interaction between the border and mouse pointer
             // virtually any object in the Canvas with the type "Border" can be interacted
@@ -647,6 +688,9 @@ namespace TheGraphProject
 
                 Canvas.SetLeft(draggableControl,currentPosition.X - 12.5); // X
                 Canvas.SetTop(draggableControl,currentPosition.Y - 12.5); // Y
+
+                Canvas.SetLeft(draggableControl2, currentPosition.X - 12.5); // X
+                Canvas.SetTop(draggableControl2, currentPosition.Y - 12.5); // Y
 
                 if (LastDraggedVertex == null || LastDraggedVertex.GetVertex != draggableControl)
                 {

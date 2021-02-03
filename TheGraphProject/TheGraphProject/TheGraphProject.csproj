@@ -77,7 +77,7 @@
     </ApplicationDefinition>
     <Compile Include="DataStorage.cs" />
     <Compile Include="Edges.cs" />
-    <Compile Include="GraphLogic\Edge.cs" />
+    <Compile Include="GraphLogic\LineEdge.cs" />
     <Compile Include="GraphLogic\Graph.cs" />
     <Compile Include="GraphLogic\GraphsTest.cs" />
     <Compile Include="GraphLogic\IGraph.cs" />

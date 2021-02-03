@@ -32,7 +32,7 @@
                 <RowDefinition Height="150"/>
             </Grid.RowDefinitions>
 
-            <ListView Name="ListViewVerticesList"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Margin="10,0" SelectionChanged="ListViewVerticesList_SelectionChanged">
+            <ListView Name="ListViewVerticesList" SelectionMode="Single" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" Width="200" Margin="10,0" SelectionChanged="ListViewVerticesList_SelectionChanged">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding ID}"/>
@@ -47,7 +47,7 @@
                 </ListView.View>
             </ListView>
 
-            <ListView Name="ListViewEdgeList"  Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" SelectionChanged="ListViewEdge_SelectionChanged" >
+            <ListView Name="ListViewEdgeList" SelectionMode="Single"  Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" MinWidth="200" SelectionChanged="ListViewEdge_SelectionChanged" >
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Edge ID" DisplayMemberBinding="{Binding Edge}"/>
@@ -60,12 +60,11 @@
             <Grid Grid.Row="3">
                 <RadioButton Name="RadioButtonWeighted" GroupName="WeightMode" IsChecked="False" Content="Weighted" HorizontalAlignment="Left" Margin="10,98,0,35" Click="RadioButtonWeighted_Click"/>
                 <RadioButton Name="RadioButtonUnweighted" GroupName="WeightMode" IsChecked="False" Content="Unweighted" HorizontalAlignment="Left" Margin="93,98,0,0" VerticalAlignment="Top" Click="RadioButtonUnweighted_Click"/>
-                <RadioButton Name="RadioButtonDirected" GroupName="LineMode" IsChecked="false" Content="Directed" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top" Click="RadioButtonDirected_OnClick"/>
-                <RadioButton Name="RadioButtonUndirected" GroupName="LineMode" IsChecked="False" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top" Click="RadioButtonUndirected_OnClick"/>
-                <ComboBox Name="CmbStartingVertexSp" HorizontalAlignment="Left"  Margin="724,8,-643,0" VerticalAlignment="Top" Width="120" DropDownOpened="CmbStartingVertexSp_DropDownOpened"/>
-                <ComboBox Name="CmbEndingVertexSp" HorizontalAlignment="Left" Margin="724,41,-643,0" VerticalAlignment="Top" Width="120" DropDownOpened="CmbEndingVertexSp_DropDownOpened"/>
+                <RadioButton Name="RadioButtonDirected" GroupName="LineMode" IsChecked="false" Content="Directed" HorizontalAlignment="Left" Margin="10,123,0,0" VerticalAlignment="Top"/>
+                <RadioButton Name="RadioButtonUndirected" GroupName="LineMode" IsChecked="False" Content="Undirected" HorizontalAlignment="Left" Margin="93,122,0,0" VerticalAlignment="Top"/>
+
             </Grid>
-            <Button Name="BtnDelete"  Content="Delete" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="181" Click="BtnDelete_Click"/>
+            <Button Name="BtnDelete" Width="180" Height="45" Background="Transparent" Foreground="Red" BorderBrush="Red" Content="Delete" HorizontalAlignment="Center" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Click="BtnDelete_Click"/>
         </Grid>
 
         <!--Center Column SubGrid Canvas and Control Panel-->
@@ -76,7 +75,6 @@
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
@@ -92,35 +90,64 @@
             </Border>
 
             <!--Left side Control Panel (Add Vertex)-->
-            <Button Name="BtnAddVertex" Content="Add Vertex" HorizontalAlignment="Left" Height="42" Width="129" Grid.Row="2" Grid.Column="0" VerticalAlignment="Bottom" Margin="49,0,0,14" Click="BtnAddVertex_Click"/>
-            <TextBox Name="TxtbVertexName" Grid.Column="0" HorizontalAlignment="Left" Height="30" Margin="49,10,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="129"/>
-            <TextBox x:Name="TxtBoxManualXCoords" Grid.Column="0" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Margin="49,51,0,0" Grid.Row="2"/>
-            <TextBox x:Name="TxtBoxManualYCoords" Grid.Column="0" HorizontalAlignment="Left" Height="30" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" Margin="123,51,0,0" Grid.Row="2"/>
-            <TextBlock HorizontalAlignment="Left" Grid.Column="0" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top" Margin="34,58,0,0" Grid.Row="2"/>
-            <TextBlock HorizontalAlignment="Left" Grid.Column="0" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top" Margin="109,58,0,0" Grid.Row="2"/>
-            <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="7,16,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Name:" VerticalAlignment="Top"/>
+            <StackPanel Grid.Row="2" Grid.Column="0">
+
+                <Grid Height="auto">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition  />
+                        <ColumnDefinition  />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2">
+                        <TextBlock HorizontalAlignment="Left"
+                                   TextWrapping="Wrap" Text="Name:" VerticalAlignment="Center"/>
+                        <TextBox Name="TxtbVertexName"
+                                 HorizontalAlignment="Center" Height="25" Margin="5,10"
+                                 TextWrapping="Wrap" VerticalAlignment="Center"
+                                 Width="183"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,15,0" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0">
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="X:"
+                                   VerticalAlignment="Center"/>
+                        <TextBox Name="TxtBoxManualXCoords" HorizontalAlignment="Center"
+                                 Height="25" TextWrapping="Wrap" VerticalAlignment="Top" Width="55" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="15,0,0,0" Grid.Row="1" Grid.Column="1">
+                        <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Center"/>
+                        <TextBox Name="TxtBoxManualYCoords" Grid.Row="1" HorizontalAlignment="Center" Height="25"
+                                 TextWrapping="Wrap" VerticalAlignment="Center" Width="55"/>
+                    </StackPanel>
+
+                </Grid>
+                <Button Name="BtnAddVertex" FontWeight="Bold"  Content="Add Vertex"
+                        HorizontalAlignment="Center" Margin="20,25" Width="150" VerticalAlignment="Center" Click="BtnAddVertex_Click"/>
+            </StackPanel>
+
 
             <!--Middle Control Panel (Add Weight)-->
-            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="5,16,127,0" Grid.Row="2" TextWrapping="Wrap" Text="Starting Vertex:" VerticalAlignment="Top" Width="91"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="54,16,190,0" Grid.Row="2" TextWrapping="Wrap" Text="Starting Vertex:" VerticalAlignment="Top" Width="91"/>
             <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="5,51,127,0" Grid.Row="2" TextWrapping="Wrap" Text="Ending Vertex:" VerticalAlignment="Top" Width="91"/>
-            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="45,83,132,0" Grid.Row="2" TextWrapping="Wrap" Text="Weight: " VerticalAlignment="Top" Width="46"/>
+            <TextBlock Grid.Column="1" HorizontalAlignment="Center" Margin="99,83,190,0" Grid.Row="2" TextWrapping="Wrap" Text="Weight: " VerticalAlignment="Top" Width="46"/>
             <ComboBox Name="CmbStartingVertex" Grid.Column="1" ItemsSource="{Binding VertexList}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" Width="120" Margin="96,9,7,0" DropDownOpened="ComboBox_DropDownOpened" DropDownClosed="CmbStartingVertex_DropDownClosed"/>
             <ComboBox Name="CmbEndingVertex" Grid.Column="1" ItemsSource="{Binding VertexList}" HorizontalAlignment="Center" Margin="96,42,7,0" Grid.Row="2" VerticalAlignment="Top" Width="120" DropDownOpened="CmbEndingVertex_DropDownOpened" DropDownClosed="CmbEndingVertex_DropDownClosed"/>
 
-            <TextBox Name="TxtbWeight" Grid.Column="1" IsReadOnly="False" HorizontalAlignment="Left" Height="24" Margin="96,75,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-            <Button Name="BtnAddEdge" Content="Add LineEdge" HorizontalAlignment="Center" Margin="96,0,7,10"  Height="33" Width="120" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Grid.ColumnSpan="1" Click="BtnAddEdge_Click"/>
+            <TextBox Name="TxtbWeight" Grid.Column="1" IsReadOnly="False" HorizontalAlignment="Left" Height="24" Margin="150,75,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+            <Button Name="BtnAddEdge" Content="Add Edge" HorizontalAlignment="Center" Margin="20,10"  Height="33" Width="120" Grid.Row="2" Grid.Column="1" VerticalAlignment="Bottom" Click="BtnAddEdge_Click"/>
 
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="0,9,0,0" TextWrapping="Wrap" Text="X:" VerticalAlignment="Top"/>
             <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="75,9,0,0" TextWrapping="Wrap" Text="Y:" VerticalAlignment="Top"/>
             <TextBox Name="TxtboxAutoCaptureXCoords" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="15,6,0,0" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
             <TextBox Name="TxtboxAutoCaptureYCoords" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Height="24" Margin="89,6,0,0" TextWrapping="Wrap" Text="Insert Name" VerticalAlignment="Top" Width="55"/>
-            <TextBox Name="TxtboxPath" Grid.ColumnSpan="2" Grid.Column="1" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="25" Margin="5,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="435"/>
+            <TextBox Name="TxtboxPath" Grid.Column="1" HorizontalScrollBarVisibility="Auto" HorizontalAlignment="Left" Height="25" Margin="35,5,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="290"/>
+            <TextBlock Name="TextBlockLineEdgeErrorMsg" HorizontalAlignment="Right" Visibility="Visible"
+                       Grid.Column="1" Grid.Row="2" Margin="15" Foreground="Red" TextWrapping="Wrap"
+                       Text="Invalid Action!"  VerticalAlignment="Bottom" Width="86"/>
+            <Label Content="Path:" Grid.Column="1" Width="35" HorizontalAlignment="Left" Margin="0,5,0,0" VerticalAlignment="Top"/>
 
-            <Label Content="Path:" Grid.Column="0" Width="35" HorizontalAlignment="Left" Margin="190,5,0,0" VerticalAlignment="Top"/>
-            <TextBlock Grid.Column="2" HorizontalAlignment="Center" Margin="23,16,165,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="35"><Run Text="From"/><Run Text=":"/></TextBlock>
-            <TextBlock Grid.Column="2" HorizontalAlignment="Center" Margin="23,46,167,0" Grid.Row="2" TextWrapping="Wrap" Text="To:" VerticalAlignment="Top" Width="33"/>
-            <Button Name="BtnGetShortestPath" Content="Get Shortest Path" Grid.Column="2" HorizontalAlignment="Left" Margin="47,93,0,0" Grid.Row="2" VerticalAlignment="Top" Width="154" Height="45" Click="BtnSolveShortestPath_Click"/>
-            <TextBlock Name="TextBlockLineEdgeErrorMsg" Grid.Column="1" HorizontalAlignment="Left" Foreground="Red" Visibility="Hidden" Margin="5,117,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Invalid Action!"  VerticalAlignment="Top" Width="86"/>
         </Grid>
 
         <!--Right Column SubGrid (Info Panel)-->
@@ -135,7 +162,17 @@
                                 <RowDefinition Height="200"></RowDefinition>
                                 <RowDefinition Height="200"></RowDefinition>
                             </Grid.RowDefinitions>
-
+                            <StackPanel Grid.Row="0" Margin="10">
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" TextWrapping="Wrap" Text="To:" TextAlignment="Right" VerticalAlignment="Bottom" Width="35"/>
+                                    <ComboBox Name="CmbEndingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="120" DropDownOpened="CmbEndingVertexSp_DropDownOpened"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="5">
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,0,10,0" Text="From:" TextAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="35" />
+                                    <ComboBox Name="CmbStartingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width=" 120"  DropDownOpened="CmbStartingVertexSp_DropDownOpened"/>
+                                </StackPanel>
+                                <Button Name="BtnGetShortestPath" Content="Find" FontWeight="Bold" Margin="5,15,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="35" Click="BtnSolveShortestPath_Click"/>
+                            </StackPanel>
 
                         </Grid>
                     </TabItem>

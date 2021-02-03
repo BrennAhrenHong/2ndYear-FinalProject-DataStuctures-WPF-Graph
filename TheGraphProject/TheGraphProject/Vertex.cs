@@ -30,7 +30,6 @@ namespace TheGraphProject
         public int ID { get; protected set; }
         public double VertexXCoords { get; set; }
         public double VertexYCoords { get; set; }
-        public bool IsStartingVertex { get; set; } = false;
         public bool IsDeleted { get; set; } = false;
 
 
@@ -55,7 +54,6 @@ namespace TheGraphProject
             newVertex.BorderThickness = new Thickness(1);
             newVertex.Background = Brushes.DeepSkyBlue;
             newVertex.CornerRadius = new CornerRadius(50);
-
 
 
 
@@ -87,10 +85,10 @@ namespace TheGraphProject
             newVertex.MouseMove += MainWindow.Vertex_MouseMove;
             newVertex.MouseLeftButtonUp += MainWindow.Vertex_MouseLeftButtonUp;
 
-
+            if (Name.Trim(' ') == "")
+                Name = ID.ToString();
 
             GetVertex = newVertex;
-
         }
     }
 }

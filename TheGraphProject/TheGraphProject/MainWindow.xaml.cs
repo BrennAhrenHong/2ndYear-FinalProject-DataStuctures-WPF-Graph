@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
+using System.Media;
 using System.Net;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -60,18 +61,23 @@ namespace TheGraphProject
         public MainWindow()
         {
             InitializeComponent();
-            //ListViewItems = new List<DataTemplate>();
-            //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 1 , Name = "Brenn", });
-            //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 2 , Name = "Ahren", });
-            //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 3 , Name = "C", });
-            //DataStorage.ListViewItems.Add(new DataTemplate() {ID = 4 , Name = "H", });
-            //VerticesList.ItemsSource = DataStorage.ListViewItems;
+            //VerticesListViewItems = new List<DataTemplate>();
+            //DataStorage.VerticesListViewItems.Add(new DataTemplate() {ID = 1 , Name = "Brenn", });
+            //DataStorage.VerticesListViewItems.Add(new DataTemplate() {ID = 2 , Name = "Ahren", });
+            //DataStorage.VerticesListViewItems.Add(new DataTemplate() {ID = 3 , Name = "C", });
+            //DataStorage.VerticesListViewItems.Add(new DataTemplate() {ID = 4 , Name = "H", });
+            //VerticesList.ItemsSource = DataStorage.VerticesListViewItems;
             //LinkedList<Int32> x = new LinkedList<int>();
 
             RadioButtonUndirected.IsChecked = true;
             RadioButtonUnweighted.IsChecked = true;
 
             LoadStackWithIDStartUp();
+            if (RadioButtonUnweighted.IsChecked.Value)
+                TxtbWeight.IsReadOnly = true;
+
+            ListViewVerticesList.ItemsSource = DataStorage.VerticesListViewItems;
+            ListViewEdgeList.ItemsSource = DataStorage.EdgesListViewItems;
 
 
             //MainWindow y = this;
@@ -105,11 +111,10 @@ namespace TheGraphProject
             Vertex newVertex = new Vertex(this, TxtbVertexName.Text,
                 Convert.ToInt32(SelectedCanvas_XCoordinate), Convert.ToInt32(SelectedCanvas_YCoordinate));
             newVertex.CreateVertex();
-            DataStorage.VerticesList.AddLast(newVertex);
-            DataStorage.ListViewItems.Add(new DataTemplate()
-                {ID = DataStorage.VerticesList.Last.Value.VertexIdNumber, Name = TxtbVertexName.Text,});
-            ListViewVerticesList.ItemsSource = "";
-            ListViewVerticesList.ItemsSource = DataStorage.ListViewItems;
+            DataStorage.VerticesList.Add(newVertex);
+            DataStorage.VerticesListViewItems.Add(new DataTemplate()
+                {ID = DataStorage.VerticesList[DataStorage.VerticesList.Count - 1].ID.ToString(), Name = TxtbVertexName.Text,});
+            ListViewVerticesList.Items.Refresh();
 
             RefreshCanvas();
         }
@@ -122,6 +127,8 @@ namespace TheGraphProject
             {
                 foreach (var vertex in DataStorage.VerticesList)
                 {
+                    if(vertex.IsDeleted)
+                        continue;
                     //Canvas.SetLeft(vertex.GetVertex,vertex.VertexXCoords);
                     //Canvas.SetTop(vertex.GetVertex,vertex.VertexYCoords); 
                     CanvasGraph.Children.Add(vertex.GetVertex);
@@ -129,6 +136,9 @@ namespace TheGraphProject
 
                 foreach (var edge in DataStorage.EdgeList)
                 {
+                    if (edge.IsDeleted)
+                        continue;
+
                     CanvasGraph.Children.Add(edge.EdgeLine);
                     if (edge.IsWeighted == true && edge.TxtBlockWeight != null)
                     {
@@ -139,7 +149,7 @@ namespace TheGraphProject
         }
 
         // Adding Edge
-        public void AddUnweightedEdge()
+        public void AddEdge()
         {
             MainWindow mainWindow = this;
 
@@ -150,9 +160,9 @@ namespace TheGraphProject
 
             foreach (var vertex in DataStorage.VerticesList)
             {
-                if (vertex.VertexIdNumber.ToString() == CmbStartingVertex.SelectedItem.ToString())
+                if (vertex.ID.ToString() == CmbStartingVertex.SelectedItem.ToString())
                     StartingVertex = vertex;
-                else if (vertex.VertexIdNumber.ToString() == CmbEndingVertex.SelectedItem.ToString())
+                else if (vertex.ID.ToString() == CmbEndingVertex.SelectedItem.ToString())
                     EndingVertex = vertex;
             }
 
@@ -164,23 +174,34 @@ namespace TheGraphProject
 
                     if (!RadioButtonWeighted.IsChecked.Value)
                     {
-                        var createLineEdge =
+                        var newLineEdge =
                             new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn);
-                        createLineEdge.AddDirectedEdge();
-                        DataStorage.EdgeList.Add(createLineEdge);
+                        newLineEdge.AddDirectedEdge();
+                        DataStorage.EdgeList.Add(newLineEdge);
 
-                        createLineEdge.VertexA.EdgeList.AddLast(createLineEdge);
-                        createLineEdge.VertexB.EdgeList.AddLast(createLineEdge);
+                        newLineEdge.VertexA.EdgeList.AddLast(newLineEdge);
+                        newLineEdge.VertexB.EdgeList.AddLast(newLineEdge);
+
+
+                        DataStorage.EdgesListViewItems.Add(new DataTemplate()
+                            {
+                                Edge = newLineEdge.VertexA.ID + " -> " + newLineEdge.VertexB.ID,
+                                Name = newLineEdge.VertexA.Name + "->" + newLineEdge.VertexB.Name, Weight = newLineEdge.Weight});
                     }
                     else if (RadioButtonWeighted.IsChecked.Value)
                     {
-                        var createLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
+                        var newLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
                             Convert.ToInt32(TxtbWeight.Text));
-                        createLineEdge.AddDirectedEdge();
-                        DataStorage.EdgeList.Add(createLineEdge);
+                        newLineEdge.AddDirectedEdge();
+                        DataStorage.EdgeList.Add(newLineEdge);
 
-                        createLineEdge.VertexA.EdgeList.AddLast(createLineEdge);
-                        createLineEdge.VertexB.EdgeList.AddLast(createLineEdge);
+                        newLineEdge.VertexA.EdgeList.AddLast(newLineEdge);
+                        newLineEdge.VertexB.EdgeList.AddLast(newLineEdge);
+
+                        DataStorage.EdgesListViewItems.Add(new DataTemplate()
+                            {
+                                Edge = newLineEdge.VertexA.ID + " -> " + newLineEdge.VertexB.ID,
+                                Name = newLineEdge.VertexA.Name + " ->" + newLineEdge.VertexB.Name, Weight = newLineEdge.Weight });
                     }
 
                 }
@@ -188,23 +209,39 @@ namespace TheGraphProject
                 {
                     if (!RadioButtonWeighted.IsChecked.Value)
                     {
-                        var createLineEdge =
+                        var newLineEdge =
                             new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn);
-                        createLineEdge.AddUndirectedEdge();
-                        DataStorage.EdgeList.Add(createLineEdge);
+                        newLineEdge.AddUndirectedEdge();
+                        DataStorage.EdgeList.Add(newLineEdge);
 
-                        createLineEdge.VertexA.EdgeList.AddLast(createLineEdge);
-                        createLineEdge.VertexB.EdgeList.AddLast(createLineEdge);
+                        newLineEdge.VertexA.EdgeList.AddLast(newLineEdge);
+                        newLineEdge.VertexB.EdgeList.AddLast(newLineEdge);
+
+
+                        DataStorage.EdgesListViewItems.Add(new DataTemplate()
+                        {
+                            Edge = newLineEdge.VertexA.ID + " <-> " + newLineEdge.VertexB.ID,
+                            Name = newLineEdge.VertexA.Name + " <-> " + newLineEdge.VertexB.Name,
+                            Weight = newLineEdge.Weight
+                        });
                     }
                     else if (RadioButtonWeighted.IsChecked.Value)
                     {
-                        var createLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
+                        var newLineEdge = new LineEdge(mainWindow, StartingVertex, EndingVertex, isDirectedOn,
                             Convert.ToInt32(TxtbWeight.Text));
-                        createLineEdge.AddUndirectedEdge();
-                        DataStorage.EdgeList.Add(createLineEdge);
+                        newLineEdge.AddUndirectedEdge();
+                        DataStorage.EdgeList.Add(newLineEdge);
 
-                        createLineEdge.VertexA.EdgeList.AddLast(createLineEdge);
-                        createLineEdge.VertexB.EdgeList.AddLast(createLineEdge);
+                        newLineEdge.VertexA.EdgeList.AddLast(newLineEdge);
+                        newLineEdge.VertexB.EdgeList.AddLast(newLineEdge);
+
+
+                        DataStorage.EdgesListViewItems.Add(new DataTemplate()
+                        {
+                            Edge = newLineEdge.VertexA.ID + " <-> " + newLineEdge.VertexB.ID,
+                            Name = newLineEdge.VertexA.Name + " <->" + newLineEdge.VertexB.Name,
+                            Weight = newLineEdge.Weight
+                        });
                     }
                 }
             }
@@ -226,12 +263,12 @@ namespace TheGraphProject
 
             //DataStorage.EdgeList.Add(new LineEdge(main,DataStorage.VerticesList.First,1,false ));
 
-            {
+            { 
                 foreach (var edge in DataStorage.EdgeList)
                 {
-                    edges.Add(new WeightedEdge(edge.VertexA.VertexIdNumber, edge.VertexB.VertexIdNumber, edge.Weight));
+                    edges.Add(new WeightedEdge(edge.VertexA.ID, edge.VertexB.ID, edge.Weight));
                     if(edge.IsDirected == false)  
-                        edges.Add(new WeightedEdge(edge.VertexB.VertexIdNumber, edge.VertexA.VertexIdNumber, edge.Weight));
+                        edges.Add(new WeightedEdge(edge.VertexB.ID, edge.VertexA.ID, edge.Weight));
                 }
             }
 
@@ -274,24 +311,31 @@ namespace TheGraphProject
 
 
 
-            _shortestPath = _WeightedGraph.GetShortestPath(Convert.ToInt32(ComboBoxStartingVertexSp.Text));
+            _shortestPath = _WeightedGraph.GetShortestPath(Convert.ToInt32(CmbStartingVertexSp.Text));
 
 
             try
             {
-                _shortestDestinationPath = _WeightedGraph.ShortestPathDestination(_shortestPath, Convert.ToInt32(ComboBoxEndingVertexSp.Text));
+                _shortestDestinationPath = _WeightedGraph.ShortestPathDestination(_shortestPath, Convert.ToInt32(CmbEndingVertexSp.Text));
             }
-            catch (Exception e)
+            catch (Exception exception)
             {
-                MessageBox.Show("Failed", "Warning", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None);
+                Console.WriteLine(exception.Data);
+                Console.WriteLine(exception.StackTrace);
+                MessageBox.Show("Impossible to traverse", "Warning", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None);
+                SystemSounds.Exclamation.Play();
                 return;
             }
 
             var sb = new StringBuilder();
-            foreach (var i in _shortestDestinationPath)
+
+            while (_shortestDestinationPath.Count > 1)
             {
-                sb.Append(i);
+                sb.Append(_shortestDestinationPath.Pop() + " -> ");
             }
+
+            sb.Append(_shortestDestinationPath.Pop());
+
 
             TxtboxPath.Text = sb.ToString();
         }
@@ -349,12 +393,99 @@ namespace TheGraphProject
             }
             catch (Exception exception)
             {
-
                 CmbStartingVertex.SelectedIndex = -1;
                 CmbEndingVertex.SelectedIndex = -1;
-
             }
 
+        }
+        private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            var getItem = ListViewVerticesList.Items[ListViewVerticesList.SelectedIndex];
+            //DataStorage.VerticesList.Remove(((DataTemplate) getItem).ID);
+            var getEdge =  ((DataTemplate) getItem).ID ;
+
+            //LinkedList<LineEdge> getEdgeConnectedList = new LinkedList<LineEdge>();
+
+
+            //Vertex getVertex = null;
+            //Before deleting the vertex, the edges connected to it must be deleted first.
+            //foreach (var vertex in DataStorage.VerticesList)
+            //{
+            //    if (vertex.ID == Convert.ToInt32(getId))
+            //    {
+            //        getVertex = vertex;
+            //        var getEdgeConnectedList = vertex.EdgeList; //Getting edgeList from the vertex
+
+            //        for (int i = 0; i < DataStorage.EdgeList.Count; i++) //Comparing if the lineEdge from the EdgeList of the DataStorage is the same with the vertex
+            //        {
+            //            var lineEdge = DataStorage.EdgeList[i];
+            //            {
+            //                foreach (var line in getEdgeConnectedList) //Going over the EdgeList of the vertex
+            //                {
+            //                    if (lineEdge == line)
+            //                    {
+            //                        DataStorage.EdgeList.Remove(lineEdge); //When found delete
+            //                        break;
+            //                    }
+            //                }
+            //            }
+            //        }
+
+            //    }
+            //}
+
+            LinkedList<LineEdge> getVertexEdgeList = null;
+            foreach (var vertex in DataStorage.VerticesList)
+            {
+                if (vertex.ID == Convert.ToInt32(getEdge))
+                {
+                    getVertexEdgeList = vertex.EdgeList;
+                    vertex.IsDeleted = true;
+                    foreach (var lineEdge in vertex.EdgeList)
+                    {
+                        lineEdge.IsDeleted = true;
+                    }
+
+                    break;
+                }
+            }
+
+            var edgesToBeDeletedStack = new Stack<DataTemplate>();
+            int counter = 0;
+            foreach (var lineEdge in DataStorage.EdgesListViewItems)
+            {
+                var getId = lineEdge.Edge.TrimEnd('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');
+                getId = getId.TrimEnd('>', '-', '<',' ');
+
+                foreach (var edge in getVertexEdgeList)
+                {
+                    if (getId == edge.VertexA.ID.ToString())
+                    {
+                        edgesToBeDeletedStack.Push(lineEdge);
+                        counter++;
+                        break;
+                    }
+                }
+
+                if (counter == getVertexEdgeList.Count)
+                    break;
+            }
+
+            while (edgesToBeDeletedStack.Count > 0)
+            {
+                DataStorage.EdgesListViewItems.Remove(edgesToBeDeletedStack.Pop());
+            }
+            DataStorage.VerticesListViewItems.Remove((DataTemplate)getItem);
+
+            CmbStartingVertex.SelectedIndex = -1;
+            CmbEndingVertex.SelectedIndex = -1;
+
+            CmbStartingVertexSp.SelectedIndex = -1;
+            CmbEndingVertexSp.SelectedIndex = -1;
+
+            ListViewVerticesList.Items.Refresh();
+            ListViewEdgeList.Items.Refresh();
+            RefreshCanvas();
         }
 
         private void BtnAddVertex_Click(object sender, RoutedEventArgs e)
@@ -369,7 +500,31 @@ namespace TheGraphProject
 
         private void BtnAddEdge_Click(object sender, RoutedEventArgs e)
         {
-            AddUnweightedEdge();
+            if (TextBlockLineEdgeErrorMsg.Visibility == Visibility.Visible)
+                TextBlockLineEdgeErrorMsg.Visibility = Visibility.Hidden;
+
+            if (CmbStartingVertex.Text == CmbEndingVertex.Text)
+            {
+                SystemSounds.Exclamation.Play();
+                TextBlockLineEdgeErrorMsg.Visibility = Visibility.Visible;
+                return;
+            }
+
+            //DataStorage.VerticesList.Find(CmbStartingVertex.Text);
+
+            try
+            {
+
+                AddEdge();
+                ListViewEdgeList.Items.Refresh();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Data);
+                Console.WriteLine(exception.StackTrace);
+
+                MessageBox.Show("Please indicate a specific Path.", "Oops!", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void LoadStackWithIDStartUp()
@@ -384,7 +539,7 @@ namespace TheGraphProject
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
             //CmbStartingVertex.Items.Clear();
-            //foreach (var item in DataStorage.ListViewItems)
+            //foreach (var item in DataStorage.VerticesListViewItems)
             //{
             //    if (DataStorage.SelectedEndingVertex != item.ID)
             //        CmbStartingVertex.Items.Add(item.ID);
@@ -393,14 +548,17 @@ namespace TheGraphProject
             CmbStartingVertex.Items.Clear();
             foreach (var vertex in DataStorage.VerticesList)
             {
-                CmbStartingVertex.Items.Add(vertex.VertexIdNumber);
+                if(vertex.IsDeleted)
+                    continue;
+
+                CmbStartingVertex.Items.Add(vertex.ID);
             }
         }
 
         private void CmbEndingVertex_DropDownOpened(object sender, EventArgs e)
         {
             //CmbEndingVertex.Items.Clear();
-            //foreach (var item in DataStorage.ListViewItems)
+            //foreach (var item in DataStorage.VerticesListViewItems)
             //{
             //    if (DataStorage.SelectedStartingVertex != item.ID)
             //        CmbEndingVertex.Items.Add(item.ID);
@@ -409,7 +567,10 @@ namespace TheGraphProject
             CmbEndingVertex.Items.Clear();
             foreach (var vertex in DataStorage.VerticesList)
             {
-                CmbEndingVertex.Items.Add(vertex.VertexIdNumber);
+                if (vertex.IsDeleted)
+                    continue;
+
+                CmbEndingVertex.Items.Add(vertex.ID);
             }
         }
 
@@ -455,7 +616,6 @@ namespace TheGraphProject
         //Tracks pointer position
         private void CanvasGraph_MouseMove(object sender, MouseEventArgs e)
         {
-            var draggable = sender as Border;
             var x = e.GetPosition(CanvasGraph).X;
             var y = e.GetPosition(CanvasGraph).Y;
 
@@ -588,7 +748,7 @@ namespace TheGraphProject
 
             //        foreach (var edge in DataStorage.EdgeList)
             //        {
-            //            if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
+            //            if (edge.VertexA.ID == vertex.ID)
             //            {
             //                edge.VertexA.VertexXCoords = vertex.VertexXCoords;
             //                edge.VertexA.VertexYCoords = vertex.VertexYCoords;
@@ -596,7 +756,7 @@ namespace TheGraphProject
             //                //Canvas.SetTop(edge.VertexA.GetVertex, edge.VertexA.VertexYCoords);
             //            }
 
-            //            if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
+            //            if (edge.VertexB.ID == vertex.ID)
             //            {
             //                edge.VertexB.VertexXCoords = vertex.VertexXCoords;
             //                edge.VertexB.VertexYCoords = vertex.VertexYCoords;
@@ -636,7 +796,7 @@ namespace TheGraphProject
 
         //            foreach (var edge in DataStorage.EdgeList)
         //            {
-        //                if (edge.VertexA.VertexIdNumber == vertex.VertexIdNumber)
+        //                if (edge.VertexA.ID == vertex.ID)
         //                {
         //                    edge.VertexA.VertexXCoords = vertex.VertexXCoords;
         //                    edge.VertexA.VertexYCoords = vertex.VertexYCoords;
@@ -644,7 +804,7 @@ namespace TheGraphProject
         //                    //Canvas.SetTop(edge.VertexA.GetVertex, edge.VertexA.VertexYCoords);
         //                }
 
-        //                if (edge.VertexB.VertexIdNumber == vertex.VertexIdNumber)
+        //                if (edge.VertexB.ID == vertex.ID)
         //                {
         //                    edge.VertexB.VertexXCoords = vertex.VertexXCoords;
         //                    edge.VertexB.VertexYCoords = vertex.VertexYCoords;
@@ -690,26 +850,40 @@ namespace TheGraphProject
 
         #endregion
 
-        private void ComboBox_DropDownOpened_1(object sender, EventArgs e)
+        private void CmbStartingVertexSp_DropDownOpened(object sender, EventArgs e)
         {
-            ComboBoxStartingVertexSp.Items.Clear();
+            CmbStartingVertexSp.Items.Clear();
 
             foreach (var vertex in DataStorage.VerticesList)
             {
-                ComboBoxStartingVertexSp.Items.Add(vertex.VertexIdNumber);
+                if (vertex.IsDeleted)
+                    continue;
+
+                CmbStartingVertexSp.Items.Add(vertex.ID);
             }
         }
 
-        private void ComboBoxEndingVertexSp_DropDownOpened(object sender, EventArgs e)
+        private void CmbEndingVertexSp_DropDownOpened(object sender, EventArgs e)
         {
-            ComboBoxEndingVertexSp.Items.Clear();
+            CmbEndingVertexSp.Items.Clear();
 
             foreach (var vertex in DataStorage.VerticesList)
             {
-                ComboBoxEndingVertexSp.Items.Add(vertex.VertexIdNumber);
+                if(vertex.IsDeleted)
+                    continue;
+
+                CmbEndingVertexSp.Items.Add(vertex.ID);
             }
         }
 
+        private void ListViewVerticesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewEdgeList.SelectedIndex = -1;
+        }
 
+        private void ListViewEdge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListViewVerticesList.SelectedIndex = -1;
+        }
     }
 }

@@ -24,14 +24,15 @@ namespace TheGraphProject
 
         public MainWindow MainWindow { get; set; }
         public Border GetVertex { get; set; }
-        public LinkedList<LineEdge> EdgeList = new LinkedList<LineEdge>();
+        public LinkedList<LineEdge> EdgeList = new LinkedList<LineEdge>(); //In LineEdge DataType
+        public LinkedList<Line> EdgesConnected = new LinkedList<Line>(); //In Line DataType
         public string Name { get; protected set; }
-        public int VertexIdNumber { get; protected set; }
+        public int ID { get; protected set; }
         public double VertexXCoords { get; set; }
         public double VertexYCoords { get; set; }
         public bool IsStartingVertex { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
-        public LinkedList<Line> EdgesConnected = new LinkedList<Line>();
 
         public Label CreateLabel()
         {
@@ -39,7 +40,7 @@ namespace TheGraphProject
             vertexLabel.VerticalAlignment = VerticalAlignment.Center;
             vertexLabel.HorizontalContentAlignment = HorizontalAlignment.Center;
             vertexLabel.FontSize = 12;
-            vertexLabel.Content = VertexIdNumber;// CHANGED SOMETHING
+            vertexLabel.Content = ID;// CHANGED SOMETHING
             return vertexLabel;
         }
 
@@ -52,16 +53,22 @@ namespace TheGraphProject
             newVertex.Width = 25;
             newVertex.BorderBrush = Brushes.Black;
             newVertex.BorderThickness = new Thickness(1);
-            newVertex.Background = Brushes.DodgerBlue;
+            newVertex.Background = Brushes.DeepSkyBlue;
             newVertex.CornerRadius = new CornerRadius(50);
 
 
 
-            VertexIdNumber = DataStorage.UniqueIDList.Count;
+
             if (DataStorage.UniqueIDList.Count == 0)
+            {
                 DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count);
+                ID = 0;
+            }
             else
-                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList.Count + 1);
+            {
+                DataStorage.UniqueIDList.Add(DataStorage.UniqueIDList[DataStorage.UniqueIDList.Count - 1] + 1);
+                ID = DataStorage.UniqueIDList[DataStorage.UniqueIDList.Count - 1];
+            }
             newVertex.Child = CreateLabel();
 
             //SetLeft = X-Axis

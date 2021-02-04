@@ -192,7 +192,7 @@ namespace TheGraphProject
                         DataStorage.EdgesListViewItems.Add(new ListViewEdgeTemplate(newLineEdge.VertexA, newLineEdge.VertexB, newLineEdge.Weight.ToString())
                             {
                                 Edge = newLineEdge.VertexA.ID + " -> " + newLineEdge.VertexB.ID,
-                                Name = newLineEdge.VertexA.Name + " ->" + newLineEdge.VertexB.Name});
+                                Name = newLineEdge.VertexA.Name + " -> " + newLineEdge.VertexB.Name});
                     }
 
                 }

@@ -39,8 +39,6 @@ namespace TheGraphProject
 
         public Vertex VertexA { get; set; }
         public Vertex VertexB { get; set; }
-
-        public LinkedList<Vertex> VerticesConnectedList = new LinkedList<Vertex>();
         public int Weight { get; protected set; }
         public Line EdgeLine { get; protected set; }
         public TextBlock TxtBlockWeight {get; protected set; }
@@ -54,16 +52,20 @@ namespace TheGraphProject
 
             Line edgeLine = new Line();
 
-
             edgeLine.X1 = VertexA.VertexXCoords;
             edgeLine.Y1 = VertexA.VertexYCoords;
 
             edgeLine.X2 = VertexB.VertexXCoords;
             edgeLine.Y2 = VertexB.VertexYCoords;
 
-            //double XmidPointCoordinates = (edgeLine.X1 + edgeLine.X2) / 2;
-            //double YmidPointCoordinates = (edgeLine.Y1 + edgeLine.Y2) / 2;
+            edgeLine.StrokeEndLineCap = PenLineCap.Triangle;
+            edgeLine.StrokeStartLineCap = PenLineCap.Flat;
+            edgeLine.StrokeThickness = 3;
 
+            edgeLine.Stroke = Brushes.Black;
+            edgeLine.Fill = Brushes.Black;
+
+            EdgeLine = edgeLine;
 
             //textBlock Weight
             TextBlock textBlockLine = new TextBlock();
@@ -77,13 +79,6 @@ namespace TheGraphProject
             Panel.SetZIndex(textBlockLine, 2);
 
             TxtBlockWeight = textBlockLine;
-
-            edgeLine.Stroke = Brushes.Black;
-            edgeLine.StrokeThickness = 2;
-            edgeLine.Fill = Brushes.Black;
-
-            //textBlockLine.Inlines.Add(new Line{});
-            EdgeLine = edgeLine;
 
             VertexA.EdgesConnected.AddLast(edgeLine);
             VertexB.EdgesConnected.AddLast(edgeLine);
@@ -99,7 +94,6 @@ namespace TheGraphProject
 
             edgeLine.X2 = VertexB.VertexXCoords;
             edgeLine.Y2 = VertexB.VertexYCoords;
-            edgeLine.StrokeDashCap = PenLineCap.Square;
 
             //textBlock Weight
             TextBlock textBlockLine = new TextBlock();

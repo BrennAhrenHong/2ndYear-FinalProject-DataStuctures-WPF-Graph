@@ -77,16 +77,13 @@
     </ApplicationDefinition>
     <Compile Include="DataStorage.cs" />
     <Compile Include="Edges.cs" />
-    <Compile Include="GraphLogic\LineEdge.cs" />
+    <Compile Include="GraphLogic\Edge.cs" />
     <Compile Include="GraphLogic\Graph.cs" />
-    <Compile Include="GraphLogic\GraphsTest.cs" />
     <Compile Include="GraphLogic\IGraph.cs" />
     <Compile Include="GraphLogic\IWeightedGraph.cs" />
-    <Compile Include="GraphLogic\ShortestPathSample.cs" />
     <Compile Include="GraphLogic\Tree.cs" />
     <Compile Include="GraphLogic\UnWeightedGraph.cs" />
     <Compile Include="GraphLogic\WeightedGraph.cs" />
-    <Compile Include="GraphLogic\WeightedSimpleGraphTests.cs" />
     <Compile Include="IEdge.cs" />
     <Compile Include="Vertex.cs" />
     <Page Include="MainWindow.xaml">

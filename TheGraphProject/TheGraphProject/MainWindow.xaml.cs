@@ -50,7 +50,7 @@ namespace TheGraphProject
 
         private Path _shortestPath;
         private Stack<int> _shortestDestinationPath;
-
+        private Queue<string> PathQueue = new Queue<string>();
 
         private Vertex x;
         private Line z;
@@ -69,12 +69,12 @@ namespace TheGraphProject
             RadioButtonUndirected.IsChecked = true;
             RadioButtonUnweighted.IsChecked = true;
 
-            LoadStackWithIDStartUp();
             if (RadioButtonUnweighted.IsChecked.Value)
                 TxtbWeight.IsReadOnly = true;
 
             ListViewVerticesList.ItemsSource = DataStorage.VerticesListViewItems;
             ListViewEdgeList.ItemsSource = DataStorage.EdgesListViewItems;
+
         }
 
         //Methods
@@ -105,6 +105,8 @@ namespace TheGraphProject
                     //Canvas.SetLeft(vertex.GetVertex,vertex.VertexXCoords);
                     //Canvas.SetTop(vertex.GetVertex,vertex.VertexYCoords); 
                     CanvasGraph.Children.Add(vertex.GetVertex);
+                    CanvasGraph.Children.Add(vertex.VertexLabel);
+                    vertex.UpdateNameLabelLocation();
                 }
 
                 foreach (var edge in DataStorage.EdgeList)
@@ -162,7 +164,7 @@ namespace TheGraphProject
                         DataStorage.EdgesListViewItems.Add(new ListViewEdgeTemplate(newLineEdge.VertexA, newLineEdge.VertexB, newLineEdge.Weight.ToString())
                             {
                                 Edge = newLineEdge.VertexA.ID + " -> " + newLineEdge.VertexB.ID,
-                            Name = newLineEdge.VertexA.Name + "->" + newLineEdge.VertexB.Name, Weight = "N/A"});
+                            Name = newLineEdge.VertexA.Name + " -> " + newLineEdge.VertexB.Name, Weight = "N/A"});
                     }
                     else if (RadioButtonWeighted.IsChecked.Value)
                     {
@@ -177,7 +179,7 @@ namespace TheGraphProject
                         DataStorage.EdgesListViewItems.Add(new ListViewEdgeTemplate(newLineEdge.VertexA, newLineEdge.VertexB, newLineEdge.Weight.ToString())
                             {
                                 Edge = newLineEdge.VertexA.ID + " -> " + newLineEdge.VertexB.ID,
-                                Name = newLineEdge.VertexA.Name + " ->" + newLineEdge.VertexB.Name});
+                                Name = newLineEdge.VertexA.Name + " -> " + newLineEdge.VertexB.Name});
                     }
 
                 }
@@ -214,7 +216,7 @@ namespace TheGraphProject
                         DataStorage.EdgesListViewItems.Add(new ListViewEdgeTemplate(newLineEdge.VertexA, newLineEdge.VertexB, newLineEdge.Weight.ToString())
                         {
                             Edge = newLineEdge.VertexA.ID + " <-> " + newLineEdge.VertexB.ID,
-                            Name = newLineEdge.VertexA.Name + " <->" + newLineEdge.VertexB.Name
+                            Name = newLineEdge.VertexA.Name + " <-> " + newLineEdge.VertexB.Name
                         });
                     }
                 }
@@ -223,24 +225,26 @@ namespace TheGraphProject
             RefreshCanvas();
         }
 
+        //Logic to Solve Shortest Path
         public void GraphShortestPathLogic()
         {
-            var edges = new List<WeightedEdge>();
+            var edges = new List<WeightedEdge>(); // Need to store edges to Type WeightedEdge
 
 
             foreach (var edge in DataStorage.EdgeList)
             {
                     edges.Add(new WeightedEdge(edge.VertexA.ID, edge.VertexB.ID, edge.Weight));
-                    if(edge.IsDirected == false)  
+                    if(edge.IsDirected == false)  //Need to create another edge going to the opposite in order to make it undirected.
                         edges.Add(new WeightedEdge(edge.VertexB.ID, edge.VertexA.ID, edge.Weight));
             }
             
 
 
-            _WeightedGraph = new WeightedGraph<string>(edges, DataStorage.VerticesList.Count);
+            _WeightedGraph = new WeightedGraph<string>(edges, DataStorage.VerticesList.Count);//Instantiate
 
-            var neighbors = _WeightedGraph.Neighbors;
+            var neighbors = _WeightedGraph.Neighbors;//Create Neighbors List
 
+            //Adjacency List Output Box
             TxtbAdjacencyList.Clear();
             int counter = 0;
             TxtbAdjacencyList.Text = "Adjacency List: \n";
@@ -256,6 +260,7 @@ namespace TheGraphProject
                 counter++;
             }
 
+            //NeighborList Output
             TxtbNeighborList.Clear();
             TxtbNeighborList.Text = "Neighbor List: \n";
             counter = 0;
@@ -273,12 +278,13 @@ namespace TheGraphProject
             }
 
 
-
+            //GetShortestPath From the source to all vertices
             _shortestPath = _WeightedGraph.GetShortestPath(Convert.ToInt32(CmbStartingVertexSp.Text));
 
 
             try
             {
+                //Find Shortest path to Destination from Source
                 _shortestDestinationPath = _WeightedGraph.ShortestPathDestination(_shortestPath, Convert.ToInt32(CmbEndingVertexSp.Text));
             }
             catch (Exception exception)
@@ -292,8 +298,17 @@ namespace TheGraphProject
                 return;
             }
 
-            var sb = new StringBuilder();
 
+            //Get path for visualization
+            //(A,B)
+            foreach (var i in _shortestDestinationPath)
+            {
+                PathQueue.Enqueue(i.ToString());
+                DataStorage.VerticesList[i].GetVertex.BorderBrush = Brushes.Orange;
+            }
+
+
+            var sb = new StringBuilder();
             while (_shortestDestinationPath.Count > 1)
             {
                 sb.Append(_shortestDestinationPath.Pop() + " -> ");
@@ -303,6 +318,14 @@ namespace TheGraphProject
 
 
             TxtboxPath.Text = sb.ToString();
+            string path = TxtboxPath.Text;
+
+            
+            //foreach (var p in path)
+            //{
+            //    pathQueue.Enqueue(p);
+            //}
+
         }
 
         public void ShowPath()
@@ -594,15 +617,6 @@ namespace TheGraphProject
             }
         }
 
-        private void LoadStackWithIDStartUp()
-        {
-            DataStorage.IDStack.Push('Z');
-            for (char i = 'Y'; DataStorage.IDStack.Peek() != 'A'; i--)
-            {
-                DataStorage.IDStack.Push(i);
-            }
-        }
-
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
             CmbStartingVertex.Items.Clear();
@@ -667,7 +681,16 @@ namespace TheGraphProject
             var draggableControl = sender as Border;
             IsDragging = true;
 
-            draggableControl.Background = Brushes.ForestGreen;
+            try
+            {
+                //if (draggableControl.Background != Brushes.Orange)
+                    draggableControl.Background = Brushes.ForestGreen;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+
 
             draggableControl.CaptureMouse();
         }
@@ -677,7 +700,6 @@ namespace TheGraphProject
         {
             //draggablecontrol is a UIelement(Datatype)
             var draggableControl = sender as Border;
-            var draggableControl2 = sender as Line;
 
             // "sender as type Border" allows to move the vertex since the original datatype of the
             // vertex is a Border thus, this further allows interaction between the border and mouse pointer
@@ -689,8 +711,6 @@ namespace TheGraphProject
                 Canvas.SetLeft(draggableControl,currentPosition.X - 12.5); // X
                 Canvas.SetTop(draggableControl,currentPosition.Y - 12.5); // Y
 
-                Canvas.SetLeft(draggableControl2, currentPosition.X - 12.5); // X
-                Canvas.SetTop(draggableControl2, currentPosition.Y - 12.5); // Y
 
                 if (LastDraggedVertex == null || LastDraggedVertex.GetVertex != draggableControl)
                 {
@@ -702,12 +722,14 @@ namespace TheGraphProject
                             {
                                 vertex.VertexXCoords = currentPosition.X;
                                 vertex.VertexYCoords = currentPosition.Y;
+                                vertex.UpdateNameLabelLocation();
                                 break;
                             }
 
                             LastDraggedVertex = vertex;
                             vertex.VertexXCoords = currentPosition.X;
                             vertex.VertexYCoords = currentPosition.Y;
+                            vertex.UpdateNameLabelLocation();
 
                             break;
                         }
@@ -725,6 +747,8 @@ namespace TheGraphProject
                             LastDraggedVertex.VertexXCoords = currentPosition.X;
                             LastDraggedVertex.VertexYCoords = currentPosition.Y;
 
+                            LastDraggedVertex.UpdateNameLabelLocation();
+
                             edgeLine.UpdateLine();
 
                         }
@@ -735,6 +759,8 @@ namespace TheGraphProject
 
                             LastDraggedVertex.VertexXCoords = currentPosition.X;
                             LastDraggedVertex.VertexYCoords = currentPosition.Y;
+
+                            LastDraggedVertex.UpdateNameLabelLocation();
 
                             edgeLine.UpdateLine();
                         }
@@ -747,16 +773,15 @@ namespace TheGraphProject
 
         public void Vertex_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
             IsDragging = false;
             var draggable = sender as Border;
-            draggable.Background = Brushes.DeepSkyBlue;
+            //if(draggable.Background != Brushes.Orange)
+                draggable.Background = Brushes.DeepSkyBlue;
 
             draggable.ReleaseMouseCapture();
 
             var x = e.GetPosition(CanvasGraph).X; //(Canvas.GetLeft(SelectedVertexOrigin) + 12.5) - (ClickStart.X - e.GetPosition(CanvasGraph).X);
             var y = e.GetPosition(CanvasGraph).Y; //(Canvas.GetTop(SelectedVertexOrigin) + 12.5) - (ClickStart.Y - e.GetPosition(CanvasGraph).Y);
-            Console.WriteLine($"{x} {y}");
 
             RefreshCanvas();
         }

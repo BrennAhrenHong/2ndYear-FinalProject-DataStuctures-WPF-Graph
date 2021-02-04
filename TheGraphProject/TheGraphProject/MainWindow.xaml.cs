@@ -50,7 +50,7 @@ namespace TheGraphProject
 
         private Path _shortestPath;
         private Stack<int> _shortestDestinationPath;
-
+        private Queue<int> LastSolution = new Queue<int>();
 
         private Vertex x;
         private Line z;
@@ -222,6 +222,26 @@ namespace TheGraphProject
 
             RefreshCanvas();
         }
+        private void ResetGraph()
+        {
+            BtnReset.IsEnabled = false;
+            while (LastSolution.Count > 0)
+            {
+                var currentVertex = LastSolution.Dequeue();
+                foreach (var edge in DataStorage.VerticesList[currentVertex].EdgeList)
+                {
+                    edge.EdgeLine.Stroke = Brushes.Black;
+                }
+
+                foreach (var vertex in DataStorage.VerticesList)
+                {
+                    if(vertex.ID == currentVertex)
+                        vertex.GetVertex.Background = Brushes.DeepSkyBlue;
+                }
+            }
+
+            TxtboxPath.Clear();
+        }
 
         public void GraphShortestPathLogic()
         {
@@ -292,25 +312,60 @@ namespace TheGraphProject
                 return;
             }
 
+            ResetGraph();
+            BtnReset.IsEnabled = true;
+            var pathQueue = new Queue<int>(); 
+            var txtbOutputQueue = new Queue<int>(); 
+
+            foreach (var vertex in _shortestDestinationPath)
+            {
+                LastSolution.Enqueue(vertex);
+                pathQueue.Enqueue(vertex);
+                txtbOutputQueue.Enqueue(vertex);
+                DataStorage.VerticesList[vertex].GetVertex.Background = Brushes.Orange;
+            }
+
+
+
+            //Queue: A B C D
+            while (pathQueue.Count > 0)
+            {
+                var currentPath = pathQueue.Dequeue();
+                foreach (var lineEdge in DataStorage.VerticesList[currentPath].EdgeList)
+                { 
+                    if(pathQueue.Count == 0)
+                        break;
+
+                    if (lineEdge.VertexA.ID == pathQueue.Peek())
+                    {
+                        lineEdge.EdgeLine.Stroke = Brushes.LimeGreen;
+                        continue;
+                    }
+
+                    if (lineEdge.VertexB.ID == pathQueue.Peek())
+                    {
+                        lineEdge.EdgeLine.Stroke = Brushes.LimeGreen;
+                    }
+                }
+            }
+
             var sb = new StringBuilder();
 
             while (_shortestDestinationPath.Count > 1)
             {
                 sb.Append(_shortestDestinationPath.Pop() + " -> ");
             }
-
             sb.Append(_shortestDestinationPath.Pop());
-
 
             TxtboxPath.Text = sb.ToString();
         }
+
+
 
         public void ShowPath()
         {
 
         }
-
-
 
         public void PrintPath(Path path)
         {
@@ -341,12 +396,13 @@ namespace TheGraphProject
             for (int i = 0; i < path.Costs.Count; i++)
                 DataStorage.PredecessorList.Add(path.Predecessor[i]);
         }
-
-
         //Events
 
         #region Events
-
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ResetGraph();
+        }
         private void BtnSolveShortestPath_Click(object sender, RoutedEventArgs e)
         {
             TxtboxPath.Clear();
@@ -372,6 +428,8 @@ namespace TheGraphProject
         {
             if (ListViewEdgeList.SelectedIndex > -1 && ListViewVerticesList.SelectedIndex > -1)
                 return;
+
+            ResetGraph();
 
             #region ListView
 
@@ -468,8 +526,6 @@ namespace TheGraphProject
 
                     foreach (var edge in getVertexEdgeList)
                     {
-                        if (edge.IsDeleted)
-                            continue;
 
                         if (getId == edge.VertexA.ID)
                         {
@@ -666,8 +722,14 @@ namespace TheGraphProject
         {
             var draggableControl = sender as Border;
             IsDragging = true;
+            if (draggableControl == null)
+                return;
 
-            draggableControl.Background = Brushes.ForestGreen;
+            if(draggableControl.Background != Brushes.Orange)
+                draggableControl.Background = Brushes.ForestGreen;
+
+            if (draggableControl.Background == Brushes.Orange)
+                draggableControl.Background = Brushes.DarkOrange;
 
             draggableControl.CaptureMouse();
         }
@@ -677,7 +739,6 @@ namespace TheGraphProject
         {
             //draggablecontrol is a UIelement(Datatype)
             var draggableControl = sender as Border;
-            var draggableControl2 = sender as Line;
 
             // "sender as type Border" allows to move the vertex since the original datatype of the
             // vertex is a Border thus, this further allows interaction between the border and mouse pointer
@@ -688,9 +749,6 @@ namespace TheGraphProject
 
                 Canvas.SetLeft(draggableControl,currentPosition.X - 12.5); // X
                 Canvas.SetTop(draggableControl,currentPosition.Y - 12.5); // Y
-
-                Canvas.SetLeft(draggableControl2, currentPosition.X - 12.5); // X
-                Canvas.SetTop(draggableControl2, currentPosition.Y - 12.5); // Y
 
                 if (LastDraggedVertex == null || LastDraggedVertex.GetVertex != draggableControl)
                 {
@@ -750,7 +808,12 @@ namespace TheGraphProject
 
             IsDragging = false;
             var draggable = sender as Border;
-            draggable.Background = Brushes.DeepSkyBlue;
+
+            if (draggable.Background == Brushes.DarkOrange)
+                draggable.Background = Brushes.Orange;
+
+            if(draggable.Background != Brushes.Orange)
+                draggable.Background = Brushes.DeepSkyBlue;
 
             draggable.ReleaseMouseCapture();
 

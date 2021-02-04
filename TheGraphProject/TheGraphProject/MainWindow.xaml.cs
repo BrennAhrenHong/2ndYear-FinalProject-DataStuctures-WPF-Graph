@@ -296,7 +296,7 @@ namespace TheGraphProject
 
             _shortestPath = _WeightedGraph.GetShortestPath(Convert.ToInt32(CmbStartingVertexSp.Text));
 
-
+            PrintPath(_shortestPath);
             try
             {
                 _shortestDestinationPath = _WeightedGraph.ShortestPathDestination(_shortestPath, Convert.ToInt32(CmbEndingVertexSp.Text));

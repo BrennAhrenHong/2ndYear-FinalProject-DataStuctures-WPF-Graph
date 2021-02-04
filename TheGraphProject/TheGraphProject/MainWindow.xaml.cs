@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
+using System.IO;
+using System.IO.Pipes;
 using System.Linq;
 using System.Media;
 using System.Net;
@@ -48,6 +50,7 @@ namespace TheGraphProject
 
         private WeightedGraph<string> _WeightedGraph;
 
+
         private Path _shortestPath;
         private Stack<int> _shortestDestinationPath;
         private Queue<int> LastSolution = new Queue<int>();
@@ -69,7 +72,6 @@ namespace TheGraphProject
             RadioButtonUndirected.IsChecked = true;
             RadioButtonUnweighted.IsChecked = true;
 
-            LoadStackWithIDStartUp();
             if (RadioButtonUnweighted.IsChecked.Value)
                 TxtbWeight.IsReadOnly = true;
 
@@ -77,6 +79,19 @@ namespace TheGraphProject
             ListViewEdgeList.ItemsSource = DataStorage.EdgesListViewItems;
         }
 
+        public void SaveGraphLogic()
+        {
+           FileStream f = new FileStream(default ,FileMode.CreateNew, FileAccess.Write);
+           StreamWriter newParameterStreamWriter = new StreamWriter(f);
+
+           using (StreamWriter sw = new StreamWriter("ShortestPathSaveFile.txt"))
+           {
+               foreach (var vertex in DataStorage.VerticesList)
+               {
+                   sw.Write($"(Name:{vertex.Name} {vertex.VertexXCoords}), ({vertex.VertexYCoords})");
+               }
+           }
+        }
         //Methods
         public void AddVertex()
         {
@@ -360,13 +375,6 @@ namespace TheGraphProject
             TxtboxPath.Text = sb.ToString();
         }
 
-
-
-        public void ShowPath()
-        {
-
-        }
-
         public void PrintPath(Path path)
         {
             TxtbCost.Clear();
@@ -430,66 +438,6 @@ namespace TheGraphProject
                 return;
 
             ResetGraph();
-
-            #region ListView
-
-            //var getItem = ListViewVerticesList.Items[ListViewVerticesList.SelectedIndex];
-            //var getVertex = ((ListViewVerticesTemplate)getItem).ID;
-
-            //LinkedList<LineEdge> getVertexEdgeList = null;
-            //foreach (var vertex in DataStorage.VerticesList)
-            //{
-            //    if (vertex.ID == Convert.ToInt32(getVertex))
-            //    {
-            //        getVertexEdgeList = vertex.EdgeList;
-            //        vertex.IsDeleted = true;
-            //        foreach (var lineEdge in vertex.EdgeList)
-            //        {
-            //            lineEdge.IsDeleted = true;
-            //        }
-
-            //        break;
-            //    }
-            //}
-
-            //var edgesToBeDeletedStack = new Stack<ListViewEdgeTemplate>();
-            //int counter = 0;
-            //foreach (var lineEdge in DataStorage.EdgesListViewItems)
-            //{
-            //    var getId = lineEdge.Edge.TrimEnd('1', '2', '3', '4', '5', '6', '7', '8', '9', '0');
-            //    getId = getId.TrimEnd('>', '-', '<', ' ');
-
-            //    foreach (var edge in getVertexEdgeList)
-            //    {
-            //        if (getId == edge.VertexA.ID.ToString())
-            //        {
-            //            edgesToBeDeletedStack.Push(lineEdge);
-            //            counter++;
-            //            break;
-            //        }
-            //    }
-
-            //    if (counter == getVertexEdgeList.Count)
-            //        break;
-            //}
-
-            //while (edgesToBeDeletedStack.Count > 0)
-            //{
-            //    DataStorage.EdgesListViewItems.Remove(edgesToBeDeletedStack.Pop());
-            //}
-            //DataStorage.VerticesListViewItems.Remove((ListViewVerticesTemplate)getItem);
-
-            //CmbStartingVertex.SelectedIndex = -1;
-            //CmbEndingVertex.SelectedIndex = -1;
-
-            //CmbStartingVertexSp.SelectedIndex = -1;
-            //CmbEndingVertexSp.SelectedIndex = -1;
-
-            //ListViewVerticesList.Items.Refresh();
-            //ListViewEdgeList.Items.Refresh();
-            //RefreshCanvas();
-
-            #endregion
 
             if (ListViewVerticesList.SelectedIndex > -1)
             {
@@ -592,19 +540,9 @@ namespace TheGraphProject
 
         private void BtnAddVertex_Click(object sender, RoutedEventArgs e)
         {
-            if (DataStorage.IDStack.Count != 0)
-            {
-                try
-                {
-                    SelectedCanvas_XCoordinate = Convert.ToInt32(TxtBoxManualXCoords.Text);
-                    SelectedCanvas_YCoordinate = Convert.ToInt32(TxtBoxManualYCoords.Text);
-                    AddVertex();
-                }
-                catch (Exception exception)
-                {
-                    Console.WriteLine(exception);
-                }
-            }
+            SelectedCanvas_XCoordinate = Convert.ToInt32(TxtBoxManualXCoords.Text);
+            SelectedCanvas_YCoordinate = Convert.ToInt32(TxtBoxManualYCoords.Text);
+            AddVertex();
         }
 
         private void BtnAddEdge_Click(object sender, RoutedEventArgs e)
@@ -650,14 +588,6 @@ namespace TheGraphProject
             }
         }
 
-        private void LoadStackWithIDStartUp()
-        {
-            DataStorage.IDStack.Push('Z');
-            for (char i = 'Y'; DataStorage.IDStack.Peek() != 'A'; i--)
-            {
-                DataStorage.IDStack.Push(i);
-            }
-        }
 
         private void ComboBox_DropDownOpened(object sender, EventArgs e)
         {
@@ -702,8 +632,7 @@ namespace TheGraphProject
 
         private void CMenuItemAddVertex_OnClick(object sender, RoutedEventArgs e)
         {
-            if (DataStorage.IDStack.Count != 0)
-                AddVertex();
+            AddVertex();
         }
 
         //Tracks pointer position
@@ -877,6 +806,34 @@ namespace TheGraphProject
         private void ListViewEdge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ListViewVerticesList.SelectedIndex = -1;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            DataStorage.VerticesList.Clear();
+            DataStorage.EdgeList.Clear();
+            DataStorage.EdgesListViewItems.Clear();
+            DataStorage.VerticesListViewItems.Clear();
+            DataStorage.PredecessorList.Clear();
+            DataStorage.UniqueIDList.Clear();
+            CanvasGraph.Children.Clear();
+            TxtbAdjacencyList.Clear();
+            TxtboxPath.Clear();
+            TxtbWeight.Clear();
+            TxtbCost.Clear();
+            TxtbPredecessor.Clear();
+            TxtbVertexName.Clear();
+            TxtbNeighborList.Clear();
+            CmbStartingVertex.SelectedIndex = -1;
+            CmbEndingVertex.SelectedIndex = -1;
+            CmbStartingVertexSp.SelectedIndex = -1;
+            CmbEndingVertexSp.SelectedIndex = -1;
+
+            BtnReset.IsEnabled = false;
+            LastSolution.Clear();
+
+            ListViewEdgeList.Items.Refresh();
+            ListViewVerticesList.Items.Refresh();
         }
     }
 }

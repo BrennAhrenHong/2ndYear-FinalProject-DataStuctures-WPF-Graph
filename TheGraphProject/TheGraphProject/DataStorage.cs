@@ -45,6 +45,5 @@ namespace TheGraphProject
         public static List<LineEdge> EdgeList = new List<LineEdge>();
         public static List<int> PredecessorList = new List<int>();
         public static List<int> UniqueIDList = new List<int>();
-        public static Stack<char> IDStack = new Stack<char>();
     }
 }

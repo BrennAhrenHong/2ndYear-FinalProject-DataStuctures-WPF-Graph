@@ -99,7 +99,7 @@ namespace TheGraphProject
 
             edgeLine.X2 = VertexB.VertexXCoords;
             edgeLine.Y2 = VertexB.VertexYCoords;
-
+            edgeLine.StrokeDashCap = PenLineCap.Square;
 
             //textBlock Weight
             TextBlock textBlockLine = new TextBlock();

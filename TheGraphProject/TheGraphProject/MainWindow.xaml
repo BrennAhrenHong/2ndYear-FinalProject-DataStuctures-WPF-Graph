@@ -80,16 +80,6 @@
             </Grid.ColumnDefinitions>
             <Border Grid.Row="1" BorderThickness="1" BorderBrush="Black" Grid.ColumnSpan="3">
                 <Canvas Name="CanvasGraph" ClipToBounds="True" Background="AliceBlue" MouseMove="CanvasGraph_MouseMove" MouseRightButtonDown="CanvasGraph_MouseRightButtonDown">
-                    <Path Stroke="Black" Data="M 0 4 L 15.1 4 L 10 0 M 16 4 L 10 8" Canvas.Left="78.166" Canvas.Top="30.5" RenderTransformOrigin="0.5,0.5" >
-                        <Path.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform Angle="-180.283"/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Path.RenderTransform>
-                    </Path>
                     <Canvas.ContextMenu>
                         <ContextMenu>
                             <MenuItem Name="CMenuItemAddVertex" Header="Add Vertex" Click="CMenuItemAddVertex_OnClick"/>
@@ -174,19 +164,19 @@
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Margin="10">
                                 <StackPanel Orientation="Horizontal" Margin="5">
-                                    <TextBlock HorizontalAlignment="Left" Margin="0,0,10,0" Text="From:" TextAlignment="Right"
-                                               TextWrapping="Wrap" VerticalAlignment="Bottom" Width="35" />
-                                    <ComboBox Name="CmbStartingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width=" 120"
-                                              DropDownOpened="CmbStartingVertexSp_DropDownOpened"/>
+                                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" TextWrapping="Wrap" Text="To:" TextAlignment="Right" VerticalAlignment="Bottom" Width="35"/>
+                                    <ComboBox Name="CmbEndingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="120" DropDownOpened="CmbEndingVertexSp_DropDownOpened"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="5">
-                                    <TextBlock HorizontalAlignment="Right" Margin="0,0,10,0" TextWrapping="Wrap" Text="To:" TextAlignment="Right"
-                                               VerticalAlignment="Bottom" Width="35"/>
-                                    <ComboBox Name="CmbEndingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width="120"
-                                              DropDownOpened="CmbEndingVertexSp_DropDownOpened"/>
+                                    <TextBlock HorizontalAlignment="Left" Margin="0,0,10,0" Text="From:" TextAlignment="Right" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="35" />
+                                    <ComboBox Name="CmbStartingVertexSp" VerticalAlignment="Center" HorizontalAlignment="Stretch" Width=" 120"  DropDownOpened="CmbStartingVertexSp_DropDownOpened"/>
                                 </StackPanel>
+<<<<<<< HEAD
                                     <Button Name="BtnGetShortestPath" Content="Find" FontWeight="Bold" Margin="5,15,0,0" HorizontalAlignment="Center"
                                         VerticalAlignment="Center" Width="120" Height="35" Click="BtnSolveShortestPath_Click"/>
+=======
+                                <Button Name="BtnGetShortestPath" Content="Find" FontWeight="Bold" Margin="5,15,0,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="120" Height="35" Click="BtnSolveShortestPath_Click"/>
+>>>>>>> parent of cffbbe3... need arrowhead
                             </StackPanel>
 
 

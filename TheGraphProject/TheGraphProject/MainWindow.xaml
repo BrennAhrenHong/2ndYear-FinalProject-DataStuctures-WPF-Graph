@@ -180,8 +180,6 @@
                                 
                                 <Button Name="BtnReset" Content="Reset" Margin="5" Height="25" Width="120" IsEnabled="False" Click="Button_Click"/>
                             </StackPanel>
-                            
-
                         </Grid>
                     </TabItem>
                     <TabItem Header="More Info">

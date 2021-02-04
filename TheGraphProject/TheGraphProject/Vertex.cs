@@ -31,6 +31,7 @@ namespace TheGraphProject
         public double VertexXCoords { get; set; }
         public double VertexYCoords { get; set; }
         public bool IsDeleted { get; set; } = false;
+        public TextBlock VertexLabel { get; set; }
 
 
         public Label CreateLabel()
@@ -87,8 +88,28 @@ namespace TheGraphProject
 
             if (Name.Trim(' ') == "")
                 Name = ID.ToString();
+            CreateNameLabel();
 
             GetVertex = newVertex;
+        }
+
+        private void CreateNameLabel()
+        {
+            var newVertexLabel = new TextBlock();
+            newVertexLabel.Text = Name;
+            Canvas.SetLeft(newVertexLabel,VertexXCoords);
+            Canvas.SetTop(newVertexLabel,VertexYCoords - 35);
+            Panel.SetZIndex(newVertexLabel,3);
+
+            newVertexLabel.HorizontalAlignment = HorizontalAlignment.Center;
+
+            VertexLabel = newVertexLabel;
+        }
+
+        public void UpdateNameLabelLocation()
+        {
+            Canvas.SetLeft(VertexLabel, VertexXCoords);
+            Canvas.SetTop(VertexLabel, VertexYCoords - 35);
         }
     }
 }

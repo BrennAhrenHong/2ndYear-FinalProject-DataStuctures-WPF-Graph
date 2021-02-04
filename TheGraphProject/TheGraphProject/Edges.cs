@@ -54,6 +54,7 @@ namespace TheGraphProject
 
             Line edgeLine = new Line();
 
+
             edgeLine.X1 = VertexA.VertexXCoords;
             edgeLine.Y1 = VertexA.VertexYCoords;
 
